@@ -6,4 +6,8 @@ export default defineConfig({
   css: {
     postcss: {},
   },
+  preview: {
+    host: "0.0.0.0",
+    allowedHosts: ["demoralegalgroup.up.railway.app"],
+  },
 });
