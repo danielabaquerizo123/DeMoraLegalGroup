@@ -1,0 +1,413 @@
+generator client {
+  provider     = "prisma-client"
+  output       = "../src/generated/prisma"
+  moduleFormat = "cjs"
+}
+
+datasource db {
+  provider = "postgresql"
+}
+
+enum EstadoPublicacion {
+  BORRADOR
+  PUBLICADO
+  ARCHIVADO
+
+  @@map("estado_publicacion")
+}
+
+enum TipoCanalContacto {
+  WHATSAPP
+  EMAIL
+  TELEFONO
+  LINKEDIN
+  INSTAGRAM
+  FACEBOOK
+  YOUTUBE
+  SITIO_WEB
+
+  @@map("tipo_canal_contacto")
+}
+
+enum EstadoUsuarioAdmin {
+  PENDIENTE
+  ACTIVO
+  BLOQUEADO
+
+  @@map("estado_usuario_admin")
+}
+
+enum TipoTokenAdmin {
+  VERIFICACION_EMAIL
+  RESTABLECER_PASSWORD
+
+  @@map("tipo_token_admin")
+}
+
+model Profesional {
+  id        String @id @default(uuid()) @db.Uuid
+  nombres   String @db.VarChar(100)
+  apellidos String @db.VarChar(100)
+  slug      String @unique @db.VarChar(180)
+
+  cargo               String? @db.VarChar(150)
+  especialidadResumen String? @map("especialidad_resumen") @db.VarChar(250)
+  biografia           String? @db.Text
+  fotoUrl             String? @map("foto_url") @db.VarChar(500)
+
+  destacado Boolean @default(false)
+  activo    Boolean @default(true)
+  orden     Int     @default(0)
+
+  metaTitulo      String? @map("meta_titulo") @db.VarChar(200)
+  metaDescripcion String? @map("meta_descripcion") @db.VarChar(320)
+
+  creadoEn      DateTime @default(now()) @map("creado_en") @db.Timestamptz(3)
+  actualizadoEn DateTime @updatedAt @map("actualizado_en") @db.Timestamptz(3)
+
+  contactos CanalContactoProfesional[]
+  servicios ProfesionalServicio[]
+  sedes     ProfesionalSede[]
+  autorias  ArticuloAutor[]
+  usuariosAdmin UsuarioAdmin[]
+  articulosAdmin ArticuloBlog[]
+
+  @@index([activo, orden])
+  @@index([destacado, activo])
+  @@map("profesional")
+}
+
+model Sede {
+  id String @id @default(uuid()) @db.Uuid
+
+  nombre    String  @db.VarChar(120)
+  ciudad    String  @db.VarChar(100)
+  provincia String? @db.VarChar(100)
+  direccion String? @db.VarChar(300)
+
+  activa Boolean @default(true)
+  orden  Int     @default(0)
+
+  creadoEn      DateTime @default(now()) @map("creado_en") @db.Timestamptz(3)
+  actualizadoEn DateTime @updatedAt @map("actualizado_en") @db.Timestamptz(3)
+
+  profesionales ProfesionalSede[]
+
+  @@index([activa, orden])
+  @@index([ciudad, activa])
+  @@map("sede")
+}
+
+model ProfesionalSede {
+  profesionalId String @map("id_profesional") @db.Uuid
+  sedeId        String @map("id_sede") @db.Uuid
+
+  profesional Profesional @relation(fields: [profesionalId], references: [id], onDelete: Cascade, onUpdate: Cascade)
+  sede        Sede        @relation(fields: [sedeId], references: [id], onDelete: Cascade, onUpdate: Cascade)
+
+  principal Boolean @default(false)
+  orden     Int     @default(0)
+
+  creadoEn DateTime @default(now()) @map("creado_en") @db.Timestamptz(3)
+
+  @@id([profesionalId, sedeId])
+  @@index([sedeId])
+  @@index([profesionalId, principal])
+  @@map("profesional_sede")
+}
+
+model CanalContactoProfesional {
+  id String @id @default(uuid()) @db.Uuid
+
+  profesionalId String @map("id_profesional") @db.Uuid
+
+  profesional Profesional @relation(fields: [profesionalId], references: [id], onDelete: Cascade, onUpdate: Cascade)
+
+  tipo TipoCanalContacto
+
+  etiqueta String? @db.VarChar(100)
+
+  valor String  @db.VarChar(255)
+  url   String? @db.VarChar(500)
+
+  esPrincipal Boolean @default(false) @map("es_principal")
+  visible     Boolean @default(true)
+  orden       Int     @default(0)
+
+  creadoEn      DateTime @default(now()) @map("creado_en") @db.Timestamptz(3)
+  actualizadoEn DateTime @updatedAt @map("actualizado_en") @db.Timestamptz(3)
+
+  @@unique([profesionalId, tipo, valor], map: "uq_contacto_profesional_tipo_valor")
+  @@index([profesionalId, visible, orden])
+  @@index([tipo, visible])
+  @@map("canal_contacto_profesional")
+}
+
+model Servicio {
+  id     String @id @default(uuid()) @db.Uuid
+  nombre String @db.VarChar(150)
+  slug   String @unique @db.VarChar(180)
+
+  resumen     String? @db.VarChar(350)
+  descripcion String? @db.Text
+
+  icono     String? @db.VarChar(150)
+  imagenUrl String? @map("imagen_url") @db.VarChar(500)
+
+  destacado Boolean @default(false)
+  activo    Boolean @default(true)
+  orden     Int     @default(0)
+
+  metaTitulo      String? @map("meta_titulo") @db.VarChar(200)
+  metaDescripcion String? @map("meta_descripcion") @db.VarChar(320)
+
+  creadoEn      DateTime @default(now()) @map("creado_en") @db.Timestamptz(3)
+  actualizadoEn DateTime @updatedAt @map("actualizado_en") @db.Timestamptz(3)
+
+  profesionales ProfesionalServicio[]
+  articulos     ArticuloServicio[]
+
+  @@index([activo, orden])
+  @@index([destacado, activo])
+  @@map("servicio")
+}
+
+model ProfesionalServicio {
+  profesionalId String @map("id_profesional") @db.Uuid
+  servicioId    String @map("id_servicio") @db.Uuid
+
+  profesional Profesional @relation(fields: [profesionalId], references: [id], onDelete: Cascade, onUpdate: Cascade)
+  servicio    Servicio    @relation(fields: [servicioId], references: [id], onDelete: Cascade, onUpdate: Cascade)
+
+  esPrincipal Boolean @default(false) @map("es_principal")
+  orden       Int     @default(0)
+
+  creadoEn DateTime @default(now()) @map("creado_en") @db.Timestamptz(3)
+
+  @@id([profesionalId, servicioId])
+  @@index([servicioId])
+  @@index([profesionalId, esPrincipal])
+  @@map("profesional_servicio")
+}
+
+model CategoriaBlog {
+  id     String @id @default(uuid()) @db.Uuid
+  nombre String @db.VarChar(120)
+  slug   String @unique @db.VarChar(160)
+
+  descripcion String? @db.Text
+
+  activa Boolean @default(true)
+  orden  Int     @default(0)
+
+  creadoEn      DateTime @default(now()) @map("creado_en") @db.Timestamptz(3)
+  actualizadoEn DateTime @updatedAt @map("actualizado_en") @db.Timestamptz(3)
+
+  articulos ArticuloBlog[]
+
+  @@index([activa, orden])
+  @@map("categoria_blog")
+}
+
+model ArticuloBlog {
+  id     String @id @default(uuid()) @db.Uuid
+  titulo String @db.VarChar(250)
+  slug   String @unique @db.VarChar(280)
+
+  extracto  String? @db.VarChar(500)
+  contenido String  @db.Text
+
+  imagenPortadaUrl String? @map("imagen_portada_url") @db.VarChar(500)
+
+  estado EstadoPublicacion @default(BORRADOR)
+
+  destacado Boolean @default(false)
+
+  publicadoEn DateTime? @map("publicado_en") @db.Timestamptz(3)
+
+  categoriaId String? @map("id_categoria") @db.Uuid
+  autorProfesionalId String? @map("id_autor_profesional") @db.Uuid
+
+  categoria CategoriaBlog? @relation(fields: [categoriaId], references: [id], onDelete: Restrict, onUpdate: Cascade)
+  autorProfesional Profesional? @relation(fields: [autorProfesionalId], references: [id], onDelete: Restrict, onUpdate: Cascade)
+
+  metaTitulo      String? @map("meta_titulo") @db.VarChar(200)
+  metaDescripcion String? @map("meta_descripcion") @db.VarChar(320)
+
+  creadoEn      DateTime @default(now()) @map("creado_en") @db.Timestamptz(3)
+  actualizadoEn DateTime @updatedAt @map("actualizado_en") @db.Timestamptz(3)
+
+  autores   ArticuloAutor[]
+  servicios ArticuloServicio[]
+  etiquetas ArticuloEtiqueta[]
+
+  @@index([estado, publicadoEn(sort: Desc)])
+  @@index([categoriaId, estado, publicadoEn(sort: Desc)])
+  @@index([autorProfesionalId, estado, actualizadoEn(sort: Desc)])
+  @@index([destacado, estado])
+  @@map("articulo_blog")
+}
+
+model ArticuloAutor {
+  articuloId    String @map("id_articulo") @db.Uuid
+  profesionalId String @map("id_profesional") @db.Uuid
+
+  articulo    ArticuloBlog @relation(fields: [articuloId], references: [id], onDelete: Cascade, onUpdate: Cascade)
+  profesional Profesional  @relation(fields: [profesionalId], references: [id], onDelete: Restrict, onUpdate: Cascade)
+
+  esPrincipal Boolean @default(false) @map("es_principal")
+  orden       Int     @default(0)
+
+  creadoEn DateTime @default(now()) @map("creado_en") @db.Timestamptz(3)
+
+  @@id([articuloId, profesionalId])
+  @@index([profesionalId])
+  @@index([articuloId, orden])
+  @@map("articulo_autor")
+}
+
+model ArticuloServicio {
+  articuloId String @map("id_articulo") @db.Uuid
+  servicioId String @map("id_servicio") @db.Uuid
+
+  articulo ArticuloBlog @relation(fields: [articuloId], references: [id], onDelete: Cascade, onUpdate: Cascade)
+  servicio Servicio     @relation(fields: [servicioId], references: [id], onDelete: Restrict, onUpdate: Cascade)
+
+  creadoEn DateTime @default(now()) @map("creado_en") @db.Timestamptz(3)
+
+  @@id([articuloId, servicioId])
+  @@index([servicioId])
+  @@map("articulo_servicio")
+}
+
+model EtiquetaBlog {
+  id     String @id @default(uuid()) @db.Uuid
+  nombre String @db.VarChar(100)
+  slug   String @unique @db.VarChar(130)
+
+  activa Boolean @default(true)
+
+  creadoEn      DateTime @default(now()) @map("creado_en") @db.Timestamptz(3)
+  actualizadoEn DateTime @updatedAt @map("actualizado_en") @db.Timestamptz(3)
+
+  articulos ArticuloEtiqueta[]
+
+  @@index([activa])
+  @@map("etiqueta_blog")
+}
+
+model ArticuloEtiqueta {
+  articuloId String @map("id_articulo") @db.Uuid
+  etiquetaId String @map("id_etiqueta") @db.Uuid
+
+  articulo ArticuloBlog @relation(fields: [articuloId], references: [id], onDelete: Cascade, onUpdate: Cascade)
+  etiqueta EtiquetaBlog @relation(fields: [etiquetaId], references: [id], onDelete: Restrict, onUpdate: Cascade)
+
+  creadoEn DateTime @default(now()) @map("creado_en") @db.Timestamptz(3)
+
+  @@id([articuloId, etiquetaId])
+  @@index([etiquetaId])
+  @@map("articulo_etiqueta")
+}
+
+model ConfiguracionSitio {
+  id String @id @default(uuid()) @db.Uuid
+
+  clave String @unique @db.VarChar(150)
+
+  valor Json
+
+  descripcion String? @db.VarChar(500)
+
+  publica Boolean @default(true)
+
+  creadoEn      DateTime @default(now()) @map("creado_en") @db.Timestamptz(3)
+  actualizadoEn DateTime @updatedAt @map("actualizado_en") @db.Timestamptz(3)
+
+  @@index([publica])
+  @@map("configuracion_sitio")
+}
+
+model UsuarioAdmin {
+  id String @id @default(uuid()) @db.Uuid
+
+  nombre       String @db.VarChar(160)
+  username     String? @unique @db.VarChar(80)
+  email        String? @unique @db.VarChar(255)
+  passwordHash String @map("password_hash") @db.VarChar(255)
+  profesionalId String? @map("id_profesional") @db.Uuid
+  profesional Profesional? @relation(fields: [profesionalId], references: [id], onDelete: Restrict, onUpdate: Cascade)
+
+  emailVerificado Boolean @default(false) @map("email_verificado")
+  estado           EstadoUsuarioAdmin @default(PENDIENTE)
+
+  ultimoAccesoEn DateTime? @map("ultimo_acceso_en") @db.Timestamptz(3)
+  bloqueadoHasta DateTime? @map("bloqueado_hasta") @db.Timestamptz(3)
+
+  creadoEn      DateTime @default(now()) @map("creado_en") @db.Timestamptz(3)
+  actualizadoEn DateTime @updatedAt @map("actualizado_en") @db.Timestamptz(3)
+
+  tokens   TokenAdmin[]
+  sesiones SesionAdmin[]
+
+  @@index([estado])
+  @@index([emailVerificado])
+  @@index([profesionalId])
+  @@map("usuario_admin")
+}
+
+model TokenAdmin {
+  id String @id @default(uuid()) @db.Uuid
+
+  usuarioId String @map("id_usuario") @db.Uuid
+  usuario   UsuarioAdmin @relation(fields: [usuarioId], references: [id], onDelete: Cascade, onUpdate: Cascade)
+
+  tipo      TipoTokenAdmin
+  tokenHash String @unique @map("token_hash") @db.VarChar(128)
+
+  expiraEn DateTime @map("expira_en") @db.Timestamptz(3)
+  usadoEn  DateTime? @map("usado_en") @db.Timestamptz(3)
+  creadoEn DateTime @default(now()) @map("creado_en") @db.Timestamptz(3)
+
+  @@index([usuarioId, tipo])
+  @@index([tipo, expiraEn])
+  @@map("token_admin")
+}
+
+model SesionAdmin {
+  id String @id @default(uuid()) @db.Uuid
+
+  usuarioId String @map("id_usuario") @db.Uuid
+  usuario   UsuarioAdmin @relation(fields: [usuarioId], references: [id], onDelete: Cascade, onUpdate: Cascade)
+
+  tokenHash String @unique @map("token_hash") @db.VarChar(128)
+
+  ip        String? @db.VarChar(80)
+  userAgent String? @map("user_agent") @db.VarChar(500)
+
+  expiraEn       DateTime @map("expira_en") @db.Timestamptz(3)
+  revocadaEn     DateTime? @map("revocada_en") @db.Timestamptz(3)
+  ultimoUsoEn    DateTime @default(now()) @map("ultimo_uso_en") @db.Timestamptz(3)
+  creadoEn       DateTime @default(now()) @map("creado_en") @db.Timestamptz(3)
+
+  @@index([usuarioId])
+  @@index([expiraEn])
+  @@map("sesion_admin")
+}
+
+model IntentoLoginAdmin {
+  id String @id @default(uuid()) @db.Uuid
+
+  email  String @db.VarChar(255)
+  username String? @db.VarChar(80)
+  ip     String? @db.VarChar(80)
+  exitoso Boolean @default(false)
+  motivo  String? @db.VarChar(120)
+
+  creadoEn DateTime @default(now()) @map("creado_en") @db.Timestamptz(3)
+
+  @@index([email, creadoEn])
+  @@index([username, creadoEn])
+  @@index([ip, creadoEn])
+  @@map("intento_login_admin")
+}

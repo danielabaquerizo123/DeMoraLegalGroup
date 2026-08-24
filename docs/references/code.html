@@ -1,0 +1,520 @@
+<!DOCTYPE html>
+
+<html class="dark" lang="es"><head>
+<meta charset="utf-8"/>
+<meta content="width=device-width, initial-scale=1.0" name="viewport"/>
+<title>The Inner Circle Litigation - Defensa Estratégica</title>
+<script src="https://cdn.tailwindcss.com?plugins=forms,container-queries"></script>
+<link href="https://fonts.googleapis.com/css2?family=Playfair+Display:wght@400;600;700&amp;family=Inter:wght@400;600&amp;family=Material+Symbols+Outlined:wght,FILL@100..700,0..1&amp;display=swap" rel="stylesheet"/>
+<link href="https://fonts.googleapis.com/css2?family=Material+Symbols+Outlined:wght,FILL@100..700,0..1&amp;display=swap" rel="stylesheet"/>
+<script id="tailwind-config">
+        tailwind.config = {
+          darkMode: "class",
+          theme: {
+            extend: {
+              "colors": {
+                      "primary-fixed": "#ffdea5",
+                      "on-surface-variant": "#d1c5b4",
+                      "tertiary-fixed-dim": "#c3c6d7",
+                      "on-tertiary-container": "#373b49",
+                      "secondary-fixed": "#e0e2e6",
+                      "inverse-surface": "#e5e2e1",
+                      "primary-container": "#c5a059",
+                      "inverse-on-surface": "#313030",
+                      "on-primary-fixed-variant": "#5d4201",
+                      "on-secondary-fixed-variant": "#44474a",
+                      "outline-variant": "#4e4639",
+                      "primary": "#e9c176",
+                      "on-primary-fixed": "#261900",
+                      "surface-bright": "#393939",
+                      "background": "#131313",
+                      "on-error": "#690005",
+                      "surface-container-highest": "#353534",
+                      "tertiary": "#c3c6d7",
+                      "inverse-primary": "#775a19",
+                      "on-surface": "#e5e2e1",
+                      "surface-container-low": "#1c1b1b",
+                      "on-tertiary": "#2c303d",
+                      "secondary-fixed-dim": "#c4c7ca",
+                      "on-background": "#e5e2e1",
+                      "surface": "#131313",
+                      "surface-container": "#201f1f",
+                      "on-error-container": "#ffdad6",
+                      "surface-container-high": "#2a2a2a",
+                      "error-container": "#93000a",
+                      "tertiary-fixed": "#dfe2f3",
+                      "outline": "#9a8f80",
+                      "surface-variant": "#353534",
+                      "surface-container-lowest": "#0e0e0e",
+                      "secondary": "#c4c7ca",
+                      "surface-tint": "#e9c176",
+                      "on-tertiary-fixed": "#171b28",
+                      "surface-dim": "#131313",
+                      "secondary-container": "#46494d",
+                      "on-secondary-fixed": "#191c1f",
+                      "on-primary": "#412d00",
+                      "on-secondary": "#2d3134",
+                      "error": "#ffb4ab",
+                      "primary-fixed-dim": "#e9c176",
+                      "tertiary-container": "#a2a5b6",
+                      "on-secondary-container": "#b6b8bc",
+                      "on-primary-container": "#4e3700",
+                      "on-tertiary-fixed-variant": "#434654"
+              },
+              "borderRadius": {
+                      "DEFAULT": "0.125rem",
+                      "lg": "0.25rem",
+                      "xl": "0.5rem",
+                      "full": "0.75rem"
+              },
+              "spacing": {
+                      "margin-desktop": "64px",
+                      "container-max": "1280px",
+                      "gutter": "24px",
+                      "unit": "8px",
+                      "margin-mobile": "20px"
+              },
+              "fontFamily": {
+                      "headline-lg": [
+                              "Playfair Display"
+                      ],
+                      "body-md": [
+                              "Inter"
+                      ],
+                      "body-lg": [
+                              "Inter"
+                      ],
+                      "headline-md": [
+                              "Playfair Display"
+                      ],
+                      "display-lg-mobile": [
+                              "Playfair Display"
+                      ],
+                      "display-lg": [
+                              "Playfair Display"
+                      ],
+                      "label-caps": [
+                              "Inter"
+                      ]
+              },
+              "fontSize": {
+                      "headline-lg": [
+                              "48px",
+                              {
+                                      "lineHeight": "1.2",
+                                      "fontWeight": "600"
+                              }
+                      ],
+                      "body-md": [
+                              "16px",
+                              {
+                                      "lineHeight": "1.6",
+                                      "fontWeight": "400"
+                              }
+                      ],
+                      "body-lg": [
+                              "18px",
+                              {
+                                      "lineHeight": "1.6",
+                                      "fontWeight": "400"
+                              }
+                      ],
+                      "headline-md": [
+                              "32px",
+                              {
+                                      "lineHeight": "1.3",
+                                      "fontWeight": "600"
+                              }
+                      ],
+                      "display-lg-mobile": [
+                              "40px",
+                              {
+                                      "lineHeight": "1.2",
+                                      "letterSpacing": "-0.01em",
+                                      "fontWeight": "700"
+                              }
+                      ],
+                      "display-lg": [
+                              "64px",
+                              {
+                                      "lineHeight": "1.1",
+                                      "letterSpacing": "-0.02em",
+                                      "fontWeight": "700"
+                              }
+                      ],
+                      "label-caps": [
+                              "12px",
+                              {
+                                      "lineHeight": "1.0",
+                                      "letterSpacing": "0.1em",
+                                      "fontWeight": "600"
+                              }
+                      ]
+              }
+      },
+          },
+        }
+      </script>
+<style>
+        .reveal {
+            opacity: 0;
+            transform: translateY(30px);
+            transition: all 1s ease-out;
+        }
+        .reveal.active {
+            opacity: 1;
+            transform: translateY(0);
+        }
+        .glass-card {
+            background: rgba(32, 31, 31, 0.4);
+            backdrop-filter: blur(20px);
+            border: 1px solid rgba(197, 160, 89, 0.15);
+        }
+        .glass-card:hover {
+            border-color: rgba(197, 160, 89, 0.5);
+            box-shadow: 0 4px 30px rgba(197, 160, 89, 0.05);
+        }
+      </style>
+</head>
+<body class="bg-background text-on-background font-body-md antialiased overflow-x-hidden selection:bg-primary-container selection:text-on-primary-container">
+<!-- Background WebGL Shader -->
+<div class="fixed inset-0 z-0 pointer-events-none opacity-40">
+<!-- STITCH_SHADER_START:ANIMATION_6 class="absolute inset-0 w-full h-full" -->
+<div class="absolute inset-0 w-full h-full" style="display:block;">
+<canvas id="shader-canvas-ANIMATION_6" style="display:block;width:100%;height:100%"></canvas>
+<script>
+(function() {
+  const canvas = document.getElementById('shader-canvas-ANIMATION_6');
+
+  // Sync the WebGL drawing-buffer size with the CSS-driven layout size.
+  // This fires on initial layout and whenever the element is resized.
+  function syncSize() {
+    const w = canvas.clientWidth  || 1280;
+    const h = canvas.clientHeight || 720;
+    if (canvas.width !== w || canvas.height !== h) {
+      canvas.width  = w;
+      canvas.height = h;
+    }
+  }
+  if (typeof ResizeObserver !== 'undefined') {
+    new ResizeObserver(syncSize).observe(canvas);
+  }
+  syncSize();
+
+  const gl = canvas.getContext('webgl') || canvas.getContext('experimental-webgl');
+  if (!gl) return;
+  const vs = `attribute vec2 a_position;
+varying vec2 v_texCoord;
+void main() {
+  v_texCoord = a_position * 0.5 + 0.5;
+  gl_Position = vec4(a_position, 0.0, 1.0);
+}`;
+  const fs = `precision highp float;
+uniform float u_time;
+uniform vec2 u_resolution;
+uniform vec2 u_mouse;
+varying vec2 v_texCoord;
+
+float hash(vec2 p) {
+    p = fract(p * vec2(123.34, 456.21));
+    p += dot(p, p + 45.32);
+    return fract(p.x * p.y);
+}
+
+void main() {
+    vec2 uv = v_texCoord;
+    vec2 p = (gl_FragCoord.xy * 2.0 - u_resolution.xy) / min(u_resolution.x, u_resolution.y);
+    vec2 m = (u_mouse.xy * 2.0 - u_resolution.xy) / min(u_resolution.x, u_resolution.y);
+    
+    // Deep background gradient
+    vec3 color1 = vec3(0.03, 0.04, 0.08); // Deep Midnight
+    vec3 color2 = vec3(0.07, 0.07, 0.07);   // Deep Charcoal
+    vec3 bg = mix(color1, color2, uv.y + sin(u_time * 0.2) * 0.1);
+    
+    // Interactive floating particles
+    float particles = 0.0;
+    for(float i = 0.0; i < 50.0; i++) {
+        vec2 seed = vec2(i, 1.0);
+        vec2 pos = vec2(hash(seed), hash(seed + 1.0));
+        
+        // Base movement
+        pos.y = fract(pos.y - u_time * 0.015 * (0.5 + hash(seed + 2.0)));
+        pos.x += sin(u_time * 0.1 + i) * 0.05;
+        
+        // Convert particle seed to world space
+        vec2 pPos = (pos * 2.0 - 1.0) * (u_resolution.xy / min(u_resolution.x, u_resolution.y));
+        
+        // Mouse reactivity: Particles "flee" or "attract" based on proximity
+        float mouseDist = length(pPos - m);
+        float mouseInfluence = smoothstep(0.6, 0.0, mouseDist);
+        pPos += normalize(pPos - m) * mouseInfluence * 0.15; // Push away effect
+        
+        float dist = length(p - pPos);
+        float size = 0.0015 + 0.0025 * hash(seed + 3.0);
+        
+        // Brightness pulse + proximity boost
+        float pulse = (0.4 + 0.6 * sin(u_time * 0.8 + i));
+        particles += smoothstep(size, 0.0, dist) * pulse * (1.0 + mouseInfluence * 2.0);
+    }
+    
+    // Geometric depth (abstract pillars)
+    float lines = smoothstep(0.0015, 0.0, abs(p.x - sin(u_time * 0.03 + p.y * 0.1) * 0.6));
+    lines *= 0.04;
+    
+    vec3 accent = vec3(0.77, 0.63, 0.35); // Burnished Gold
+    vec3 finalColor = bg + particles * accent * 0.6 + lines * accent;
+    
+    // Subtle mouse glow
+    float glow = smoothstep(1.0, 0.0, length(p - m));
+    finalColor += accent * glow * 0.05;
+    
+    // Vignette
+    float vignette = smoothstep(1.6, 0.4, length(p));
+    finalColor *= vignette;
+
+    gl_FragColor = vec4(finalColor, 1.0);
+}`;
+  function cs(type, src) {
+    const s = gl.createShader(type);
+    gl.shaderSource(s, src);
+    gl.compileShader(s);
+    return s;
+  }
+  const prog = gl.createProgram();
+  gl.attachShader(prog, cs(gl.VERTEX_SHADER, vs));
+  gl.attachShader(prog, cs(gl.FRAGMENT_SHADER, fs));
+  gl.linkProgram(prog);
+  gl.useProgram(prog);
+  const buf = gl.createBuffer();
+  gl.bindBuffer(gl.ARRAY_BUFFER, buf);
+  gl.bufferData(gl.ARRAY_BUFFER, new Float32Array([-1,-1, 1,-1, -1,1, 1,1]), gl.STATIC_DRAW);
+  const pos = gl.getAttribLocation(prog, 'a_position');
+  gl.enableVertexAttribArray(pos);
+  gl.vertexAttribPointer(pos, 2, gl.FLOAT, false, 0, 0);
+  const uTime = gl.getUniformLocation(prog, 'u_time');
+  const uRes = gl.getUniformLocation(prog, 'u_resolution');
+  const uMouse = gl.getUniformLocation(prog, 'u_mouse');
+
+  // u_mouse is in pixel coordinates matching u_resolution (ShaderToy convention).
+  // Shaders that need normalized coords should use: u_mouse / u_resolution.
+  let mouse = { x: canvas.width / 2, y: canvas.height / 2 };
+  window.addEventListener('mousemove', (event) => {
+    const rect = canvas.getBoundingClientRect();
+    if (rect.width && rect.height) {
+      const nx = (event.clientX - rect.left) / rect.width;
+      const ny = 1.0 - (event.clientY - rect.top) / rect.height;
+      mouse.x = nx * canvas.width;
+      mouse.y = ny * canvas.height;
+    }
+  });
+
+  function render(t) {
+    if (typeof ResizeObserver === 'undefined') syncSize();
+    gl.viewport(0, 0, canvas.width, canvas.height);
+    if (uTime) gl.uniform1f(uTime, t * 0.001);
+    if (uRes) gl.uniform2f(uRes, canvas.width, canvas.height);
+    if (uMouse) gl.uniform2f(uMouse, mouse.x, mouse.y);
+    gl.drawArrays(gl.TRIANGLE_STRIP, 0, 4);
+    requestAnimationFrame(render);
+  }
+  render(0);
+})();
+</script>
+</div>
+<!-- STITCH_SHADER_END:ANIMATION_6 -->
+<div class="absolute inset-0 bg-gradient-to-b from-background/20 via-background/60 to-background"></div>
+</div>
+<!-- TopNavBar -->
+<nav class="fixed top-0 w-full z-50 bg-surface/80 backdrop-blur-xl dark:bg-surface/80 border-b border-outline-variant/15 shadow-[0_4px_30px_rgba(197,160,89,0.05)]">
+<div class="flex justify-between items-center h-20 px-margin-mobile md:px-margin-desktop max-w-container-max mx-auto">
+<a class="font-headline-md text-headline-md text-primary tracking-tight" href="#">
+                The Inner Circle
+            </a>
+<div class="hidden md:flex items-center space-x-8 font-label-caps text-label-caps tracking-widest">
+<a class="text-primary border-b border-primary pb-1" href="#inicio">Inicio</a>
+<a class="text-on-surface-variant hover:text-primary transition-colors duration-300" href="#sobre-mi">Sobre Mí</a>
+<a class="text-on-surface-variant hover:text-primary transition-colors duration-300" href="#servicios">Servicios</a>
+<a class="text-on-surface-variant hover:text-primary transition-colors duration-300" href="#contacto">Contacto</a>
+</div>
+<a class="hidden md:inline-flex items-center justify-center px-6 py-3 bg-gradient-to-r from-[#c5a059] to-[#e9c176] text-on-primary-fixed font-label-caps text-label-caps tracking-widest rounded-sm hover:opacity-80 transition-all duration-300 active:scale-95" href="#contacto">
+                Agendar Cita
+            </a>
+<button class="md:hidden text-on-surface-variant">
+<span class="material-symbols-outlined text-3xl">menu</span>
+</button>
+</div>
+</nav>
+<main class="relative z-10 pt-20">
+<!-- Hero Section -->
+<section class="min-h-screen flex items-center justify-center px-margin-mobile md:px-margin-desktop pt-20 pb-32 reveal" id="inicio">
+<div class="max-w-4xl mx-auto text-center">
+<h1 class="font-display-lg-mobile text-display-lg-mobile md:font-display-lg md:text-display-lg text-primary-fixed mb-6 leading-tight">
+                    Defensa Estratégica y Soluciones Legales de Alto Nivel
+                </h1>
+<p class="font-body-lg text-body-lg text-on-surface-variant mb-12 max-w-2xl mx-auto">
+                    Asesoramiento jurídico excepcional para corporaciones e individuos enfrentando litigios complejos. Experiencia, discreción y resultados demostrados.
+                </p>
+<div class="flex flex-col sm:flex-row items-center justify-center gap-6">
+<a class="w-full sm:w-auto px-8 py-4 bg-gradient-to-r from-[#c5a059] to-[#e9c176] text-on-primary-fixed font-label-caps text-label-caps tracking-widest rounded-sm hover:opacity-90 transition-all duration-300 active:scale-95 shadow-[0_0_20px_rgba(197,160,89,0.3)]" href="#contacto">
+                        Agendar Consulta
+                    </a>
+<a class="w-full sm:w-auto px-8 py-4 bg-transparent border border-outline-variant text-primary-fixed font-label-caps text-label-caps tracking-widest rounded-sm hover:border-primary hover:text-primary transition-all duration-300 active:scale-95" href="#servicios">
+                        Explorar Servicios
+                    </a>
+</div>
+</div>
+</section>
+<!-- About Me Section -->
+<section class="py-32 px-margin-mobile md:px-margin-desktop reveal" id="sobre-mi">
+<div class="max-w-container-max mx-auto grid grid-cols-1 lg:grid-cols-2 gap-16 items-center">
+<div class="relative group">
+<div class="absolute inset-0 bg-primary-container/10 blur-3xl rounded-full transform group-hover:scale-105 transition-transform duration-700"></div>
+<img alt="Professional Portrait" class="relative z-10 w-full h-[600px] object-cover rounded-sm border border-outline-variant/30 shadow-2xl grayscale hover:grayscale-0 transition-all duration-700" src="https://lh3.googleusercontent.com/aida-public/AB6AXuDPAbCvgFD2IpM_J1dOOfeYBMHVUt7vFGOmToRezbhv1X4FWVzlZz4gfAbcGiKIJuwojW4FQB3KuPEywQXpkzMLBJNxY4duGBswxcfusAhDJDa21YN_30UtmDEddmiTYhoKRFoJz1hDLX7CqqC95DbeE7AFAKu0TLWvUCrC9b7Rk_Oj7VUefKS8CaxHiOeNkN6ypunzTHbyrm_Mg-C_svWibOhe8rSNXkGC1Q0EeHB2k9jicC2jgYufkg"/>
+</div>
+<div>
+<h2 class="font-headline-md text-headline-md text-primary-fixed mb-8">La Precisión es Nuestro Mayor Activo</h2>
+<p class="font-body-lg text-body-lg text-on-surface-variant mb-12">
+                        En The Inner Circle, abordamos cada caso con meticulosa atención al detalle y una estrategia diseñada específicamente para asegurar el éxito. Nuestro historial habla por sí mismo en las salas de tribunales más exigentes.
+                    </p>
+<div class="grid grid-cols-2 md:grid-cols-3 gap-8">
+<div class="glass-card p-6 rounded-sm">
+<div class="font-headline-lg text-headline-lg text-primary mb-2">15+</div>
+<div class="font-label-caps text-label-caps text-on-surface-variant tracking-wider">Años de Experiencia</div>
+</div>
+<div class="glass-card p-6 rounded-sm">
+<div class="font-headline-lg text-headline-lg text-primary mb-2">500+</div>
+<div class="font-label-caps text-label-caps text-on-surface-variant tracking-wider">Casos Ganados</div>
+</div>
+<div class="glass-card p-6 rounded-sm">
+<div class="font-headline-lg text-headline-lg text-primary mb-2">100+</div>
+<div class="font-label-caps text-label-caps text-on-surface-variant tracking-wider">Clientes Corporativos</div>
+</div>
+</div>
+</div>
+</div>
+</section>
+<!-- Practice Areas Section -->
+<section class="py-32 px-margin-mobile md:px-margin-desktop bg-surface-container/50 reveal" id="servicios">
+<div class="max-w-container-max mx-auto">
+<div class="text-center mb-20">
+<h2 class="font-headline-md text-headline-md text-primary-fixed mb-4">Áreas de Práctica</h2>
+<p class="font-body-lg text-body-lg text-on-surface-variant max-w-2xl mx-auto">Dominios legales donde ejercemos influencia y logramos resoluciones definitivas.</p>
+</div>
+<div class="grid grid-cols-1 md:grid-cols-2 gap-8">
+<div class="glass-card p-10 rounded-sm group relative overflow-hidden transition-all duration-500">
+<div class="absolute inset-0 bg-gradient-to-br from-primary-container/5 to-transparent opacity-0 group-hover:opacity-100 transition-opacity duration-500"></div>
+<span class="material-symbols-outlined text-4xl text-primary mb-6 block" style="font-variation-settings: 'FILL' 1;">gavel</span>
+<h3 class="font-headline-md text-headline-md text-primary-fixed mb-4">Derecho Civil</h3>
+<p class="font-body-md text-body-md text-on-surface-variant relative z-10">Litigios complejos involucrando disputas de propiedad, responsabilidad civil y daños estructurales con un enfoque analítico profundo.</p>
+<div class="mt-8 flex items-center text-primary font-label-caps text-label-caps tracking-widest opacity-0 group-hover:opacity-100 transform translate-y-4 group-hover:translate-y-0 transition-all duration-300">
+                            LEER MÁS <span class="material-symbols-outlined ml-2 text-sm">arrow_forward</span>
+</div>
+</div>
+<div class="glass-card p-10 rounded-sm group relative overflow-hidden transition-all duration-500">
+<div class="absolute inset-0 bg-gradient-to-br from-primary-container/5 to-transparent opacity-0 group-hover:opacity-100 transition-opacity duration-500"></div>
+<span class="material-symbols-outlined text-4xl text-primary mb-6 block" style="font-variation-settings: 'FILL' 1;">domain</span>
+<h3 class="font-headline-md text-headline-md text-primary-fixed mb-4">Derecho Corporativo</h3>
+<p class="font-body-md text-body-md text-on-surface-variant relative z-10">Defensa y estructuración para juntas directivas, fusiones conflictivas y litigios entre accionistas de alto valor.</p>
+<div class="mt-8 flex items-center text-primary font-label-caps text-label-caps tracking-widest opacity-0 group-hover:opacity-100 transform translate-y-4 group-hover:translate-y-0 transition-all duration-300">
+                            LEER MÁS <span class="material-symbols-outlined ml-2 text-sm">arrow_forward</span>
+</div>
+</div>
+<div class="glass-card p-10 rounded-sm group relative overflow-hidden transition-all duration-500">
+<div class="absolute inset-0 bg-gradient-to-br from-primary-container/5 to-transparent opacity-0 group-hover:opacity-100 transition-opacity duration-500"></div>
+<span class="material-symbols-outlined text-4xl text-primary mb-6 block" style="font-variation-settings: 'FILL' 1;">handshake</span>
+<h3 class="font-headline-md text-headline-md text-primary-fixed mb-4">Resolución de Conflictos</h3>
+<p class="font-body-md text-body-md text-on-surface-variant relative z-10">Arbitraje y mediación internacional estratégica para evitar exposiciones públicas perjudiciales.</p>
+<div class="mt-8 flex items-center text-primary font-label-caps text-label-caps tracking-widest opacity-0 group-hover:opacity-100 transform translate-y-4 group-hover:translate-y-0 transition-all duration-300">
+                            LEER MÁS <span class="material-symbols-outlined ml-2 text-sm">arrow_forward</span>
+</div>
+</div>
+<div class="glass-card p-10 rounded-sm group relative overflow-hidden transition-all duration-500">
+<div class="absolute inset-0 bg-gradient-to-br from-primary-container/5 to-transparent opacity-0 group-hover:opacity-100 transition-opacity duration-500"></div>
+<span class="material-symbols-outlined text-4xl text-primary mb-6 block" style="font-variation-settings: 'FILL' 1;">description</span>
+<h3 class="font-headline-md text-headline-md text-primary-fixed mb-4">Contratos</h3>
+<p class="font-body-md text-body-md text-on-surface-variant relative z-10">Análisis exhaustivo y litigio sobre incumplimientos contractuales complejos a nivel empresarial.</p>
+<div class="mt-8 flex items-center text-primary font-label-caps text-label-caps tracking-widest opacity-0 group-hover:opacity-100 transform translate-y-4 group-hover:translate-y-0 transition-all duration-300">
+                            LEER MÁS <span class="material-symbols-outlined ml-2 text-sm">arrow_forward</span>
+</div>
+</div>
+</div>
+</div>
+</section>
+<!-- Booking & Contact Section -->
+<section class="py-32 px-margin-mobile md:px-margin-desktop reveal" id="contacto">
+<div class="max-w-container-max mx-auto">
+<div class="grid grid-cols-1 lg:grid-cols-2 gap-16">
+<div>
+<h2 class="font-headline-md text-headline-md text-primary-fixed mb-6">Inicie el Diálogo</h2>
+<p class="font-body-lg text-body-lg text-on-surface-variant mb-10">La discreción es primordial. Complete el formulario para una evaluación inicial confidencial o seleccione un espacio en nuestro calendario.</p>
+<div class="glass-card p-8 rounded-sm">
+<form class="space-y-6">
+<div>
+<label class="block font-label-caps text-label-caps text-on-surface-variant mb-2">Nombre Completo</label>
+<input class="w-full bg-surface-container-highest border-b border-outline-variant border-x-0 border-t-0 text-on-surface focus:ring-0 focus:border-primary transition-colors bg-transparent px-0 py-3 font-body-md" type="text"/>
+</div>
+<div>
+<label class="block font-label-caps text-label-caps text-on-surface-variant mb-2">Correo Corporativo</label>
+<input class="w-full bg-surface-container-highest border-b border-outline-variant border-x-0 border-t-0 text-on-surface focus:ring-0 focus:border-primary transition-colors bg-transparent px-0 py-3 font-body-md" type="email"/>
+</div>
+<div>
+<label class="block font-label-caps text-label-caps text-on-surface-variant mb-2">Resumen del Asunto</label>
+<textarea class="w-full bg-surface-container-highest border-b border-outline-variant border-x-0 border-t-0 text-on-surface focus:ring-0 focus:border-primary transition-colors bg-transparent px-0 py-3 font-body-md resize-none" rows="4"></textarea>
+</div>
+<button class="w-full px-8 py-4 bg-gradient-to-r from-[#c5a059] to-[#e9c176] text-on-primary-fixed font-label-caps text-label-caps tracking-widest rounded-sm hover:opacity-90 transition-all duration-300 mt-8" type="submit">
+                                    Enviar Consulta
+                                </button>
+</form>
+</div>
+</div>
+<div class="flex flex-col justify-center">
+<div class="glass-card p-8 rounded-sm border-l-4 border-l-primary">
+<h3 class="font-headline-md text-headline-md text-primary-fixed mb-6">Disponibilidad</h3>
+<p class="font-body-md text-body-md text-on-surface-variant mb-8">Nuestra oficina opera bajo estricta agenda. Por favor, utilice el portal para reservar una videollamada cifrada inicial.</p>
+<!-- Placeholder for Calendar UI -->
+<div class="bg-surface-container-lowest p-6 rounded border border-outline-variant/20 flex flex-col items-center justify-center min-h-[300px]">
+<span class="material-symbols-outlined text-4xl text-outline-variant mb-4">calendar_month</span>
+<p class="text-on-surface-variant font-label-caps text-label-caps tracking-widest">INTERFAZ DE AGENDA PRIVADA</p>
+</div>
+</div>
+</div>
+</div>
+</div>
+</section>
+</main>
+<!-- Footer -->
+<footer class="bg-surface-container-lowest dark:bg-surface-container-lowest w-full py-16 border-t border-outline-variant/10 relative z-10">
+<div class="grid grid-cols-1 md:grid-cols-4 gap-gutter px-margin-mobile md:px-margin-desktop max-w-container-max mx-auto">
+<div class="col-span-1 md:col-span-1">
+<a class="font-headline-md text-headline-md text-primary block mb-6" href="#">
+                    The Inner Circle
+                </a>
+<p class="font-body-md text-body-md text-on-surface-variant">
+                    © 2024 The Inner Circle Litigation.<br/>All rights reserved.
+                </p>
+</div>
+<div class="col-span-1 md:col-span-3 flex flex-wrap gap-8 md:justify-end items-start font-body-md text-body-md">
+<a class="text-on-surface-variant hover:text-primary transition-colors duration-200" href="#">LinkedIn</a>
+<a class="text-on-surface-variant hover:text-primary transition-colors duration-200" href="#">Experience</a>
+<a class="text-on-surface-variant hover:text-primary transition-colors duration-200" href="#">Awards</a>
+<a class="text-on-surface-variant hover:text-primary transition-colors duration-200" href="#">Privacy Policy</a>
+</div>
+</div>
+</footer>
+<script>
+        // Simple reveal on scroll
+        function reveal() {
+            var reveals = document.querySelectorAll(".reveal");
+            for (var i = 0; i < reveals.length; i++) {
+                var windowHeight = window.innerHeight;
+                var elementTop = reveals[i].getBoundingClientRect().top;
+                var elementVisible = 150;
+                if (elementTop < windowHeight - elementVisible) {
+                    reveals[i].classList.add("active");
+                }
+            }
+        }
+        window.addEventListener("scroll", reveal);
+        reveal(); // Trigger on load
+    </script>
+</body></html>
