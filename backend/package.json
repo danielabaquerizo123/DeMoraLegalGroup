@@ -9,6 +9,7 @@
     "build": "tsc",
     "start": "node dist/server.js",
     "typecheck": "tsc --noEmit",
+    "seed:public": "tsx prisma/seed/public.ts",
     "seed": "tsx prisma/seed/index.ts"
   },
   "keywords": [],
