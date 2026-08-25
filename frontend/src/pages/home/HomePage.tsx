@@ -84,11 +84,18 @@ export function HomePage() {
         {professionals.isLoading ? <LoadingState /> : null}
         {professionals.error ? <ErrorState message={professionals.error} /> : null}
         {professionals.data ? (
-          <div className="professional-grid professional-grid--showcase">
-            {professionals.data.data.map((professional, index) => (
-              <ProfessionalCard key={professional.slug} professional={professional} priority={index === 0} variant="showcase" />
-            ))}
-          </div>
+          <>
+            <div className="professional-grid professional-grid--showcase" aria-label="Carrusel de profesionales">
+              {professionals.data.data.map((professional, index) => (
+                <ProfessionalCard key={professional.slug} professional={professional} priority={index === 0} variant="showcase" />
+              ))}
+            </div>
+            <div className="mobile-carousel-dots" aria-hidden="true">
+              {professionals.data.data.map((professional, index) => (
+                <span className={index === 0 ? "is-active" : ""} key={professional.slug} />
+              ))}
+            </div>
+          </>
         ) : null}
       </section>
 
@@ -109,6 +116,13 @@ export function HomePage() {
             </Link>
           ))}
         </div>
+        {services.data ? (
+          <div className="mobile-carousel-dots mobile-carousel-dots--services" aria-hidden="true">
+            {services.data.data.map((service, index) => (
+              <span className={index === 0 ? "is-active" : ""} key={service.slug} />
+            ))}
+          </div>
+        ) : null}
         <div className="practice-section__image" aria-hidden="true">
           <img src={studioMeetingAsset} alt="" loading="lazy" />
         </div>
@@ -145,6 +159,7 @@ export function HomePage() {
             <div className="blog-grid blog-grid--home">
               {articles.data.data.map((article) => (
                 <article className="blog-card" key={article.slug}>
+                  {article.imagen ? <img className="blog-card__image" src={article.imagen} alt="" loading="lazy" /> : null}
                   <p className="eyebrow">{article.categoria?.nombre ?? "Blog juridico"}</p>
                   <h3>
                     <Link to={`/blog/${article.slug}`}>{article.titulo}</Link>

@@ -217,7 +217,7 @@ model ArticuloBlog {
   extracto  String? @db.VarChar(500)
   contenido String  @db.Text
 
-  imagenPortadaUrl String? @map("imagen_portada_url") @db.VarChar(500)
+  imagenPortadaUrl String? @map("imagen_portada_url") @db.Text
 
   estado EstadoPublicacion @default(BORRADOR)
 

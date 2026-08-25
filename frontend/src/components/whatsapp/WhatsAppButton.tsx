@@ -54,7 +54,8 @@ export function WhatsAppButton({ configuration }: WhatsAppButtonProps) {
   }
 
   return (
-    <a className="whatsapp-float" href={href} target="_blank" rel="noreferrer" aria-label={`Contactar por WhatsApp ${whatsapp.display}`}>
+    <a className="whatsapp-float" href={href} target="_blank" rel="noreferrer" aria-label="Contactar por WhatsApp" title="WhatsApp">
+      <img src="/images/ui/legal-whatsapp.png" alt="" aria-hidden="true" />
       <span>WhatsApp</span>
     </a>
   );

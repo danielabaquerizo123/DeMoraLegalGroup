@@ -29,6 +29,16 @@ export const errorMiddleware: ErrorRequestHandler = (error, _request, response, 
     return;
   }
 
+  const candidateStatus = (error as { status?: unknown; statusCode?: unknown }).status ?? (error as { statusCode?: unknown }).statusCode;
+  if ((error as { type?: unknown }).type === "entity.too.large" || candidateStatus === 413) {
+    response.status(413).json({
+      error: {
+        message: "El contenido enviado es demasiado grande",
+      },
+    });
+    return;
+  }
+
   if (process.env.NODE_ENV !== "production") {
     console.error(error);
   }

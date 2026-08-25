@@ -23,7 +23,9 @@ app.use(
     credentials: true,
   }),
 );
-app.use(express.json());
+// 4 mb: permite data URLs Base64 de portada (tope del validador: 3.000.000 caracteres)
+// con margen para el resto del JSON, sin dejar el cuerpo sin limite.
+app.use(express.json({ limit: "4mb" }));
 
 app.get("/api/health", (_request, response) => {
   response.status(200).json({ status: "ok" });

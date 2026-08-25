@@ -31,8 +31,9 @@ export function LegalAssistant({ configuration }: LegalAssistantProps) {
   return (
     <div className="assistant-shell">
       {isOpen ? <AssistantPanel assistant={assistant} /> : null}
-      <button className="assistant-float" type="button" aria-label="Abrir asistente legal" aria-expanded={isOpen} onClick={open}>
-        <span>Guía</span>
+      <button className="assistant-float" type="button" aria-label="Abrir guía legal" title="Guía legal" aria-expanded={isOpen} onClick={open}>
+        <img src="/images/ui/legal-assistant.png" alt="" aria-hidden="true" />
+        <span>Guía legal</span>
       </button>
     </div>
   );

@@ -1,5 +1,6 @@
 import { useEffect, useState } from "react";
 import { Link, NavLink, useLocation } from "react-router-dom";
+import { Phone } from "lucide-react";
 import { logoAsset } from "../../constants/assets";
 import type { SiteConfiguration } from "../../types/api";
 import { buildWhatsAppUrl } from "../../utils/whatsapp";
@@ -74,6 +75,7 @@ export function Navbar({ configuration }: NavbarProps) {
 
         {whatsapp ? (
           <a className="button button--nav" href={buildWhatsAppUrl(whatsapp.url)} target="_blank" rel="noreferrer">
+            <Phone aria-hidden="true" />
             Consultar
           </a>
         ) : null}
@@ -98,6 +100,7 @@ export function Navbar({ configuration }: NavbarProps) {
         )}
         {whatsapp ? (
           <a className="button button--primary" href={buildWhatsAppUrl(whatsapp.url)} target="_blank" rel="noreferrer">
+            <Phone aria-hidden="true" />
             Contactar
           </a>
         ) : null}

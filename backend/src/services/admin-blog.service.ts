@@ -10,6 +10,14 @@ type PostPayload = {
   estado: "BORRADOR" | "PUBLICADO";
 };
 
+type VideoBlock = {
+  provider: "youtube" | "instagram";
+  url: string;
+  embedUrl: string;
+  videoId?: string;
+  shortcode?: string;
+};
+
 const postInclude = {
   autorProfesional: true,
   autores: {
@@ -18,11 +26,11 @@ const postInclude = {
   },
 };
 
-const allowedTags = new Set(["p", "br", "strong", "b", "em", "i", "h1", "h2", "ul", "ol", "li", "blockquote", "a", "img", "figure", "figcaption", "iframe"]);
+const allowedTags = new Set(["p", "br", "strong", "b", "em", "i", "h1", "h2", "ul", "ol", "li", "blockquote", "a", "img", "figure", "figcaption", "div", "span"]);
 const allowedAttributes = new Map<string, Set<string>>([
   ["a", new Set(["href", "target", "rel"])],
   ["img", new Set(["src", "alt"])],
-  ["iframe", new Set(["src", "title", "allow", "allowfullscreen", "loading"])],
+  ["figure", new Set(["data-content-block", "data-provider", "data-video-id", "data-shortcode", "data-url", "data-embed-url"])],
 ]);
 
 function slugify(value: string) {
@@ -58,7 +66,7 @@ async function defaultCategoryId() {
   return category?.id ?? null;
 }
 
-function youtubeEmbedUrl(rawUrl: string) {
+function youtubeVideo(rawUrl: string): VideoBlock | null {
   try {
     const url = new URL(rawUrl);
     const hostname = url.hostname.replace(/^www\./, "");
@@ -70,6 +78,9 @@ function youtubeEmbedUrl(rawUrl: string) {
 
     if (hostname === "youtube.com" || hostname === "m.youtube.com") {
       videoId = url.searchParams.get("v");
+      if (!videoId && url.pathname.startsWith("/shorts/")) {
+        videoId = url.pathname.split("/")[2] ?? null;
+      }
       if (!videoId && url.pathname.startsWith("/embed/")) {
         videoId = url.pathname.split("/")[2] ?? null;
       }
@@ -79,10 +90,77 @@ function youtubeEmbedUrl(rawUrl: string) {
       return null;
     }
 
-    return `https://www.youtube.com/embed/${videoId}`;
+    return {
+      provider: "youtube",
+      url: url.href,
+      embedUrl: `https://www.youtube.com/embed/${videoId}`,
+      videoId,
+    };
   } catch {
     return null;
   }
+}
+
+function instagramVideo(rawUrl: string): VideoBlock | null {
+  try {
+    const url = new URL(rawUrl);
+    const hostname = url.hostname.replace(/^www\./, "");
+
+    if (hostname !== "instagram.com") {
+      return null;
+    }
+
+    const [kind, shortcode] = url.pathname.split("/").filter(Boolean);
+
+    if ((kind !== "p" && kind !== "reel") || !shortcode || !/^[A-Za-z0-9_-]+$/.test(shortcode)) {
+      return null;
+    }
+
+    return {
+      provider: "instagram",
+      url: url.href,
+      embedUrl: `https://www.instagram.com/${kind}/${shortcode}/embed`,
+      shortcode,
+    };
+  } catch {
+    return null;
+  }
+}
+
+function videoFromUrl(rawUrl: string) {
+  return youtubeVideo(rawUrl) ?? instagramVideo(rawUrl);
+}
+
+function readAttribute(attributes: string, name: string) {
+  const pattern = new RegExp(`\\b${name}\\s*=\\s*(\"([^\"]*)\"|'([^']*)')`, "i");
+  const match = attributes.match(pattern);
+
+  return match?.[2] ?? match?.[3] ?? "";
+}
+
+function videoFigure(attributes: string) {
+  if (readAttribute(attributes, "data-content-block") !== "video") {
+    return null;
+  }
+
+  const provider = readAttribute(attributes, "data-provider");
+  const url = readAttribute(attributes, "data-url");
+  const embedUrl = readAttribute(attributes, "data-embed-url");
+  const videoId = readAttribute(attributes, "data-video-id");
+  const shortcode = readAttribute(attributes, "data-shortcode");
+
+  if (provider === "youtube" && videoId && /^[A-Za-z0-9_-]{6,20}$/.test(videoId)) {
+    return `<figure data-content-block="video" data-provider="youtube" data-video-id="${videoId}" data-url="${url || `https://www.youtube.com/watch?v=${videoId}`}" data-embed-url="https://www.youtube.com/embed/${videoId}"></figure>`;
+  }
+
+  if (provider === "instagram" && shortcode && /^[A-Za-z0-9_-]+$/.test(shortcode) && isAllowedVideoUrl(url || embedUrl)) {
+    const sourceUrl = url || `https://www.instagram.com/p/${shortcode}/`;
+    const embed = embedUrl && isAllowedVideoUrl(embedUrl) ? embedUrl : `${sourceUrl.replace(/\/$/, "")}/embed`;
+
+    return `<figure data-content-block="video" data-provider="instagram" data-shortcode="${shortcode}" data-url="${sourceUrl}" data-embed-url="${embed}"></figure>`;
+  }
+
+  return null;
 }
 
 function sanitizeAttributes(tag: string, attributes: string) {
@@ -104,7 +182,27 @@ function sanitizeAttributes(tag: string, attributes: string) {
       continue;
     }
 
-    if ((name === "href" || name === "src") && !isSafeUrl(value, tag === "iframe")) {
+    if ((name === "href" || name === "src") && !isSafeUrl(value)) {
+      continue;
+    }
+
+    if ((name === "data-url" || name === "data-embed-url") && !isAllowedVideoUrl(value)) {
+      continue;
+    }
+
+    if (name === "data-content-block" && value !== "video") {
+      continue;
+    }
+
+    if (name === "data-provider" && value !== "youtube" && value !== "instagram") {
+      continue;
+    }
+
+    if (name === "data-video-id" && !/^[A-Za-z0-9_-]{6,20}$/.test(value)) {
+      continue;
+    }
+
+    if (name === "data-shortcode" && !/^[A-Za-z0-9_-]+$/.test(value)) {
       continue;
     }
 
@@ -115,14 +213,10 @@ function sanitizeAttributes(tag: string, attributes: string) {
     cleaned.push('target="_blank"', 'rel="noreferrer"');
   }
 
-  if (tag === "iframe") {
-    cleaned.push('loading="lazy"', 'allowfullscreen="true"', 'allow="accelerometer; autoplay; clipboard-write; encrypted-media; gyroscope; picture-in-picture; web-share"');
-  }
-
   return cleaned.length ? ` ${Array.from(new Set(cleaned)).join(" ")}` : "";
 }
 
-function isSafeUrl(value: string, allowYoutubeEmbed = false) {
+function isSafeUrl(value: string) {
   if (value.startsWith("data:image/")) {
     return true;
   }
@@ -134,11 +228,18 @@ function isSafeUrl(value: string, allowYoutubeEmbed = false) {
       return false;
     }
 
-    if (allowYoutubeEmbed) {
-      return url.hostname === "www.youtube.com" && url.pathname.startsWith("/embed/");
-    }
-
     return true;
+  } catch {
+    return false;
+  }
+}
+
+function isAllowedVideoUrl(value: string) {
+  try {
+    const url = new URL(value);
+    const hostname = url.hostname.replace(/^www\./, "");
+
+    return ["youtube.com", "m.youtube.com", "youtu.be", "instagram.com"].includes(hostname) && ["http:", "https:"].includes(url.protocol);
   } catch {
     return false;
   }
@@ -147,16 +248,21 @@ function isSafeUrl(value: string, allowYoutubeEmbed = false) {
 export function sanitizeHtml(html: string) {
   let sanitized = html.replace(/<script[\s\S]*?>[\s\S]*?<\/script>/gi, "").replace(/\son[a-z]+\s*=\s*(".*?"|'.*?'|[^\s>]+)/gi, "");
 
+  sanitized = sanitized.replace(/<figure\b([^>]*)>[\s\S]*?<\/figure>/gi, (match, attributes: string) => videoFigure(attributes) ?? match);
+
   sanitized = sanitized.replace(/<iframe\b([^>]*)><\/iframe>/gi, (_match, attributes: string) => {
     const src = attributes.match(/\bsrc\s*=\s*("([^"]*)"|'([^']*)')/i);
     const rawSrc = src?.[2] ?? src?.[3] ?? "";
-    const embedUrl = youtubeEmbedUrl(rawSrc) ?? (isSafeUrl(rawSrc, true) ? rawSrc : null);
+    const video = videoFromUrl(rawSrc);
 
-    if (!embedUrl) {
+    if (!video) {
       return "";
     }
 
-    return `<iframe src="${embedUrl}" title="Video embebido"></iframe>`;
+    const videoId = video.videoId ? ` data-video-id="${video.videoId}"` : "";
+    const shortcode = video.shortcode ? ` data-shortcode="${video.shortcode}"` : "";
+
+    return `<figure data-content-block="video" data-provider="${video.provider}"${videoId}${shortcode} data-url="${video.url}" data-embed-url="${video.embedUrl}"></figure>`;
   });
 
   sanitized = sanitized.replace(/<\/?([a-zA-Z0-9]+)([^>]*)>/g, (match, rawTag: string, attributes: string) => {
@@ -208,6 +314,25 @@ function toAdminPost(post: any) {
     fecha: post.publicadoEn,
     actualizadoEn: post.actualizadoEn,
     autor: primaryAuthor(post),
+  };
+}
+
+function normalizedPostPayload(payload: PostPayload) {
+  const isPublished = payload.estado === EstadoPublicacion.PUBLICADO;
+  const titulo = payload.titulo.trim() || "Borrador sin titulo";
+  const contenido = payload.contenido.trim();
+  const sanitizedContent = sanitizeHtml(contenido);
+
+  if (isPublished && (!payload.titulo.trim() || sanitizedContent.length === 0)) {
+    throw new HttpError(400, "El título y el contenido son obligatorios para publicar.");
+  }
+
+  return {
+    titulo,
+    extracto: payload.extracto?.trim() || null,
+    contenido: sanitizedContent,
+    imagenPortadaUrl: payload.imagenPortadaUrl || null,
+    isPublished,
   };
 }
 
@@ -270,22 +395,18 @@ export const adminBlogService = {
 
   async create(professionalId: string, payload: PostPayload) {
     const categoryId = await defaultCategoryId();
-    const slug = await uniqueSlug(payload.titulo);
-    const isPublished = payload.estado === EstadoPublicacion.PUBLICADO;
-
-    if (isPublished && sanitizeHtml(payload.contenido).length === 0) {
-      throw new HttpError(400, "El contenido es obligatorio para publicar.");
-    }
+    const normalized = normalizedPostPayload(payload);
+    const slug = await uniqueSlug(normalized.titulo);
 
     const post = await prisma.articuloBlog.create({
       data: {
-        titulo: payload.titulo,
+        titulo: normalized.titulo,
         slug,
-        extracto: payload.extracto || null,
-        contenido: sanitizeHtml(payload.contenido),
-        imagenPortadaUrl: payload.imagenPortadaUrl || null,
+        extracto: normalized.extracto,
+        contenido: normalized.contenido,
+        imagenPortadaUrl: normalized.imagenPortadaUrl,
         estado: payload.estado,
-        publicadoEn: isPublished ? new Date() : null,
+        publicadoEn: normalized.isPublished ? new Date() : null,
         categoriaId: categoryId,
         autorProfesionalId: professionalId,
         autores: {
@@ -303,19 +424,19 @@ export const adminBlogService = {
   },
 
   async update(professionalId: string, id: string, payload: PostPayload) {
-    await findOwnedPost(professionalId, id);
-    const isPublished = payload.estado === EstadoPublicacion.PUBLICADO;
+    const existingPost = await findOwnedPost(professionalId, id);
+    const normalized = normalizedPostPayload(payload);
 
     const post = await prisma.articuloBlog.update({
       where: { id },
       data: {
-        titulo: payload.titulo,
-        slug: await uniqueSlug(payload.titulo, id),
-        extracto: payload.extracto || null,
-        contenido: sanitizeHtml(payload.contenido),
-        imagenPortadaUrl: payload.imagenPortadaUrl || null,
+        titulo: normalized.titulo,
+        slug: await uniqueSlug(normalized.titulo, id),
+        extracto: normalized.extracto,
+        contenido: normalized.contenido,
+        imagenPortadaUrl: normalized.imagenPortadaUrl,
         estado: payload.estado,
-        publicadoEn: isPublished ? new Date() : null,
+        publicadoEn: normalized.isPublished ? (existingPost.publicadoEn ?? new Date()) : null,
         autorProfesionalId: professionalId,
         autores: {
           upsert: {
