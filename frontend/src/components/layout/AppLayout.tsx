@@ -1,6 +1,5 @@
 import { useRef } from "react";
 import { Outlet } from "react-router-dom";
-import { LegalAssistant } from "../assistant/LegalAssistant";
 import { BackgroundAtmosphere } from "../sections/BackgroundAtmosphere";
 import { Footer } from "./Footer";
 import { Navbar } from "../navigation/Navbar";
@@ -25,7 +24,6 @@ export function AppLayout() {
       </main>
       <Footer configuration={configuration} />
       <WhatsAppButton configuration={configuration} />
-      <LegalAssistant configuration={configuration} />
     </>
   );
 }

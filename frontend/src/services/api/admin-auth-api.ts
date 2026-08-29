@@ -7,9 +7,7 @@ export type LoginPayload = {
 };
 
 export type ChangePasswordPayload = {
-  currentPassword: string;
   password: string;
-  confirmPassword: string;
 };
 
 export const adminAuthApi = {

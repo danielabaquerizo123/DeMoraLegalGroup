@@ -20,6 +20,7 @@ const servicios = [
     slug: "derecho-administrativo",
     resumen: "Orientación jurídica en procedimientos, actuaciones y controversias relacionadas con la administración pública.",
     descripcion: "Orientación jurídica en procedimientos, actuaciones y controversias relacionadas con la administración pública.",
+    preguntaColoquial: "¿Tienes un problema con una entidad o institución pública?",
     orden: 3,
   },
   {
@@ -27,6 +28,7 @@ const servicios = [
     slug: "derecho-constitucional",
     resumen: "Asesoría en asuntos relacionados con derechos, garantías y mecanismos previstos por el ordenamiento constitucional.",
     descripcion: "Asesoría en asuntos relacionados con derechos, garantías y mecanismos previstos por el ordenamiento constitucional.",
+    preguntaColoquial: "¿Necesitas proteger un derecho fundamental o impugnar una norma?",
     orden: 4,
   },
   {
@@ -34,6 +36,7 @@ const servicios = [
     slug: "derecho-tributario",
     resumen: "Orientación jurídica en asuntos tributarios y en la interpretación y aplicación de la normativa correspondiente.",
     descripcion: "Orientación jurídica en asuntos tributarios y en la interpretación y aplicación de la normativa correspondiente.",
+    preguntaColoquial: "¿Tienes un inconveniente con el SRI o el pago de impuestos?",
     orden: 5,
   },
   {
@@ -41,6 +44,7 @@ const servicios = [
     slug: "contratacion-publica",
     resumen: "Asesoría jurídica relacionada con procedimientos y actuaciones dentro del ámbito de la contratación pública.",
     descripcion: "Asesoría jurídica relacionada con procedimientos y actuaciones dentro del ámbito de la contratación pública.",
+    preguntaColoquial: "¿Participas o tienes un conflicto en un contrato con el Estado?",
     orden: 6,
   },
   {
@@ -48,6 +52,7 @@ const servicios = [
     slug: "derecho-de-familia",
     resumen: "Acompañamiento jurídico en asuntos familiares que requieren orientación, análisis y una atención responsable de cada situación.",
     descripcion: "Acompañamiento jurídico en asuntos familiares que requieren orientación, análisis y una atención responsable de cada situación.",
+    preguntaColoquial: "¿Tu situación involucra divorcio, pensión alimenticia o custodia?",
     orden: 7,
   },
   {
@@ -55,6 +60,7 @@ const servicios = [
     slug: "derecho-de-transito",
     resumen: "Asesoría jurídica en asuntos relacionados con tránsito, incluyendo procedimientos e impugnaciones que requieran análisis y defensa legal.",
     descripcion: "Asesoría jurídica en asuntos relacionados con tránsito, incluyendo procedimientos e impugnaciones que requieran análisis y defensa legal.",
+    preguntaColoquial: "¿Tuviste un accidente de tránsito o una multa que quieres impugnar?",
     orden: 8,
   },
 ];

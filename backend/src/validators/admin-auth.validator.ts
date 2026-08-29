@@ -20,13 +20,6 @@ export const adminLoginSchema = z.object({
   password: z.string().min(1, "La contraseña es obligatoria."),
 });
 
-export const adminChangePasswordSchema = z
-  .object({
-    currentPassword: z.string().min(1, "La contraseña actual es obligatoria."),
-    password: passwordSchema,
-    confirmPassword: z.string(),
-  })
-  .refine((data) => data.password === data.confirmPassword, {
-    message: "Las contraseñas no coinciden.",
-    path: ["confirmPassword"],
-  });
+export const adminChangePasswordSchema = z.object({
+  password: passwordSchema,
+});

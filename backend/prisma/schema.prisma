@@ -65,11 +65,11 @@ model Profesional {
   creadoEn      DateTime @default(now()) @map("creado_en") @db.Timestamptz(3)
   actualizadoEn DateTime @updatedAt @map("actualizado_en") @db.Timestamptz(3)
 
-  contactos CanalContactoProfesional[]
-  servicios ProfesionalServicio[]
-  sedes     ProfesionalSede[]
-  autorias  ArticuloAutor[]
-  usuariosAdmin UsuarioAdmin[]
+  contactos      CanalContactoProfesional[]
+  servicios      ProfesionalServicio[]
+  sedes          ProfesionalSede[]
+  autorias       ArticuloAutor[]
+  usuariosAdmin  UsuarioAdmin[]
   articulosAdmin ArticuloBlog[]
 
   @@index([activo, orden])
@@ -148,8 +148,10 @@ model Servicio {
   nombre String @db.VarChar(150)
   slug   String @unique @db.VarChar(180)
 
-  resumen     String? @db.VarChar(350)
-  descripcion String? @db.Text
+  resumen           String?  @db.VarChar(350)
+  descripcion       String?  @db.Text
+  preguntaColoquial String?  @map("pregunta_coloquial")
+  palabrasClave     String[] @default([]) @map("palabras_clave")
 
   icono     String? @db.VarChar(150)
   imagenUrl String? @map("imagen_url") @db.VarChar(500)
@@ -225,11 +227,11 @@ model ArticuloBlog {
 
   publicadoEn DateTime? @map("publicado_en") @db.Timestamptz(3)
 
-  categoriaId String? @map("id_categoria") @db.Uuid
+  categoriaId        String? @map("id_categoria") @db.Uuid
   autorProfesionalId String? @map("id_autor_profesional") @db.Uuid
 
-  categoria CategoriaBlog? @relation(fields: [categoriaId], references: [id], onDelete: Restrict, onUpdate: Cascade)
-  autorProfesional Profesional? @relation(fields: [autorProfesionalId], references: [id], onDelete: Restrict, onUpdate: Cascade)
+  categoria        CategoriaBlog? @relation(fields: [categoriaId], references: [id], onDelete: Restrict, onUpdate: Cascade)
+  autorProfesional Profesional?   @relation(fields: [autorProfesionalId], references: [id], onDelete: Restrict, onUpdate: Cascade)
 
   metaTitulo      String? @map("meta_titulo") @db.VarChar(200)
   metaDescripcion String? @map("meta_descripcion") @db.VarChar(320)
@@ -331,15 +333,15 @@ model ConfiguracionSitio {
 model UsuarioAdmin {
   id String @id @default(uuid()) @db.Uuid
 
-  nombre       String @db.VarChar(160)
-  username     String? @unique @db.VarChar(80)
-  email        String? @unique @db.VarChar(255)
-  passwordHash String @map("password_hash") @db.VarChar(255)
-  profesionalId String? @map("id_profesional") @db.Uuid
-  profesional Profesional? @relation(fields: [profesionalId], references: [id], onDelete: Restrict, onUpdate: Cascade)
+  nombre        String       @db.VarChar(160)
+  username      String?      @unique @db.VarChar(80)
+  email         String?      @unique @db.VarChar(255)
+  passwordHash  String       @map("password_hash") @db.VarChar(255)
+  profesionalId String?      @map("id_profesional") @db.Uuid
+  profesional   Profesional? @relation(fields: [profesionalId], references: [id], onDelete: Restrict, onUpdate: Cascade)
 
-  emailVerificado Boolean @default(false) @map("email_verificado")
-  estado           EstadoUsuarioAdmin @default(PENDIENTE)
+  emailVerificado Boolean            @default(false) @map("email_verificado")
+  estado          EstadoUsuarioAdmin @default(PENDIENTE)
 
   ultimoAccesoEn DateTime? @map("ultimo_acceso_en") @db.Timestamptz(3)
   bloqueadoHasta DateTime? @map("bloqueado_hasta") @db.Timestamptz(3)
@@ -359,15 +361,15 @@ model UsuarioAdmin {
 model TokenAdmin {
   id String @id @default(uuid()) @db.Uuid
 
-  usuarioId String @map("id_usuario") @db.Uuid
+  usuarioId String       @map("id_usuario") @db.Uuid
   usuario   UsuarioAdmin @relation(fields: [usuarioId], references: [id], onDelete: Cascade, onUpdate: Cascade)
 
   tipo      TipoTokenAdmin
-  tokenHash String @unique @map("token_hash") @db.VarChar(128)
+  tokenHash String         @unique @map("token_hash") @db.VarChar(128)
 
-  expiraEn DateTime @map("expira_en") @db.Timestamptz(3)
+  expiraEn DateTime  @map("expira_en") @db.Timestamptz(3)
   usadoEn  DateTime? @map("usado_en") @db.Timestamptz(3)
-  creadoEn DateTime @default(now()) @map("creado_en") @db.Timestamptz(3)
+  creadoEn DateTime  @default(now()) @map("creado_en") @db.Timestamptz(3)
 
   @@index([usuarioId, tipo])
   @@index([tipo, expiraEn])
@@ -377,7 +379,7 @@ model TokenAdmin {
 model SesionAdmin {
   id String @id @default(uuid()) @db.Uuid
 
-  usuarioId String @map("id_usuario") @db.Uuid
+  usuarioId String       @map("id_usuario") @db.Uuid
   usuario   UsuarioAdmin @relation(fields: [usuarioId], references: [id], onDelete: Cascade, onUpdate: Cascade)
 
   tokenHash String @unique @map("token_hash") @db.VarChar(128)
@@ -385,10 +387,10 @@ model SesionAdmin {
   ip        String? @db.VarChar(80)
   userAgent String? @map("user_agent") @db.VarChar(500)
 
-  expiraEn       DateTime @map("expira_en") @db.Timestamptz(3)
-  revocadaEn     DateTime? @map("revocada_en") @db.Timestamptz(3)
-  ultimoUsoEn    DateTime @default(now()) @map("ultimo_uso_en") @db.Timestamptz(3)
-  creadoEn       DateTime @default(now()) @map("creado_en") @db.Timestamptz(3)
+  expiraEn    DateTime  @map("expira_en") @db.Timestamptz(3)
+  revocadaEn  DateTime? @map("revocada_en") @db.Timestamptz(3)
+  ultimoUsoEn DateTime  @default(now()) @map("ultimo_uso_en") @db.Timestamptz(3)
+  creadoEn    DateTime  @default(now()) @map("creado_en") @db.Timestamptz(3)
 
   @@index([usuarioId])
   @@index([expiraEn])
@@ -398,11 +400,11 @@ model SesionAdmin {
 model IntentoLoginAdmin {
   id String @id @default(uuid()) @db.Uuid
 
-  email  String @db.VarChar(255)
+  email    String  @db.VarChar(255)
   username String? @db.VarChar(80)
-  ip     String? @db.VarChar(80)
-  exitoso Boolean @default(false)
-  motivo  String? @db.VarChar(120)
+  ip       String? @db.VarChar(80)
+  exitoso  Boolean @default(false)
+  motivo   String? @db.VarChar(120)
 
   creadoEn DateTime @default(now()) @map("creado_en") @db.Timestamptz(3)
 

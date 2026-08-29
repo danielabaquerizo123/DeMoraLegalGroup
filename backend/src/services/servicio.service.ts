@@ -9,6 +9,7 @@ const toPublicServicioListItem = (servicio: ServicioListRecord) => ({
   slug: servicio.slug,
   resumen: servicio.resumen,
   descripcion: servicio.descripcion,
+  preguntaColoquial: servicio.preguntaColoquial,
   icono: servicio.icono,
   imagenUrl: servicio.imagenUrl,
   destacado: servicio.destacado,

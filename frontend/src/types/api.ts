@@ -93,6 +93,7 @@ export type LegalService = {
   slug: string;
   resumen: string | null;
   descripcion: string | null;
+  preguntaColoquial: string | null;
   icono: string | null;
   imagenUrl: string | null;
   destacado: boolean;

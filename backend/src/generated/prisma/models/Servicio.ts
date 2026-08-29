@@ -40,6 +40,7 @@ export type ServicioMinAggregateOutputType = {
   slug: string | null
   resumen: string | null
   descripcion: string | null
+  preguntaColoquial: string | null
   icono: string | null
   imagenUrl: string | null
   destacado: boolean | null
@@ -57,6 +58,7 @@ export type ServicioMaxAggregateOutputType = {
   slug: string | null
   resumen: string | null
   descripcion: string | null
+  preguntaColoquial: string | null
   icono: string | null
   imagenUrl: string | null
   destacado: boolean | null
@@ -74,6 +76,8 @@ export type ServicioCountAggregateOutputType = {
   slug: number
   resumen: number
   descripcion: number
+  preguntaColoquial: number
+  palabrasClave: number
   icono: number
   imagenUrl: number
   destacado: number
@@ -101,6 +105,7 @@ export type ServicioMinAggregateInputType = {
   slug?: true
   resumen?: true
   descripcion?: true
+  preguntaColoquial?: true
   icono?: true
   imagenUrl?: true
   destacado?: true
@@ -118,6 +123,7 @@ export type ServicioMaxAggregateInputType = {
   slug?: true
   resumen?: true
   descripcion?: true
+  preguntaColoquial?: true
   icono?: true
   imagenUrl?: true
   destacado?: true
@@ -135,6 +141,8 @@ export type ServicioCountAggregateInputType = {
   slug?: true
   resumen?: true
   descripcion?: true
+  preguntaColoquial?: true
+  palabrasClave?: true
   icono?: true
   imagenUrl?: true
   destacado?: true
@@ -239,6 +247,8 @@ export type ServicioGroupByOutputType = {
   slug: string
   resumen: string | null
   descripcion: string | null
+  preguntaColoquial: string | null
+  palabrasClave: string[]
   icono: string | null
   imagenUrl: string | null
   destacado: boolean
@@ -279,6 +289,8 @@ export type ServicioWhereInput = {
   slug?: Prisma.StringFilter<"Servicio"> | string
   resumen?: Prisma.StringNullableFilter<"Servicio"> | string | null
   descripcion?: Prisma.StringNullableFilter<"Servicio"> | string | null
+  preguntaColoquial?: Prisma.StringNullableFilter<"Servicio"> | string | null
+  palabrasClave?: Prisma.StringNullableListFilter<"Servicio">
   icono?: Prisma.StringNullableFilter<"Servicio"> | string | null
   imagenUrl?: Prisma.StringNullableFilter<"Servicio"> | string | null
   destacado?: Prisma.BoolFilter<"Servicio"> | boolean
@@ -298,6 +310,8 @@ export type ServicioOrderByWithRelationInput = {
   slug?: Prisma.SortOrder
   resumen?: Prisma.SortOrderInput | Prisma.SortOrder
   descripcion?: Prisma.SortOrderInput | Prisma.SortOrder
+  preguntaColoquial?: Prisma.SortOrderInput | Prisma.SortOrder
+  palabrasClave?: Prisma.SortOrder
   icono?: Prisma.SortOrderInput | Prisma.SortOrder
   imagenUrl?: Prisma.SortOrderInput | Prisma.SortOrder
   destacado?: Prisma.SortOrder
@@ -320,6 +334,8 @@ export type ServicioWhereUniqueInput = Prisma.AtLeast<{
   nombre?: Prisma.StringFilter<"Servicio"> | string
   resumen?: Prisma.StringNullableFilter<"Servicio"> | string | null
   descripcion?: Prisma.StringNullableFilter<"Servicio"> | string | null
+  preguntaColoquial?: Prisma.StringNullableFilter<"Servicio"> | string | null
+  palabrasClave?: Prisma.StringNullableListFilter<"Servicio">
   icono?: Prisma.StringNullableFilter<"Servicio"> | string | null
   imagenUrl?: Prisma.StringNullableFilter<"Servicio"> | string | null
   destacado?: Prisma.BoolFilter<"Servicio"> | boolean
@@ -339,6 +355,8 @@ export type ServicioOrderByWithAggregationInput = {
   slug?: Prisma.SortOrder
   resumen?: Prisma.SortOrderInput | Prisma.SortOrder
   descripcion?: Prisma.SortOrderInput | Prisma.SortOrder
+  preguntaColoquial?: Prisma.SortOrderInput | Prisma.SortOrder
+  palabrasClave?: Prisma.SortOrder
   icono?: Prisma.SortOrderInput | Prisma.SortOrder
   imagenUrl?: Prisma.SortOrderInput | Prisma.SortOrder
   destacado?: Prisma.SortOrder
@@ -364,6 +382,8 @@ export type ServicioScalarWhereWithAggregatesInput = {
   slug?: Prisma.StringWithAggregatesFilter<"Servicio"> | string
   resumen?: Prisma.StringNullableWithAggregatesFilter<"Servicio"> | string | null
   descripcion?: Prisma.StringNullableWithAggregatesFilter<"Servicio"> | string | null
+  preguntaColoquial?: Prisma.StringNullableWithAggregatesFilter<"Servicio"> | string | null
+  palabrasClave?: Prisma.StringNullableListFilter<"Servicio">
   icono?: Prisma.StringNullableWithAggregatesFilter<"Servicio"> | string | null
   imagenUrl?: Prisma.StringNullableWithAggregatesFilter<"Servicio"> | string | null
   destacado?: Prisma.BoolWithAggregatesFilter<"Servicio"> | boolean
@@ -381,6 +401,8 @@ export type ServicioCreateInput = {
   slug: string
   resumen?: string | null
   descripcion?: string | null
+  preguntaColoquial?: string | null
+  palabrasClave?: Prisma.ServicioCreatepalabrasClaveInput | string[]
   icono?: string | null
   imagenUrl?: string | null
   destacado?: boolean
@@ -400,6 +422,8 @@ export type ServicioUncheckedCreateInput = {
   slug: string
   resumen?: string | null
   descripcion?: string | null
+  preguntaColoquial?: string | null
+  palabrasClave?: Prisma.ServicioCreatepalabrasClaveInput | string[]
   icono?: string | null
   imagenUrl?: string | null
   destacado?: boolean
@@ -419,6 +443,8 @@ export type ServicioUpdateInput = {
   slug?: Prisma.StringFieldUpdateOperationsInput | string
   resumen?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
   descripcion?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  preguntaColoquial?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  palabrasClave?: Prisma.ServicioUpdatepalabrasClaveInput | string[]
   icono?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
   imagenUrl?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
   destacado?: Prisma.BoolFieldUpdateOperationsInput | boolean
@@ -438,6 +464,8 @@ export type ServicioUncheckedUpdateInput = {
   slug?: Prisma.StringFieldUpdateOperationsInput | string
   resumen?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
   descripcion?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  preguntaColoquial?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  palabrasClave?: Prisma.ServicioUpdatepalabrasClaveInput | string[]
   icono?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
   imagenUrl?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
   destacado?: Prisma.BoolFieldUpdateOperationsInput | boolean
@@ -457,6 +485,8 @@ export type ServicioCreateManyInput = {
   slug: string
   resumen?: string | null
   descripcion?: string | null
+  preguntaColoquial?: string | null
+  palabrasClave?: Prisma.ServicioCreatepalabrasClaveInput | string[]
   icono?: string | null
   imagenUrl?: string | null
   destacado?: boolean
@@ -474,6 +504,8 @@ export type ServicioUpdateManyMutationInput = {
   slug?: Prisma.StringFieldUpdateOperationsInput | string
   resumen?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
   descripcion?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  preguntaColoquial?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  palabrasClave?: Prisma.ServicioUpdatepalabrasClaveInput | string[]
   icono?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
   imagenUrl?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
   destacado?: Prisma.BoolFieldUpdateOperationsInput | boolean
@@ -491,6 +523,8 @@ export type ServicioUncheckedUpdateManyInput = {
   slug?: Prisma.StringFieldUpdateOperationsInput | string
   resumen?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
   descripcion?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  preguntaColoquial?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  palabrasClave?: Prisma.ServicioUpdatepalabrasClaveInput | string[]
   icono?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
   imagenUrl?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
   destacado?: Prisma.BoolFieldUpdateOperationsInput | boolean
@@ -502,12 +536,22 @@ export type ServicioUncheckedUpdateManyInput = {
   actualizadoEn?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
 }
 
+export type StringNullableListFilter<$PrismaModel = never> = {
+  equals?: string[] | Prisma.ListStringFieldRefInput<$PrismaModel> | null
+  has?: string | Prisma.StringFieldRefInput<$PrismaModel> | null
+  hasEvery?: string[] | Prisma.ListStringFieldRefInput<$PrismaModel>
+  hasSome?: string[] | Prisma.ListStringFieldRefInput<$PrismaModel>
+  isEmpty?: boolean
+}
+
 export type ServicioCountOrderByAggregateInput = {
   id?: Prisma.SortOrder
   nombre?: Prisma.SortOrder
   slug?: Prisma.SortOrder
   resumen?: Prisma.SortOrder
   descripcion?: Prisma.SortOrder
+  preguntaColoquial?: Prisma.SortOrder
+  palabrasClave?: Prisma.SortOrder
   icono?: Prisma.SortOrder
   imagenUrl?: Prisma.SortOrder
   destacado?: Prisma.SortOrder
@@ -529,6 +573,7 @@ export type ServicioMaxOrderByAggregateInput = {
   slug?: Prisma.SortOrder
   resumen?: Prisma.SortOrder
   descripcion?: Prisma.SortOrder
+  preguntaColoquial?: Prisma.SortOrder
   icono?: Prisma.SortOrder
   imagenUrl?: Prisma.SortOrder
   destacado?: Prisma.SortOrder
@@ -546,6 +591,7 @@ export type ServicioMinOrderByAggregateInput = {
   slug?: Prisma.SortOrder
   resumen?: Prisma.SortOrder
   descripcion?: Prisma.SortOrder
+  preguntaColoquial?: Prisma.SortOrder
   icono?: Prisma.SortOrder
   imagenUrl?: Prisma.SortOrder
   destacado?: Prisma.SortOrder
@@ -564,6 +610,15 @@ export type ServicioSumOrderByAggregateInput = {
 export type ServicioScalarRelationFilter = {
   is?: Prisma.ServicioWhereInput
   isNot?: Prisma.ServicioWhereInput
+}
+
+export type ServicioCreatepalabrasClaveInput = {
+  set: string[]
+}
+
+export type ServicioUpdatepalabrasClaveInput = {
+  set?: string[]
+  push?: string | string[]
 }
 
 export type ServicioCreateNestedOneWithoutProfesionalesInput = {
@@ -600,6 +655,8 @@ export type ServicioCreateWithoutProfesionalesInput = {
   slug: string
   resumen?: string | null
   descripcion?: string | null
+  preguntaColoquial?: string | null
+  palabrasClave?: Prisma.ServicioCreatepalabrasClaveInput | string[]
   icono?: string | null
   imagenUrl?: string | null
   destacado?: boolean
@@ -618,6 +675,8 @@ export type ServicioUncheckedCreateWithoutProfesionalesInput = {
   slug: string
   resumen?: string | null
   descripcion?: string | null
+  preguntaColoquial?: string | null
+  palabrasClave?: Prisma.ServicioCreatepalabrasClaveInput | string[]
   icono?: string | null
   imagenUrl?: string | null
   destacado?: boolean
@@ -652,6 +711,8 @@ export type ServicioUpdateWithoutProfesionalesInput = {
   slug?: Prisma.StringFieldUpdateOperationsInput | string
   resumen?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
   descripcion?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  preguntaColoquial?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  palabrasClave?: Prisma.ServicioUpdatepalabrasClaveInput | string[]
   icono?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
   imagenUrl?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
   destacado?: Prisma.BoolFieldUpdateOperationsInput | boolean
@@ -670,6 +731,8 @@ export type ServicioUncheckedUpdateWithoutProfesionalesInput = {
   slug?: Prisma.StringFieldUpdateOperationsInput | string
   resumen?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
   descripcion?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  preguntaColoquial?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  palabrasClave?: Prisma.ServicioUpdatepalabrasClaveInput | string[]
   icono?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
   imagenUrl?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
   destacado?: Prisma.BoolFieldUpdateOperationsInput | boolean
@@ -688,6 +751,8 @@ export type ServicioCreateWithoutArticulosInput = {
   slug: string
   resumen?: string | null
   descripcion?: string | null
+  preguntaColoquial?: string | null
+  palabrasClave?: Prisma.ServicioCreatepalabrasClaveInput | string[]
   icono?: string | null
   imagenUrl?: string | null
   destacado?: boolean
@@ -706,6 +771,8 @@ export type ServicioUncheckedCreateWithoutArticulosInput = {
   slug: string
   resumen?: string | null
   descripcion?: string | null
+  preguntaColoquial?: string | null
+  palabrasClave?: Prisma.ServicioCreatepalabrasClaveInput | string[]
   icono?: string | null
   imagenUrl?: string | null
   destacado?: boolean
@@ -740,6 +807,8 @@ export type ServicioUpdateWithoutArticulosInput = {
   slug?: Prisma.StringFieldUpdateOperationsInput | string
   resumen?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
   descripcion?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  preguntaColoquial?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  palabrasClave?: Prisma.ServicioUpdatepalabrasClaveInput | string[]
   icono?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
   imagenUrl?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
   destacado?: Prisma.BoolFieldUpdateOperationsInput | boolean
@@ -758,6 +827,8 @@ export type ServicioUncheckedUpdateWithoutArticulosInput = {
   slug?: Prisma.StringFieldUpdateOperationsInput | string
   resumen?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
   descripcion?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  preguntaColoquial?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  palabrasClave?: Prisma.ServicioUpdatepalabrasClaveInput | string[]
   icono?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
   imagenUrl?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
   destacado?: Prisma.BoolFieldUpdateOperationsInput | boolean
@@ -816,6 +887,8 @@ export type ServicioSelect<ExtArgs extends runtime.Types.Extensions.InternalArgs
   slug?: boolean
   resumen?: boolean
   descripcion?: boolean
+  preguntaColoquial?: boolean
+  palabrasClave?: boolean
   icono?: boolean
   imagenUrl?: boolean
   destacado?: boolean
@@ -836,6 +909,8 @@ export type ServicioSelectCreateManyAndReturn<ExtArgs extends runtime.Types.Exte
   slug?: boolean
   resumen?: boolean
   descripcion?: boolean
+  preguntaColoquial?: boolean
+  palabrasClave?: boolean
   icono?: boolean
   imagenUrl?: boolean
   destacado?: boolean
@@ -853,6 +928,8 @@ export type ServicioSelectUpdateManyAndReturn<ExtArgs extends runtime.Types.Exte
   slug?: boolean
   resumen?: boolean
   descripcion?: boolean
+  preguntaColoquial?: boolean
+  palabrasClave?: boolean
   icono?: boolean
   imagenUrl?: boolean
   destacado?: boolean
@@ -870,6 +947,8 @@ export type ServicioSelectScalar = {
   slug?: boolean
   resumen?: boolean
   descripcion?: boolean
+  preguntaColoquial?: boolean
+  palabrasClave?: boolean
   icono?: boolean
   imagenUrl?: boolean
   destacado?: boolean
@@ -881,7 +960,7 @@ export type ServicioSelectScalar = {
   actualizadoEn?: boolean
 }
 
-export type ServicioOmit<ExtArgs extends runtime.Types.Extensions.InternalArgs = runtime.Types.Extensions.DefaultArgs> = runtime.Types.Extensions.GetOmit<"id" | "nombre" | "slug" | "resumen" | "descripcion" | "icono" | "imagenUrl" | "destacado" | "activo" | "orden" | "metaTitulo" | "metaDescripcion" | "creadoEn" | "actualizadoEn", ExtArgs["result"]["servicio"]>
+export type ServicioOmit<ExtArgs extends runtime.Types.Extensions.InternalArgs = runtime.Types.Extensions.DefaultArgs> = runtime.Types.Extensions.GetOmit<"id" | "nombre" | "slug" | "resumen" | "descripcion" | "preguntaColoquial" | "palabrasClave" | "icono" | "imagenUrl" | "destacado" | "activo" | "orden" | "metaTitulo" | "metaDescripcion" | "creadoEn" | "actualizadoEn", ExtArgs["result"]["servicio"]>
 export type ServicioInclude<ExtArgs extends runtime.Types.Extensions.InternalArgs = runtime.Types.Extensions.DefaultArgs> = {
   profesionales?: boolean | Prisma.Servicio$profesionalesArgs<ExtArgs>
   articulos?: boolean | Prisma.Servicio$articulosArgs<ExtArgs>
@@ -902,6 +981,8 @@ export type $ServicioPayload<ExtArgs extends runtime.Types.Extensions.InternalAr
     slug: string
     resumen: string | null
     descripcion: string | null
+    preguntaColoquial: string | null
+    palabrasClave: string[]
     icono: string | null
     imagenUrl: string | null
     destacado: boolean
@@ -1341,6 +1422,8 @@ export interface ServicioFieldRefs {
   readonly slug: Prisma.FieldRef<"Servicio", 'String'>
   readonly resumen: Prisma.FieldRef<"Servicio", 'String'>
   readonly descripcion: Prisma.FieldRef<"Servicio", 'String'>
+  readonly preguntaColoquial: Prisma.FieldRef<"Servicio", 'String'>
+  readonly palabrasClave: Prisma.FieldRef<"Servicio", 'String[]'>
   readonly icono: Prisma.FieldRef<"Servicio", 'String'>
   readonly imagenUrl: Prisma.FieldRef<"Servicio", 'String'>
   readonly destacado: Prisma.FieldRef<"Servicio", 'Boolean'>

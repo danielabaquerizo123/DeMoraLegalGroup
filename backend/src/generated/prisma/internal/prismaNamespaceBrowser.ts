@@ -156,6 +156,8 @@ export const ServicioScalarFieldEnum = {
   slug: 'slug',
   resumen: 'resumen',
   descripcion: 'descripcion',
+  preguntaColoquial: 'preguntaColoquial',
+  palabrasClave: 'palabrasClave',
   icono: 'icono',
   imagenUrl: 'imagenUrl',
   destacado: 'destacado',

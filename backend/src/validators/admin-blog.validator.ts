@@ -10,6 +10,29 @@ const optionalText = (max: number) => z.string().trim().max(max).optional().null
 // Cuando la portada pase a almacenarse en un servicio de archivos (URL corta),
 // este límite debe reducirse a un VarChar/limite de URL normal.
 export const IMAGEN_PORTADA_MAX_CARACTERES = 3000000;
+const IMAGEN_PORTADA_MAX_BYTES = 2 * 1024 * 1024;
+const dataImagePattern = /^data:image\/(?:jpeg|jpg|png|webp|gif);base64,([A-Za-z0-9+/=]+)$/i;
+
+function isValidCoverImage(value: string | null | undefined) {
+  if (!value) {
+    return true;
+  }
+
+  const dataImageMatch = value.match(dataImagePattern);
+  if (dataImageMatch) {
+    const base64 = dataImageMatch[1];
+    const padding = base64.endsWith("==") ? 2 : base64.endsWith("=") ? 1 : 0;
+    const estimatedBytes = Math.floor((base64.length * 3) / 4) - padding;
+    return estimatedBytes <= IMAGEN_PORTADA_MAX_BYTES;
+  }
+
+  try {
+    const url = new URL(value);
+    return url.protocol === "http:" || url.protocol === "https:";
+  } catch {
+    return false;
+  }
+}
 
 export const adminPostStatusQuerySchema = z.object({
   estado: z.enum(["TODAS", "PUBLICADO", "BORRADOR"]).default("TODAS"),
@@ -24,7 +47,7 @@ export const adminPostPayloadSchema = z
     titulo: z.string().trim().max(250, "El título es demasiado largo.").optional().default(""),
     extracto: optionalText(500),
     contenido: z.string().trim().optional().default(""),
-    imagenPortadaUrl: optionalText(IMAGEN_PORTADA_MAX_CARACTERES),
+    imagenPortadaUrl: optionalText(IMAGEN_PORTADA_MAX_CARACTERES).refine(isValidCoverImage, "La imagen de portada es demasiado grande o no tiene un formato permitido."),
     estado: z.enum([EstadoPublicacion.BORRADOR, EstadoPublicacion.PUBLICADO]).default(EstadoPublicacion.BORRADOR),
   })
   .superRefine((payload, context) => {

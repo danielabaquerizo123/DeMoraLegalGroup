@@ -56,6 +56,29 @@ export function BlogDetailPage() {
     };
   }, []);
 
+  useEffect(() => {
+    const images = Array.from(document.querySelectorAll<HTMLImageElement>(".article-detail__content img"));
+    const cleanup: Array<() => void> = [];
+
+    images.forEach((image) => {
+      const handleError = () => {
+        const fallback = document.createElement("span");
+        fallback.className = "article-image-fallback";
+        fallback.textContent = "No se pudo cargar esta imagen.";
+        image.replaceWith(fallback);
+      };
+
+      image.addEventListener("error", handleError, { once: true });
+      cleanup.push(() => image.removeEventListener("error", handleError));
+
+      if (image.complete && image.naturalWidth === 0) {
+        handleError();
+      }
+    });
+
+    return () => cleanup.forEach((removeListener) => removeListener());
+  }, [article.data?.data.contenido]);
+
   if (article.isLoading) {
     return <LoadingState label="Cargando articulo" />;
   }

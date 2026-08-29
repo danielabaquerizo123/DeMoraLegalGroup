@@ -15,9 +15,7 @@ type LoginInput = {
 };
 
 type ChangePasswordInput = {
-  currentPassword: string;
   password: string;
-  confirmPassword: string;
 };
 
 const sessionCookieName = process.env.AUTH_COOKIE_NAME || "demora_admin_session";
@@ -200,15 +198,10 @@ export async function logoutAdmin(token: string | null) {
 }
 
 export async function changeAdminPassword(userId: string, input: ChangePasswordInput) {
-  if (input.password !== input.confirmPassword) {
-    throw new HttpError(400, "Las contraseñas no coinciden.");
-  }
-
   const user = await prisma.usuarioAdmin.findUnique({ where: { id: userId } });
-  const isValidPassword = user ? await verifyPassword(input.currentPassword, user.passwordHash) : false;
 
-  if (!user || !isValidPassword) {
-    throw new HttpError(401, "La contraseña actual no es correcta.");
+  if (!user) {
+    throw new HttpError(401, "Tu sesión ha expirado. Inicia sesión nuevamente.");
   }
 
   const passwordHashed = await hashPassword(input.password);

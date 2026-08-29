@@ -11,11 +11,13 @@ type PostPayload = {
 };
 
 type VideoBlock = {
-  provider: "youtube" | "instagram";
+  provider: "youtube" | "instagram" | "tiktok" | "x" | "facebook" | "drive";
   url: string;
   embedUrl: string;
   videoId?: string;
   shortcode?: string;
+  postId?: string;
+  fileId?: string;
 };
 
 const postInclude = {
@@ -26,11 +28,54 @@ const postInclude = {
   },
 };
 
-const allowedTags = new Set(["p", "br", "strong", "b", "em", "i", "h1", "h2", "ul", "ol", "li", "blockquote", "a", "img", "figure", "figcaption", "div", "span"]);
+const allowedTags = new Set(["p", "br", "strong", "b", "em", "i", "u", "s", "h1", "h2", "h3", "ul", "ol", "li", "blockquote", "a", "img", "figure", "figcaption", "hr", "table", "tbody", "thead", "tr", "th", "td", "div", "span"]);
 const allowedAttributes = new Map<string, Set<string>>([
   ["a", new Set(["href", "target", "rel"])],
-  ["img", new Set(["src", "alt"])],
-  ["figure", new Set(["data-content-block", "data-provider", "data-video-id", "data-shortcode", "data-url", "data-embed-url"])],
+  ["img", new Set(["src", "alt", "title"])],
+  ["figure", new Set(["class", "data-content-block", "data-provider", "data-video-id", "data-shortcode", "data-post-id", "data-file-id", "data-url", "data-embed-url"])],
+  ["figcaption", new Set(["class"])],
+  ["div", new Set(["class"])],
+  ["p", new Set(["class"])],
+  ["h1", new Set(["class"])],
+  ["h2", new Set(["class"])],
+  ["h3", new Set(["class"])],
+  ["li", new Set(["class"])],
+  ["blockquote", new Set(["class"])],
+  ["table", new Set(["class"])],
+  ["tbody", new Set(["class"])],
+  ["thead", new Set(["class"])],
+  ["tr", new Set(["class"])],
+  ["th", new Set(["class"])],
+  ["td", new Set(["class"])],
+]);
+const allowedClasses = new Set([
+  "article-callout",
+  "article-callout--info",
+  "article-callout--note",
+  "article-callout--important",
+  "article-callout--warning",
+  "article-callout--update",
+  "article-image",
+  "content-video",
+  "content-video--youtube",
+  "content-video--instagram",
+  "content-video--tiktok",
+  "content-video--x",
+  "content-video--facebook",
+  "content-video--drive",
+  "content-video__fallback",
+  "image-align-left",
+  "image-align-center",
+  "image-align-right",
+  "image-align-full",
+  "image-size-25",
+  "image-size-50",
+  "image-size-75",
+  "image-size-100",
+  "text-align-left",
+  "text-align-center",
+  "text-align-right",
+  "text-align-justify",
 ]);
 
 function slugify(value: string) {
@@ -112,7 +157,7 @@ function instagramVideo(rawUrl: string): VideoBlock | null {
 
     const [kind, shortcode] = url.pathname.split("/").filter(Boolean);
 
-    if ((kind !== "p" && kind !== "reel") || !shortcode || !/^[A-Za-z0-9_-]+$/.test(shortcode)) {
+    if ((kind !== "p" && kind !== "reel" && kind !== "tv") || !shortcode || !/^[A-Za-z0-9_-]+$/.test(shortcode)) {
       return null;
     }
 
@@ -128,7 +173,116 @@ function instagramVideo(rawUrl: string): VideoBlock | null {
 }
 
 function videoFromUrl(rawUrl: string) {
-  return youtubeVideo(rawUrl) ?? instagramVideo(rawUrl);
+  return youtubeVideo(rawUrl) ?? instagramVideo(rawUrl) ?? tiktokVideo(rawUrl) ?? xPost(rawUrl) ?? facebookMedia(rawUrl) ?? driveMedia(rawUrl);
+}
+
+function tiktokVideo(rawUrl: string): VideoBlock | null {
+  try {
+    const url = new URL(rawUrl);
+    const hostname = url.hostname.replace(/^www\./, "");
+
+    if (hostname !== "tiktok.com" && hostname !== "m.tiktok.com" && hostname !== "vm.tiktok.com" && hostname !== "vt.tiktok.com") {
+      return null;
+    }
+
+    const videoMatch = url.pathname.match(/\/@[^/]+\/video\/(\d+)/);
+    const sharedCode = url.pathname.split("/").filter(Boolean)[0] ?? "";
+    const videoId = videoMatch?.[1] ?? (/^[A-Za-z0-9]+$/.test(sharedCode) ? sharedCode : "");
+
+    if (!videoId) {
+      return null;
+    }
+
+    return {
+      provider: "tiktok",
+      url: url.href,
+      embedUrl: /^\d+$/.test(videoId) ? `https://www.tiktok.com/embed/v2/${videoId}` : url.href,
+      videoId,
+    };
+  } catch {
+    return null;
+  }
+}
+
+function xPost(rawUrl: string): VideoBlock | null {
+  try {
+    const url = new URL(rawUrl);
+    const hostname = url.hostname.replace(/^www\./, "");
+
+    if (hostname !== "x.com" && hostname !== "twitter.com") {
+      return null;
+    }
+
+    const [, username, kind, postId] = url.pathname.split("/");
+
+    if (!username || kind !== "status" || !postId || !/^\d+$/.test(postId)) {
+      return null;
+    }
+
+    return {
+      provider: "x",
+      url: `https://x.com/${username}/status/${postId}`,
+      embedUrl: `https://x.com/${username}/status/${postId}`,
+      postId,
+    };
+  } catch {
+    return null;
+  }
+}
+
+function facebookMedia(rawUrl: string): VideoBlock | null {
+  try {
+    const url = new URL(rawUrl);
+    const hostname = url.hostname.replace(/^www\./, "");
+
+    if (hostname !== "facebook.com" && hostname !== "m.facebook.com" && hostname !== "fb.watch") {
+      return null;
+    }
+
+    const isKnownFacebookContent = hostname === "fb.watch" || url.pathname.includes("/videos/") || url.pathname.includes("/posts/") || url.searchParams.has("story_fbid") || url.searchParams.has("v");
+
+    if (!isKnownFacebookContent) {
+      return null;
+    }
+
+    const plugin = url.pathname.includes("/videos/") || url.searchParams.has("v") || hostname === "fb.watch" ? "video.php" : "post.php";
+
+    return {
+      provider: "facebook",
+      url: url.href,
+      embedUrl: `https://www.facebook.com/plugins/${plugin}?href=${encodeURIComponent(url.href)}&show_text=true&width=560`,
+    };
+  } catch {
+    return null;
+  }
+}
+
+function driveMedia(rawUrl: string): VideoBlock | null {
+  try {
+    const url = new URL(rawUrl);
+    const hostname = url.hostname.replace(/^www\./, "");
+
+    if (hostname !== "drive.google.com") {
+      return null;
+    }
+
+    const pathParts = url.pathname.split("/").filter(Boolean);
+    const fileIdFromPath = pathParts[0] === "file" && pathParts[1] === "d" ? pathParts[2] : "";
+    const fileId = fileIdFromPath || url.searchParams.get("id") || "";
+
+    if (!fileId || !/^[A-Za-z0-9_-]+$/.test(fileId)) {
+      return null;
+    }
+
+    return {
+      provider: "drive",
+      url: url.href,
+      embedUrl: `https://drive.google.com/file/d/${fileId}/preview`,
+      fileId,
+    };
+  } catch {
+    return null;
+  }
 }
 
 function readAttribute(attributes: string, name: string) {
@@ -136,6 +290,10 @@ function readAttribute(attributes: string, name: string) {
   const match = attributes.match(pattern);
 
   return match?.[2] ?? match?.[3] ?? "";
+}
+
+function escapeAttribute(value: string) {
+  return value.replace(/&/g, "&amp;").replace(/"/g, "&quot;").replace(/</g, "&lt;").replace(/>/g, "&gt;");
 }
 
 function videoFigure(attributes: string) {
@@ -148,6 +306,18 @@ function videoFigure(attributes: string) {
   const embedUrl = readAttribute(attributes, "data-embed-url");
   const videoId = readAttribute(attributes, "data-video-id");
   const shortcode = readAttribute(attributes, "data-shortcode");
+  const postId = readAttribute(attributes, "data-post-id");
+  const fileId = readAttribute(attributes, "data-file-id");
+  const media = videoFromUrl(url || embedUrl);
+
+  if (media) {
+    const normalizedVideoId = media.videoId ? ` data-video-id="${escapeAttribute(media.videoId)}"` : "";
+    const normalizedShortcode = media.shortcode ? ` data-shortcode="${escapeAttribute(media.shortcode)}"` : "";
+    const normalizedPostId = media.postId ? ` data-post-id="${escapeAttribute(media.postId)}"` : "";
+    const normalizedFileId = media.fileId ? ` data-file-id="${escapeAttribute(media.fileId)}"` : "";
+
+    return `<figure data-content-block="video" data-provider="${media.provider}"${normalizedVideoId}${normalizedShortcode}${normalizedPostId}${normalizedFileId} data-url="${escapeAttribute(media.url)}" data-embed-url="${escapeAttribute(media.embedUrl)}"></figure>`;
+  }
 
   if (provider === "youtube" && videoId && /^[A-Za-z0-9_-]{6,20}$/.test(videoId)) {
     return `<figure data-content-block="video" data-provider="youtube" data-video-id="${videoId}" data-url="${url || `https://www.youtube.com/watch?v=${videoId}`}" data-embed-url="https://www.youtube.com/embed/${videoId}"></figure>`;
@@ -158,6 +328,15 @@ function videoFigure(attributes: string) {
     const embed = embedUrl && isAllowedVideoUrl(embedUrl) ? embedUrl : `${sourceUrl.replace(/\/$/, "")}/embed`;
 
     return `<figure data-content-block="video" data-provider="instagram" data-shortcode="${shortcode}" data-url="${sourceUrl}" data-embed-url="${embed}"></figure>`;
+  }
+
+  if (provider === "x" && postId && /^\d+$/.test(postId) && isAllowedVideoUrl(url)) {
+    return `<figure data-content-block="video" data-provider="x" data-post-id="${postId}" data-url="${escapeAttribute(url)}" data-embed-url="${escapeAttribute(url)}"></figure>`;
+  }
+
+  if (provider === "drive" && fileId && /^[A-Za-z0-9_-]+$/.test(fileId)) {
+    const sourceUrl = url && isAllowedVideoUrl(url) ? url : `https://drive.google.com/file/d/${fileId}/view`;
+    return `<figure data-content-block="video" data-provider="drive" data-file-id="${fileId}" data-url="${escapeAttribute(sourceUrl)}" data-embed-url="https://drive.google.com/file/d/${fileId}/preview"></figure>`;
   }
 
   return null;
@@ -182,6 +361,16 @@ function sanitizeAttributes(tag: string, attributes: string) {
       continue;
     }
 
+    if (name === "class") {
+      const safeClasses = value.split(/\s+/).filter((className) => allowedClasses.has(className));
+
+      if (safeClasses.length) {
+        cleaned.push(`class="${safeClasses.join(" ")}"`);
+      }
+
+      continue;
+    }
+
     if ((name === "href" || name === "src") && !isSafeUrl(value)) {
       continue;
     }
@@ -194,15 +383,19 @@ function sanitizeAttributes(tag: string, attributes: string) {
       continue;
     }
 
-    if (name === "data-provider" && value !== "youtube" && value !== "instagram") {
+    if (name === "data-provider" && !["youtube", "instagram", "tiktok", "x", "facebook", "drive"].includes(value)) {
       continue;
     }
 
-    if (name === "data-video-id" && !/^[A-Za-z0-9_-]{6,20}$/.test(value)) {
+    if (name === "data-video-id" && !/^[A-Za-z0-9_-]+$/.test(value)) {
       continue;
     }
 
     if (name === "data-shortcode" && !/^[A-Za-z0-9_-]+$/.test(value)) {
+      continue;
+    }
+
+    if ((name === "data-post-id" || name === "data-file-id") && !/^[A-Za-z0-9_-]+$/.test(value)) {
       continue;
     }
 
@@ -217,14 +410,14 @@ function sanitizeAttributes(tag: string, attributes: string) {
 }
 
 function isSafeUrl(value: string) {
-  if (value.startsWith("data:image/")) {
+  if (/^data:image\/(?:png|jpe?g|webp|gif);base64,/i.test(value)) {
     return true;
   }
 
   try {
     const url = new URL(value);
 
-    if (url.protocol !== "https:" && url.protocol !== "http:") {
+    if (!["https:", "http:", "mailto:", "tel:"].includes(url.protocol)) {
       return false;
     }
 
@@ -239,7 +432,7 @@ function isAllowedVideoUrl(value: string) {
     const url = new URL(value);
     const hostname = url.hostname.replace(/^www\./, "");
 
-    return ["youtube.com", "m.youtube.com", "youtu.be", "instagram.com"].includes(hostname) && ["http:", "https:"].includes(url.protocol);
+    return ["youtube.com", "m.youtube.com", "youtu.be", "instagram.com", "tiktok.com", "m.tiktok.com", "vm.tiktok.com", "vt.tiktok.com", "x.com", "twitter.com", "facebook.com", "m.facebook.com", "fb.watch", "drive.google.com"].includes(hostname) && ["http:", "https:"].includes(url.protocol);
   } catch {
     return false;
   }
@@ -259,14 +452,22 @@ export function sanitizeHtml(html: string) {
       return "";
     }
 
-    const videoId = video.videoId ? ` data-video-id="${video.videoId}"` : "";
-    const shortcode = video.shortcode ? ` data-shortcode="${video.shortcode}"` : "";
+    const videoId = video.videoId ? ` data-video-id="${escapeAttribute(video.videoId)}"` : "";
+    const shortcode = video.shortcode ? ` data-shortcode="${escapeAttribute(video.shortcode)}"` : "";
+    const postId = video.postId ? ` data-post-id="${escapeAttribute(video.postId)}"` : "";
+    const fileId = video.fileId ? ` data-file-id="${escapeAttribute(video.fileId)}"` : "";
 
-    return `<figure data-content-block="video" data-provider="${video.provider}"${videoId}${shortcode} data-url="${video.url}" data-embed-url="${video.embedUrl}"></figure>`;
+    return `<figure data-content-block="video" data-provider="${video.provider}"${videoId}${shortcode}${postId}${fileId} data-url="${escapeAttribute(video.url)}" data-embed-url="${escapeAttribute(video.embedUrl)}"></figure>`;
   });
 
   sanitized = sanitized.replace(/<\/?([a-zA-Z0-9]+)([^>]*)>/g, (match, rawTag: string, attributes: string) => {
-    const tag = rawTag.toLowerCase();
+    const tagAliases: Record<string, string> = {
+      b: "strong",
+      i: "em",
+      strike: "s",
+      del: "s",
+    };
+    const tag = tagAliases[rawTag.toLowerCase()] ?? rawTag.toLowerCase();
 
     if (!allowedTags.has(tag)) {
       return "";
