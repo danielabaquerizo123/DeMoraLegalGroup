@@ -45,9 +45,18 @@ export const adminPostIdParamSchema = z.object({
 export const adminPostPayloadSchema = z
   .object({
     titulo: z.string().trim().max(250, "El título es demasiado largo.").optional().default(""),
+    tituloHtml: z.string().trim().max(4000, "El formato del título es demasiado largo.").optional().nullable(),
     extracto: optionalText(500),
+    extractoHtml: z.string().trim().max(6000, "El formato del resumen es demasiado largo.").optional().nullable(),
     contenido: z.string().trim().optional().default(""),
     imagenPortadaUrl: optionalText(IMAGEN_PORTADA_MAX_CARACTERES).refine(isValidCoverImage, "La imagen de portada es demasiado grande o no tiene un formato permitido."),
+    tituloTamano: z.enum(["PEQUENO", "NORMAL", "GRANDE"]).default("NORMAL"),
+    tituloAlineacion: z.enum(["IZQUIERDA", "CENTRO", "DERECHA"]).default("IZQUIERDA"),
+    tituloTipografia: z.enum(["INSTITUCIONAL", "TIMES_NEW_ROMAN", "ARIAL", "CALIBRI", "GEORGIA", "GARAMOND"]).default("INSTITUCIONAL"),
+    extractoTamano: z.enum(["COMPACTO", "NORMAL", "AMPLIO"]).default("NORMAL"),
+    extractoAlineacion: z.enum(["IZQUIERDA", "CENTRO", "DERECHA", "JUSTIFICADO"]).default("IZQUIERDA"),
+    extractoTipografia: z.enum(["INSTITUCIONAL", "TIMES_NEW_ROMAN", "ARIAL", "CALIBRI", "GEORGIA", "GARAMOND"]).default("INSTITUCIONAL"),
+    comentariosHabilitados: z.boolean().default(false),
     estado: z.enum([EstadoPublicacion.BORRADOR, EstadoPublicacion.PUBLICADO]).default(EstadoPublicacion.BORRADOR),
   })
   .superRefine((payload, context) => {

@@ -405,6 +405,7 @@ export const ModelName = {
   ProfesionalServicio: 'ProfesionalServicio',
   CategoriaBlog: 'CategoriaBlog',
   ArticuloBlog: 'ArticuloBlog',
+  ComentarioBlog: 'ComentarioBlog',
   ArticuloAutor: 'ArticuloAutor',
   ArticuloServicio: 'ArticuloServicio',
   EtiquetaBlog: 'EtiquetaBlog',
@@ -429,7 +430,7 @@ export type TypeMap<ExtArgs extends runtime.Types.Extensions.InternalArgs = runt
     omit: GlobalOmitOptions
   }
   meta: {
-    modelProps: "profesional" | "sede" | "profesionalSede" | "canalContactoProfesional" | "servicio" | "profesionalServicio" | "categoriaBlog" | "articuloBlog" | "articuloAutor" | "articuloServicio" | "etiquetaBlog" | "articuloEtiqueta" | "configuracionSitio" | "usuarioAdmin" | "tokenAdmin" | "sesionAdmin" | "intentoLoginAdmin"
+    modelProps: "profesional" | "sede" | "profesionalSede" | "canalContactoProfesional" | "servicio" | "profesionalServicio" | "categoriaBlog" | "articuloBlog" | "comentarioBlog" | "articuloAutor" | "articuloServicio" | "etiquetaBlog" | "articuloEtiqueta" | "configuracionSitio" | "usuarioAdmin" | "tokenAdmin" | "sesionAdmin" | "intentoLoginAdmin"
     txIsolationLevel: TransactionIsolationLevel
   }
   model: {
@@ -1022,6 +1023,80 @@ export type TypeMap<ExtArgs extends runtime.Types.Extensions.InternalArgs = runt
         count: {
           args: Prisma.ArticuloBlogCountArgs<ExtArgs>
           result: runtime.Types.Utils.Optional<Prisma.ArticuloBlogCountAggregateOutputType> | number
+        }
+      }
+    }
+    ComentarioBlog: {
+      payload: Prisma.$ComentarioBlogPayload<ExtArgs>
+      fields: Prisma.ComentarioBlogFieldRefs
+      operations: {
+        findUnique: {
+          args: Prisma.ComentarioBlogFindUniqueArgs<ExtArgs>
+          result: runtime.Types.Utils.PayloadToResult<Prisma.$ComentarioBlogPayload> | null
+        }
+        findUniqueOrThrow: {
+          args: Prisma.ComentarioBlogFindUniqueOrThrowArgs<ExtArgs>
+          result: runtime.Types.Utils.PayloadToResult<Prisma.$ComentarioBlogPayload>
+        }
+        findFirst: {
+          args: Prisma.ComentarioBlogFindFirstArgs<ExtArgs>
+          result: runtime.Types.Utils.PayloadToResult<Prisma.$ComentarioBlogPayload> | null
+        }
+        findFirstOrThrow: {
+          args: Prisma.ComentarioBlogFindFirstOrThrowArgs<ExtArgs>
+          result: runtime.Types.Utils.PayloadToResult<Prisma.$ComentarioBlogPayload>
+        }
+        findMany: {
+          args: Prisma.ComentarioBlogFindManyArgs<ExtArgs>
+          result: runtime.Types.Utils.PayloadToResult<Prisma.$ComentarioBlogPayload>[]
+        }
+        create: {
+          args: Prisma.ComentarioBlogCreateArgs<ExtArgs>
+          result: runtime.Types.Utils.PayloadToResult<Prisma.$ComentarioBlogPayload>
+        }
+        createMany: {
+          args: Prisma.ComentarioBlogCreateManyArgs<ExtArgs>
+          result: BatchPayload
+        }
+        createManyAndReturn: {
+          args: Prisma.ComentarioBlogCreateManyAndReturnArgs<ExtArgs>
+          result: runtime.Types.Utils.PayloadToResult<Prisma.$ComentarioBlogPayload>[]
+        }
+        delete: {
+          args: Prisma.ComentarioBlogDeleteArgs<ExtArgs>
+          result: runtime.Types.Utils.PayloadToResult<Prisma.$ComentarioBlogPayload>
+        }
+        update: {
+          args: Prisma.ComentarioBlogUpdateArgs<ExtArgs>
+          result: runtime.Types.Utils.PayloadToResult<Prisma.$ComentarioBlogPayload>
+        }
+        deleteMany: {
+          args: Prisma.ComentarioBlogDeleteManyArgs<ExtArgs>
+          result: BatchPayload
+        }
+        updateMany: {
+          args: Prisma.ComentarioBlogUpdateManyArgs<ExtArgs>
+          result: BatchPayload
+        }
+        updateManyAndReturn: {
+          args: Prisma.ComentarioBlogUpdateManyAndReturnArgs<ExtArgs>
+          result: runtime.Types.Utils.PayloadToResult<Prisma.$ComentarioBlogPayload>[]
+        }
+        upsert: {
+          args: Prisma.ComentarioBlogUpsertArgs<ExtArgs>
+          result: runtime.Types.Utils.PayloadToResult<Prisma.$ComentarioBlogPayload>
+        }
+        aggregate: {
+          args: Prisma.ComentarioBlogAggregateArgs<ExtArgs>
+          result: runtime.Types.Utils.Optional<Prisma.AggregateComentarioBlog>
+        }
+        groupBy: {
+          args: Prisma.ComentarioBlogGroupByArgs<ExtArgs>
+          result: runtime.Types.Utils.Optional<Prisma.ComentarioBlogGroupByOutputType>[]
+        }
+        count: {
+          args: Prisma.ComentarioBlogCountArgs<ExtArgs>
+          result: runtime.Types.Utils.Optional<Prisma.ComentarioBlogCountAggregateOutputType> | number
         }
       }
     }
@@ -1847,7 +1922,16 @@ export const ArticuloBlogScalarFieldEnum = {
   slug: 'slug',
   extracto: 'extracto',
   contenido: 'contenido',
+  tituloHtml: 'tituloHtml',
+  extractoHtml: 'extractoHtml',
   imagenPortadaUrl: 'imagenPortadaUrl',
+  tituloTamano: 'tituloTamano',
+  tituloAlineacion: 'tituloAlineacion',
+  tituloTipografia: 'tituloTipografia',
+  extractoTamano: 'extractoTamano',
+  extractoAlineacion: 'extractoAlineacion',
+  extractoTipografia: 'extractoTipografia',
+  comentariosHabilitados: 'comentariosHabilitados',
   estado: 'estado',
   destacado: 'destacado',
   publicadoEn: 'publicadoEn',
@@ -1860,6 +1944,19 @@ export const ArticuloBlogScalarFieldEnum = {
 } as const
 
 export type ArticuloBlogScalarFieldEnum = (typeof ArticuloBlogScalarFieldEnum)[keyof typeof ArticuloBlogScalarFieldEnum]
+
+
+export const ComentarioBlogScalarFieldEnum = {
+  id: 'id',
+  articuloId: 'articuloId',
+  parentId: 'parentId',
+  nombreVisitante: 'nombreVisitante',
+  usuarioAdminId: 'usuarioAdminId',
+  contenido: 'contenido',
+  creadoEn: 'creadoEn'
+} as const
+
+export type ComentarioBlogScalarFieldEnum = (typeof ComentarioBlogScalarFieldEnum)[keyof typeof ComentarioBlogScalarFieldEnum]
 
 
 export const ArticuloAutorScalarFieldEnum = {
@@ -2081,6 +2178,76 @@ export type EnumTipoCanalContactoFieldRefInput<$PrismaModel> = FieldRefInputType
  * Reference to a field of type 'TipoCanalContacto[]'
  */
 export type ListEnumTipoCanalContactoFieldRefInput<$PrismaModel> = FieldRefInputType<$PrismaModel, 'TipoCanalContacto[]'>
+    
+
+
+/**
+ * Reference to a field of type 'TamanoTituloBlog'
+ */
+export type EnumTamanoTituloBlogFieldRefInput<$PrismaModel> = FieldRefInputType<$PrismaModel, 'TamanoTituloBlog'>
+    
+
+
+/**
+ * Reference to a field of type 'TamanoTituloBlog[]'
+ */
+export type ListEnumTamanoTituloBlogFieldRefInput<$PrismaModel> = FieldRefInputType<$PrismaModel, 'TamanoTituloBlog[]'>
+    
+
+
+/**
+ * Reference to a field of type 'AlineacionTituloBlog'
+ */
+export type EnumAlineacionTituloBlogFieldRefInput<$PrismaModel> = FieldRefInputType<$PrismaModel, 'AlineacionTituloBlog'>
+    
+
+
+/**
+ * Reference to a field of type 'AlineacionTituloBlog[]'
+ */
+export type ListEnumAlineacionTituloBlogFieldRefInput<$PrismaModel> = FieldRefInputType<$PrismaModel, 'AlineacionTituloBlog[]'>
+    
+
+
+/**
+ * Reference to a field of type 'TipografiaBlog'
+ */
+export type EnumTipografiaBlogFieldRefInput<$PrismaModel> = FieldRefInputType<$PrismaModel, 'TipografiaBlog'>
+    
+
+
+/**
+ * Reference to a field of type 'TipografiaBlog[]'
+ */
+export type ListEnumTipografiaBlogFieldRefInput<$PrismaModel> = FieldRefInputType<$PrismaModel, 'TipografiaBlog[]'>
+    
+
+
+/**
+ * Reference to a field of type 'TamanoExtractoBlog'
+ */
+export type EnumTamanoExtractoBlogFieldRefInput<$PrismaModel> = FieldRefInputType<$PrismaModel, 'TamanoExtractoBlog'>
+    
+
+
+/**
+ * Reference to a field of type 'TamanoExtractoBlog[]'
+ */
+export type ListEnumTamanoExtractoBlogFieldRefInput<$PrismaModel> = FieldRefInputType<$PrismaModel, 'TamanoExtractoBlog[]'>
+    
+
+
+/**
+ * Reference to a field of type 'AlineacionExtractoBlog'
+ */
+export type EnumAlineacionExtractoBlogFieldRefInput<$PrismaModel> = FieldRefInputType<$PrismaModel, 'AlineacionExtractoBlog'>
+    
+
+
+/**
+ * Reference to a field of type 'AlineacionExtractoBlog[]'
+ */
+export type ListEnumAlineacionExtractoBlogFieldRefInput<$PrismaModel> = FieldRefInputType<$PrismaModel, 'AlineacionExtractoBlog[]'>
     
 
 
@@ -2312,6 +2479,7 @@ export type GlobalOmitConfig = {
   profesionalServicio?: Prisma.ProfesionalServicioOmit
   categoriaBlog?: Prisma.CategoriaBlogOmit
   articuloBlog?: Prisma.ArticuloBlogOmit
+  comentarioBlog?: Prisma.ComentarioBlogOmit
   articuloAutor?: Prisma.ArticuloAutorOmit
   articuloServicio?: Prisma.ArticuloServicioOmit
   etiquetaBlog?: Prisma.EtiquetaBlogOmit

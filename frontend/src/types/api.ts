@@ -114,10 +114,19 @@ export type LegalService = {
 
 export type Article = {
   titulo: string;
+  tituloHtml: string | null;
   slug: string;
   extracto: string | null;
+  extractoHtml: string | null;
   contenido?: string;
   imagen: string | null;
+  tituloTamano: "PEQUENO" | "NORMAL" | "GRANDE";
+  tituloAlineacion: "IZQUIERDA" | "CENTRO" | "DERECHA";
+  tituloTipografia: TypographyBlog;
+  extractoTamano: "COMPACTO" | "NORMAL" | "AMPLIO";
+  extractoAlineacion: "IZQUIERDA" | "CENTRO" | "DERECHA" | "JUSTIFICADO";
+  extractoTipografia: TypographyBlog;
+  comentariosHabilitados?: boolean;
   fecha: string | null;
   categoria: {
     nombre: string;
@@ -146,6 +155,8 @@ export type Article = {
 
 export type AdminPostStatus = "PUBLICADO" | "BORRADOR";
 
+export type TypographyBlog = "INSTITUCIONAL" | "TIMES_NEW_ROMAN" | "ARIAL" | "CALIBRI" | "GEORGIA" | "GARAMOND";
+
 export type AdminBlogAuthor = {
   nombres: string;
   apellidos: string;
@@ -158,10 +169,19 @@ export type AdminBlogAuthor = {
 export type AdminBlogPost = {
   id: string;
   titulo: string;
+  tituloHtml: string | null;
   slug: string;
   extracto: string | null;
+  extractoHtml: string | null;
   contenido: string;
   imagen: string | null;
+  tituloTamano: "PEQUENO" | "NORMAL" | "GRANDE";
+  tituloAlineacion: "IZQUIERDA" | "CENTRO" | "DERECHA";
+  tituloTipografia: TypographyBlog;
+  extractoTamano: "COMPACTO" | "NORMAL" | "AMPLIO";
+  extractoAlineacion: "IZQUIERDA" | "CENTRO" | "DERECHA" | "JUSTIFICADO";
+  extractoTipografia: TypographyBlog;
+  comentariosHabilitados: boolean;
   estado: AdminPostStatus;
   fecha: string | null;
   actualizadoEn: string;
@@ -174,6 +194,31 @@ export type AdminBlogSummary = {
     publicadas: number;
     borradores: number;
     total: number;
+    comentarios: number;
+  };
+};
+
+export type BlogComment = {
+  id: string;
+  nombre: string;
+  contenido: string;
+  fecha: string;
+  respuesta: {
+    id: string;
+    contenido: string;
+    fecha: string;
+    autor: {
+      nombreCompleto: string;
+      cargo: string | null;
+    };
+  } | null;
+};
+
+export type AdminBlogComment = BlogComment & {
+  articulo: {
+    id: string;
+    titulo: string;
+    slug: string;
   };
 };
 

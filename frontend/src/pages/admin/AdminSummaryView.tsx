@@ -36,16 +36,16 @@ export function AdminSummaryView({ summary, onNewPost, onOpenPost }: AdminSummar
     <div className="admin-summary">
       <div className="admin-summary__counts">
         <div className="admin-summary__card">
-          <span className="admin-summary__card-label">Total de publicaciones</span>
+          <span className="admin-summary__card-label">Publicaciones</span>
           <span className="admin-summary__card-number">{summary?.conteos.total ?? 0}</span>
-        </div>
-        <div className="admin-summary__card">
-          <span className="admin-summary__card-label">Publicadas</span>
-          <span className="admin-summary__card-number admin-summary__card-number--publicadas">{summary?.conteos.publicadas ?? 0}</span>
         </div>
         <div className="admin-summary__card">
           <span className="admin-summary__card-label">Borradores</span>
           <span className="admin-summary__card-number admin-summary__card-number--borradores">{summary?.conteos.borradores ?? 0}</span>
+        </div>
+        <div className="admin-summary__card">
+          <span className="admin-summary__card-label">Comentarios</span>
+          <span className="admin-summary__card-number admin-summary__card-number--comentarios">{summary?.conteos.comentarios ?? 0}</span>
         </div>
       </div>
 

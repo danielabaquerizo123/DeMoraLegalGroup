@@ -5,7 +5,6 @@ import {
   AlignJustify,
   AlignLeft,
   AlignRight,
-  AlertTriangle,
   Bold,
   ChevronDown,
   Edit3,
@@ -18,16 +17,16 @@ import {
   Heading3,
   Home,
   Image as ImageIcon,
-  Info,
   Italic,
   Link as LinkIcon,
   List,
   ListOrdered,
   LogOut,
+  MessageSquare,
   Minimize2,
   Minus,
+  MoreHorizontal,
   Pilcrow,
-
   Plus,
   Quote,
   Redo2,
@@ -46,7 +45,7 @@ import { logoAsset, professionalImages } from "../../constants/assets";
 import { adminAuthApi } from "../../services/api/admin-auth-api";
 import { adminBlogApi } from "../../services/api/admin-blog-api";
 import { ApiError } from "../../services/api/api-client";
-import type { AdminBlogPost, AdminBlogSummary, AdminPostStatus, AdminUser } from "../../types/api";
+import type { AdminBlogComment, AdminBlogPost, AdminBlogSummary, AdminPostStatus, AdminUser, TypographyBlog } from "../../types/api";
 import { createVideoBlockHtml, detectMediaProvider, parseVideoUrl, plainTextToHtml, renderArticleContentHtml, sanitizeHtml, type MediaDetection } from "../../utils/sanitize-html";
 import { AdminSummaryView } from "./AdminSummaryView";
 
@@ -56,12 +55,22 @@ type AdminBlogPageProps = {
 
 type EditorForm = {
   titulo: string;
+  tituloHtml: string;
   extracto: string;
+  extractoHtml: string;
   contenido: string;
   imagenPortadaUrl: string | null;
+  tituloTamano: "PEQUENO" | "NORMAL" | "GRANDE";
+  tituloAlineacion: "IZQUIERDA" | "CENTRO" | "DERECHA";
+  tituloTipografia: TypographyBlog;
+  extractoTamano: "COMPACTO" | "NORMAL" | "AMPLIO";
+  extractoAlineacion: "IZQUIERDA" | "CENTRO" | "DERECHA" | "JUSTIFICADO";
+  extractoTipografia: TypographyBlog;
+  comentariosHabilitados: boolean;
 };
 
-type ViewMode = "resumen" | "publicaciones" | "editor";
+type ViewMode = "resumen" | "publicaciones" | "editor" | "comentarios";
+type EditorContext = "title" | "summary" | "content";
 type StatusFilter = AdminPostStatus | "TODAS";
 type ToastType = "success" | "error" | "info";
 
@@ -146,10 +155,42 @@ type ToolbarGroup = {
 
 const emptyForm: EditorForm = {
   titulo: "",
+  tituloHtml: "",
   extracto: "",
+  extractoHtml: "",
   contenido: "",
   imagenPortadaUrl: null,
+  tituloTamano: "NORMAL",
+  tituloAlineacion: "IZQUIERDA",
+  tituloTipografia: "INSTITUCIONAL",
+  extractoTamano: "NORMAL",
+  extractoAlineacion: "IZQUIERDA",
+  extractoTipografia: "INSTITUCIONAL",
+  comentariosHabilitados: false,
 };
+
+const TEXT_SIZE_OPTIONS = ["8", "9", "10", "11", "12", "14", "16", "18", "20", "22", "24", "26", "28", "32", "36", "40", "44", "48", "54", "60", "64", "72"] as const;
+
+const TEXT_COLOR_OPTIONS: ReadonlyArray<{ value: string; label: string; className: string }> = [
+  { value: "carbon", label: "Carbón", className: "text-color-carbon" },
+  { value: "gray", label: "Gris", className: "text-color-gray" },
+  { value: "gold", label: "Dorado", className: "text-color-gold" },
+  { value: "navy", label: "Azul oscuro", className: "text-color-navy" },
+  { value: "red", label: "Rojo oscuro", className: "text-color-red" },
+  { value: "green", label: "Verde oscuro", className: "text-color-green" },
+];
+
+const CONTENT_FONT_OPTIONS: ReadonlyArray<{ value: string; label: string; className: string; preview: string }> = [
+  { value: "institucional", label: "Tipografía institucional", className: "font-institucional", preview: "'Playfair Display', Georgia, serif" },
+  { value: "arial", label: "Arial", className: "font-arial", preview: "Arial, Helvetica, sans-serif" },
+  { value: "calibri", label: "Calibri", className: "font-calibri", preview: "Calibri, 'Segoe UI', Arial, sans-serif" },
+  { value: "times-new-roman", label: "Times New Roman", className: "font-times-new-roman", preview: "'Times New Roman', Times, serif" },
+  { value: "georgia", label: "Georgia", className: "font-georgia", preview: "Georgia, 'Times New Roman', serif" },
+  { value: "verdana", label: "Verdana", className: "font-verdana", preview: "Verdana, Geneva, sans-serif" },
+  { value: "tahoma", label: "Tahoma", className: "font-tahoma", preview: "Tahoma, Geneva, sans-serif" },
+  { value: "trebuchet", label: "Trebuchet MS", className: "font-trebuchet", preview: "'Trebuchet MS', Arial, sans-serif" },
+  { value: "garamond", label: "Garamond", className: "font-garamond", preview: "Garamond, 'Palatino Linotype', Georgia, serif" },
+];
 
 const emptyImageForm: ImageForm = {
   url: "",
@@ -438,6 +479,20 @@ function plainTextFromHtml(html: string) {
   return (template.content.textContent ?? "").replace(/\s+/g, " ").trim();
 }
 
+function removeClassesByPrefix(root: ParentNode, prefix: string) {
+  root.querySelectorAll<HTMLElement>(`[class*="${prefix}"]`).forEach((element) => {
+    Array.from(element.classList).forEach((className) => {
+      if (className.startsWith(prefix)) {
+        element.classList.remove(className);
+      }
+    });
+
+    if (!element.getAttribute("class")) {
+      element.removeAttribute("class");
+    }
+  });
+}
+
 function editorMetrics(html: string) {
   const words = plainTextFromHtml(html).split(" ").filter(Boolean).length;
   return {
@@ -466,7 +521,10 @@ function mediaProviderLabel(provider: MediaDetection["provider"]) {
 
 export function AdminBlogPage({ user }: AdminBlogPageProps) {
   const navigate = useNavigate();
+  const titleRef = useRef<HTMLDivElement | null>(null);
+  const summaryRef = useRef<HTMLDivElement | null>(null);
   const editorRef = useRef<HTMLDivElement | null>(null);
+  const toolbarRef = useRef<HTMLDivElement | null>(null);
   const editorSelectionRef = useRef<Range | null>(null);
   const editingLinkRef = useRef<HTMLAnchorElement | null>(null);
   const editingImageRef = useRef<HTMLElement | null>(null);
@@ -476,7 +534,13 @@ export function AdminBlogPage({ user }: AdminBlogPageProps) {
   const [view, setView] = useState<ViewMode>("resumen");
   const [summary, setSummary] = useState<AdminBlogSummary | null>(null);
   const [posts, setPosts] = useState<AdminBlogPost[]>([]);
+  const [comments, setComments] = useState<AdminBlogComment[]>([]);
+  const [commentSearch, setCommentSearch] = useState("");
+  const [replyingCommentId, setReplyingCommentId] = useState<string | null>(null);
+  const [replyText, setReplyText] = useState("");
+  const [commentPendingDelete, setCommentPendingDelete] = useState<AdminBlogComment | null>(null);
   const [filter, setFilter] = useState<StatusFilter>("TODAS");
+  const [activeEditorContext, setActiveEditorContext] = useState<EditorContext>("content");
   const [currentPostId, setCurrentPostId] = useState<string | null>(null);
   const [form, setForm] = useState<EditorForm>(emptyForm);
   const [isLoading, setIsLoading] = useState(true);
@@ -509,6 +573,8 @@ export function AdminBlogPage({ user }: AdminBlogPageProps) {
   const [isTableModalOpen, setIsTableModalOpen] = useState(false);
   const [tableForm, setTableForm] = useState<TableForm>({ rows: 2, columns: 2 });
   const [isFullscreenEditor, setIsFullscreenEditor] = useState(false);
+  const [isMoreToolsOpen, setIsMoreToolsOpen] = useState(false);
+  const [isColorPaletteOpen, setIsColorPaletteOpen] = useState(false);
   const [saveState, setSaveState] = useState<SaveState>("idle");
   const [lastSavedAt, setLastSavedAt] = useState<Date | null>(null);
   const [coverError, setCoverError] = useState<string | null>(null);
@@ -535,9 +601,14 @@ export function AdminBlogPage({ user }: AdminBlogPageProps) {
     blockquote: false,
     link: false,
   });
+  const [currentFont, setCurrentFont] = useState<{ className: string | null; label: string }>({ className: null, label: "Fuente" });
+  const [currentTextSize, setCurrentTextSize] = useState("Tamaño");
+  const [currentTextColor, setCurrentTextColor] = useState("Color");
 
   const photo = useMemo(() => professionalPhoto(user), [user]);
   const previewHtml = useMemo(() => renderArticleContentHtml(previewPost?.contenido ?? ""), [previewPost?.contenido]);
+  const previewTitleHtml = useMemo(() => renderArticleContentHtml(previewPost?.tituloHtml || escapeHtml(previewPost?.titulo ?? "")), [previewPost?.tituloHtml, previewPost?.titulo]);
+  const previewExcerptHtml = useMemo(() => renderArticleContentHtml(previewPost?.extractoHtml || escapeHtml(previewPost?.extracto ?? "")), [previewPost?.extractoHtml, previewPost?.extracto]);
   const isSaving = savingStatus !== null;
   const metrics = useMemo(() => editorMetrics(form.contenido), [form.contenido]);
 
@@ -580,12 +651,28 @@ export function AdminBlogPage({ user }: AdminBlogPageProps) {
     }
   }
 
+  async function refreshComments() {
+    setError(null);
+    try {
+      const response = await adminBlogApi.comments();
+      setComments(response.data);
+    } catch (caughtError) {
+      setError(caughtError instanceof ApiError ? caughtError.message : "No pudimos cargar los comentarios.");
+    }
+  }
+
   useEffect(() => {
     void refreshData();
   }, []);
 
   useEffect(() => {
-    if (!postPendingDelete && !isLinkModalOpen && !isImageModalOpen && !isVideoModalOpen && !isTableModalOpen) {
+    if (view === "comentarios") {
+      void refreshComments();
+    }
+  }, [view]);
+
+  useEffect(() => {
+    if (!postPendingDelete && !commentPendingDelete && !isLinkModalOpen && !isImageModalOpen && !isVideoModalOpen && !isTableModalOpen && !isFullscreenEditor && !isMoreToolsOpen && !isColorPaletteOpen) {
       return undefined;
     }
 
@@ -596,6 +683,10 @@ export function AdminBlogPage({ user }: AdminBlogPageProps) {
 
       if (postPendingDelete && !isDeleting) {
         setPostPendingDelete(null);
+      }
+
+      if (commentPendingDelete) {
+        setCommentPendingDelete(null);
       }
 
       if (isLinkModalOpen) {
@@ -613,13 +704,46 @@ export function AdminBlogPage({ user }: AdminBlogPageProps) {
       if (isTableModalOpen) {
         closeTableModal();
       }
+
+      if (isFullscreenEditor) {
+        setIsFullscreenEditor(false);
+      }
+
+      setIsMoreToolsOpen(false);
+      setIsColorPaletteOpen(false);
     }
 
     window.addEventListener("keydown", closeOnEscape);
     return () => window.removeEventListener("keydown", closeOnEscape);
-  }, [postPendingDelete, isDeleting, isLinkModalOpen, isImageModalOpen, isVideoModalOpen, isTableModalOpen]);
+  }, [postPendingDelete, commentPendingDelete, isDeleting, isLinkModalOpen, isImageModalOpen, isVideoModalOpen, isTableModalOpen, isFullscreenEditor, isMoreToolsOpen, isColorPaletteOpen]);
 
   useEffect(() => {
+    if (!isMoreToolsOpen && !isColorPaletteOpen) {
+      return undefined;
+    }
+
+    function closeToolbarPopovers(event: MouseEvent) {
+      if (toolbarRef.current?.contains(event.target as Node)) {
+        return;
+      }
+
+      setIsMoreToolsOpen(false);
+      setIsColorPaletteOpen(false);
+    }
+
+    document.addEventListener("mousedown", closeToolbarPopovers);
+    return () => document.removeEventListener("mousedown", closeToolbarPopovers);
+  }, [isMoreToolsOpen, isColorPaletteOpen]);
+
+  useEffect(() => {
+    if (titleRef.current) {
+      titleRef.current.innerHTML = form.tituloHtml || escapeHtml(form.titulo);
+    }
+
+    if (summaryRef.current) {
+      summaryRef.current.innerHTML = form.extractoHtml || escapeHtml(form.extracto);
+    }
+
     if (editorRef.current) {
       editorRef.current.innerHTML = form.contenido;
     }
@@ -627,18 +751,20 @@ export function AdminBlogPage({ user }: AdminBlogPageProps) {
 
   useEffect(() => {
     function handleSelectionChange() {
-      const editor = editorRef.current;
       const selection = window.getSelection();
 
-      if (!editor || !selection || selection.rangeCount === 0) {
+      if (!selection || selection.rangeCount === 0) {
         return;
       }
 
       const range = selection.getRangeAt(0);
-      if (!editor.contains(range.commonAncestorContainer)) {
+      const context = contextForNode(range.commonAncestorContainer);
+
+      if (!context) {
         return;
       }
 
+      setActiveEditorContext(context);
       editorSelectionRef.current = range.cloneRange();
       updateActiveTools(range);
     }
@@ -778,9 +904,18 @@ export function AdminBlogPage({ user }: AdminBlogPageProps) {
       setCurrentPostId(post.id);
       setForm({
         titulo: post.titulo,
+        tituloHtml: post.tituloHtml ?? escapeHtml(post.titulo),
         extracto: post.extracto ?? "",
+        extractoHtml: post.extractoHtml ?? escapeHtml(post.extracto ?? ""),
         contenido: post.contenido,
         imagenPortadaUrl: post.imagen,
+        tituloTamano: post.tituloTamano ?? "NORMAL",
+        tituloAlineacion: post.tituloAlineacion ?? "IZQUIERDA",
+        tituloTipografia: post.tituloTipografia ?? "INSTITUCIONAL",
+        extractoTamano: post.extractoTamano ?? "NORMAL",
+        extractoAlineacion: post.extractoAlineacion ?? "IZQUIERDA",
+        extractoTipografia: post.extractoTipografia ?? "INSTITUCIONAL",
+        comentariosHabilitados: post.comentariosHabilitados ?? false,
       });
       setCoverMeta(null);
       setSaveState("saved");
@@ -793,23 +928,55 @@ export function AdminBlogPage({ user }: AdminBlogPageProps) {
     }
   }
 
+  function editorElementForContext(context = activeEditorContext) {
+    if (context === "title") {
+      return titleRef.current;
+    }
+
+    if (context === "summary") {
+      return summaryRef.current;
+    }
+
+    return editorRef.current;
+  }
+
+  function contextForNode(node: Node) {
+    if (titleRef.current?.contains(node)) {
+      return "title" as const;
+    }
+
+    if (summaryRef.current?.contains(node)) {
+      return "summary" as const;
+    }
+
+    if (editorRef.current?.contains(node)) {
+      return "content" as const;
+    }
+
+    return null;
+  }
+
   function saveEditorSelection() {
-    const editor = editorRef.current;
     const selection = window.getSelection();
 
-    if (!editor || !selection || selection.rangeCount === 0) {
+    if (!selection || selection.rangeCount === 0) {
       return;
     }
 
     const range = selection.getRangeAt(0);
+    const context = contextForNode(range.commonAncestorContainer);
+    const editor = context ? editorElementForContext(context) : editorElementForContext();
 
-    if (editor.contains(range.commonAncestorContainer)) {
+    if (editor?.contains(range.commonAncestorContainer)) {
+      if (context) {
+        setActiveEditorContext(context);
+      }
       editorSelectionRef.current = range.cloneRange();
     }
   }
 
   function restoreEditorSelection() {
-    const editor = editorRef.current;
+    const editor = editorElementForContext();
     const selection = window.getSelection();
 
     if (!editor || !selection) {
@@ -831,15 +998,74 @@ export function AdminBlogPage({ user }: AdminBlogPageProps) {
   }
 
   function selectionElement(range = editorSelectionRef.current) {
-    return closestEditableElement(range, editorRef.current);
+    return closestEditableElement(range, editorElementForContext());
+  }
+
+  function fontsInRange(range: Range | null) {
+    const editor = editorElementForContext();
+    if (!editor || !range) {
+      return [];
+    }
+
+    const found = new Set<string>();
+    editor.querySelectorAll<HTMLElement>(".font-institucional,.font-arial,.font-calibri,.font-times-new-roman,.font-georgia,.font-verdana,.font-tahoma,.font-trebuchet,.font-garamond").forEach((element) => {
+      if (range.intersectsNode(element)) {
+        const nextClass = Array.from(element.classList).find((className) => className.startsWith("font-")) as string | undefined;
+        if (nextClass) {
+          found.add(nextClass);
+        }
+      }
+    });
+
+    return Array.from(found);
+  }
+
+  function classesInRange(range: Range | null, selector: string, prefix: string) {
+    const editor = editorElementForContext();
+    if (!editor || !range) {
+      return [];
+    }
+
+    const found = new Set<string>();
+    editor.querySelectorAll<HTMLElement>(selector).forEach((element) => {
+      if (range.intersectsNode(element)) {
+        const className = Array.from(element.classList).find((item) => item.startsWith(prefix));
+        if (className) {
+          found.add(className);
+        }
+      }
+    });
+
+    return Array.from(found);
   }
 
   function updateActiveTools(range = editorSelectionRef.current) {
-    const editor = editorRef.current;
+    const editor = editorElementForContext();
     const element = selectionElement(range);
 
     if (!editor || !element) {
       return;
+    }
+
+    const fontClasses = fontsInRange(range);
+    if (fontClasses.length === 1) {
+      const option = CONTENT_FONT_OPTIONS.find((item) => item.className === fontClasses[0]);
+      setCurrentFont({ className: option?.className ?? null, label: option?.label ?? "Fuente" });
+    } else if (fontClasses.length > 1) {
+      setCurrentFont({ className: null, label: "Mixto" });
+    } else {
+      setCurrentFont({ className: null, label: "Fuente" });
+    }
+
+    const sizeClasses = classesInRange(range, TEXT_SIZE_OPTIONS.map((size) => `.text-size-${size}`).join(","), "text-size-");
+    setCurrentTextSize(sizeClasses.length === 1 ? sizeClasses[0].replace("text-size-", "") : sizeClasses.length > 1 ? "Mixto" : "Tamaño");
+
+    const colorClasses = classesInRange(range, TEXT_COLOR_OPTIONS.map((color) => `.${color.className}`).join(","), "text-color-");
+    if (colorClasses.length === 1) {
+      const option = TEXT_COLOR_OPTIONS.find((item) => item.className === colorClasses[0]);
+      setCurrentTextColor(option?.label ?? "Color");
+    } else {
+      setCurrentTextColor(colorClasses.length > 1 ? "Mixto" : "Color");
     }
 
     const block = element.closest("h1,h2,h3,p,blockquote,li");
@@ -872,13 +1098,27 @@ export function AdminBlogPage({ user }: AdminBlogPageProps) {
   }
 
   function syncEditorContent() {
+    if (activeEditorContext === "title") {
+      const html = titleRef.current?.innerHTML ?? "";
+      setForm((current) => ({ ...current, tituloHtml: html, titulo: plainTextFromHtml(html).slice(0, 250) }));
+      markDirty();
+      return;
+    }
+
+    if (activeEditorContext === "summary") {
+      const html = summaryRef.current?.innerHTML ?? "";
+      setForm((current) => ({ ...current, extractoHtml: html, extracto: plainTextFromHtml(html).slice(0, 500) }));
+      markDirty();
+      return;
+    }
+
     setForm((current) => ({ ...current, contenido: editorRef.current?.innerHTML ?? "" }));
     markDirty();
   }
 
   function applyCommand(command: string, value?: string) {
     restoreEditorSelection();
-    editorRef.current?.focus();
+    editorElementForContext()?.focus();
     document.execCommand(command, false, value);
     syncEditorContent();
     saveEditorSelection();
@@ -889,9 +1129,35 @@ export function AdminBlogPage({ user }: AdminBlogPageProps) {
     applyCommand("formatBlock", tag);
   }
 
+  function removeAlignmentFromSelection() {
+    const editor = editorElementForContext();
+    const range = editorSelectionRef.current;
+
+    if (!editor || !range) {
+      return;
+    }
+
+    editor.querySelectorAll<HTMLElement>(".text-align-left, .text-align-center, .text-align-right, .text-align-justify").forEach((element) => {
+      if (range.intersectsNode(element)) {
+        element.classList.remove("text-align-left", "text-align-center", "text-align-right", "text-align-justify");
+      }
+    });
+  }
+
+  function cleanFormatting() {
+    restoreEditorSelection();
+    document.execCommand("removeFormat");
+    document.execCommand("formatBlock", false, "p");
+    removeAlignmentFromSelection();
+    syncEditorContent();
+    saveEditorSelection();
+    setIsMoreToolsOpen(false);
+    window.setTimeout(updateActiveTools, 0);
+  }
+
   function toggleAlignment(alignment: "left" | "center" | "right" | "justify") {
     restoreEditorSelection();
-    const editor = editorRef.current;
+    const editor = editorElementForContext();
     const selection = window.getSelection();
 
     if (!editor || !selection || selection.rangeCount === 0) {
@@ -914,38 +1180,23 @@ export function AdminBlogPage({ user }: AdminBlogPageProps) {
       target.classList.add(`text-align-${alignment}`);
     });
 
-    syncEditorContent();
-    saveEditorSelection();
-    window.setTimeout(updateActiveTools, 0);
-  }
-
-  function removeAlignmentFromSelection() {
-    const editor = editorRef.current;
-    const range = editorSelectionRef.current;
-
-    if (!editor || !range) {
-      return;
+    if (activeEditorContext === "title") {
+      const titleAlignment = alignment === "center" ? "CENTRO" : alignment === "right" ? "DERECHA" : "IZQUIERDA";
+      setForm((current) => ({ ...current, tituloAlineacion: titleAlignment }));
     }
 
-    editor.querySelectorAll<HTMLElement>(".text-align-left, .text-align-center, .text-align-right, .text-align-justify").forEach((element) => {
-      if (range.intersectsNode(element)) {
-        element.classList.remove("text-align-left", "text-align-center", "text-align-right", "text-align-justify");
-      }
-    });
-  }
+    if (activeEditorContext === "summary") {
+      const summaryAlignment = alignment === "center" ? "CENTRO" : alignment === "right" ? "DERECHA" : alignment === "justify" ? "JUSTIFICADO" : "IZQUIERDA";
+      setForm((current) => ({ ...current, extractoAlineacion: summaryAlignment }));
+    }
 
-  function cleanFormatting() {
-    restoreEditorSelection();
-    document.execCommand("removeFormat");
-    document.execCommand("formatBlock", false, "p");
-    removeAlignmentFromSelection();
     syncEditorContent();
     saveEditorSelection();
     window.setTimeout(updateActiveTools, 0);
   }
 
   function removeCurrentLink() {
-    const editor = editorRef.current;
+    const editor = editorElementForContext();
     const anchor = findAnchorFromRange(editorSelectionRef.current, editor);
 
     if (!editor || !anchor) {
@@ -957,16 +1208,19 @@ export function AdminBlogPage({ user }: AdminBlogPageProps) {
     syncEditorContent();
     editor.focus();
     saveEditorSelection();
+    setIsMoreToolsOpen(false);
     window.setTimeout(updateActiveTools, 0);
   }
 
   function insertHorizontalRule() {
     applyCommand("insertHTML", "<hr><p><br></p>");
+    setIsMoreToolsOpen(false);
   }
 
   function openTableModal() {
     saveEditorSelection();
     setTableForm({ rows: 2, columns: 2 });
+    setIsMoreToolsOpen(false);
     setIsTableModalOpen(true);
   }
 
@@ -992,11 +1246,138 @@ export function AdminBlogPage({ user }: AdminBlogPageProps) {
     };
 
     applyCommand("insertHTML", `<div class="article-callout article-callout--${type}"><strong>${labels[type]}</strong><p>Escribe aqui el contenido destacado.</p></div><p><br></p>`);
+    setIsMoreToolsOpen(false);
+  }
+
+  function applyTextSize(size: typeof TEXT_SIZE_OPTIONS[number]) {
+    restoreEditorSelection();
+    const editor = editorElementForContext();
+    const selection = window.getSelection();
+
+    if (!editor || !selection || selection.rangeCount === 0 || selection.isCollapsed) {
+      showToast("Selecciona el texto al que quieres aplicar tamaño.", "info");
+      return;
+    }
+
+    const range = selection.getRangeAt(0);
+    if (!editor.contains(range.commonAncestorContainer)) {
+      return;
+    }
+
+    const wrapper = document.createElement("span");
+    wrapper.className = `text-size-${size}`;
+    const fragment = range.extractContents();
+    removeClassesByPrefix(fragment, "text-size-");
+    wrapper.appendChild(fragment);
+    range.insertNode(wrapper);
+    range.selectNodeContents(wrapper);
+    selection.removeAllRanges();
+    selection.addRange(range);
+    syncEditorContent();
+    saveEditorSelection();
+    window.setTimeout(updateActiveTools, 0);
+  }
+
+  function applyFont(className: string) {
+    restoreEditorSelection();
+    const editor = editorElementForContext();
+    const selection = window.getSelection();
+
+    if (!editor || !selection || selection.rangeCount === 0 || selection.isCollapsed) {
+      showToast("Selecciona el texto al que quieres aplicar fuente.", "info");
+      return;
+    }
+
+    const range = selection.getRangeAt(0);
+    if (!editor.contains(range.commonAncestorContainer)) {
+      return;
+    }
+
+    const wrapper = document.createElement("span");
+    wrapper.className = className;
+    const fragment = range.extractContents();
+    removeClassesByPrefix(fragment, "font-");
+    wrapper.appendChild(fragment);
+    range.insertNode(wrapper);
+    range.selectNodeContents(wrapper);
+    selection.removeAllRanges();
+    selection.addRange(range);
+    syncEditorContent();
+    saveEditorSelection();
+    window.setTimeout(updateActiveTools, 0);
+  }
+
+  function applyTextColor(className: string) {
+    restoreEditorSelection();
+    const editor = editorElementForContext();
+    const selection = window.getSelection();
+
+    if (!editor || !selection || selection.rangeCount === 0 || selection.isCollapsed) {
+      showToast("Selecciona el texto al que quieres aplicar color.", "info");
+      return;
+    }
+
+    const range = selection.getRangeAt(0);
+    if (!editor.contains(range.commonAncestorContainer)) {
+      return;
+    }
+
+    const wrapper = document.createElement("span");
+    wrapper.className = className;
+    const fragment = range.extractContents();
+    removeClassesByPrefix(fragment, "text-color-");
+    wrapper.appendChild(fragment);
+    range.insertNode(wrapper);
+    range.selectNodeContents(wrapper);
+    selection.removeAllRanges();
+    selection.addRange(range);
+    syncEditorContent();
+    saveEditorSelection();
+    window.setTimeout(updateActiveTools, 0);
   }
 
   function handleEditorInput(event: FormEvent<HTMLDivElement>) {
+    setActiveEditorContext("content");
     const html = event.currentTarget.innerHTML;
     updateForm((current) => ({ ...current, contenido: html }));
+    refreshEditorState();
+  }
+
+  function handleTitleInput(event: FormEvent<HTMLDivElement>) {
+    setActiveEditorContext("title");
+    const html = event.currentTarget.innerHTML;
+    updateForm((current) => ({ ...current, tituloHtml: html, titulo: plainTextFromHtml(html).slice(0, 250) }));
+    refreshEditorState();
+  }
+
+  function handleSummaryInput(event: FormEvent<HTMLDivElement>) {
+    setActiveEditorContext("summary");
+    const html = event.currentTarget.innerHTML;
+    updateForm((current) => ({ ...current, extractoHtml: html, extracto: plainTextFromHtml(html).slice(0, 500) }));
+    refreshEditorState();
+  }
+
+  function handleRichFieldPaste(event: ClipboardEvent<HTMLDivElement>, context: EditorContext) {
+    event.preventDefault();
+    setActiveEditorContext(context);
+
+    const clipboard = event.clipboardData;
+    const html = clipboard.getData("text/html");
+    const text = clipboard.getData("text/plain");
+    const pastedContent = html ? sanitizeHtml(html) : plainTextToHtml(text);
+
+    if (pastedContent) {
+      document.execCommand("insertHTML", false, pastedContent);
+    }
+
+    const htmlAfterPaste = event.currentTarget.innerHTML;
+    if (context === "title") {
+      updateForm((current) => ({ ...current, tituloHtml: htmlAfterPaste, titulo: plainTextFromHtml(htmlAfterPaste).slice(0, 250) }));
+    } else if (context === "summary") {
+      updateForm((current) => ({ ...current, extractoHtml: htmlAfterPaste, extracto: plainTextFromHtml(htmlAfterPaste).slice(0, 500) }));
+    } else {
+      updateForm((current) => ({ ...current, contenido: htmlAfterPaste }));
+    }
     refreshEditorState();
   }
 
@@ -1018,6 +1399,10 @@ export function AdminBlogPage({ user }: AdminBlogPageProps) {
   }
 
   function openVideoModal() {
+    if (activeEditorContext !== "content") {
+      return;
+    }
+
     saveEditorSelection();
     setVideoUrl("");
     setVideoError(null);
@@ -1032,6 +1417,10 @@ export function AdminBlogPage({ user }: AdminBlogPageProps) {
   }
 
   function insertLink() {
+    if (activeEditorContext !== "content") {
+      return;
+    }
+
     const editor = editorRef.current;
     const anchor = findAnchorFromRange(editorSelectionRef.current, editor);
 
@@ -1140,10 +1529,19 @@ export function AdminBlogPage({ user }: AdminBlogPageProps) {
 
   function openCurrentPreview() {
     const currentContent = editorRef.current?.innerHTML ?? form.contenido;
-    setPreviewPost({ ...form, contenido: currentContent });
+    setPreviewPost({
+      ...form,
+      tituloHtml: titleRef.current?.innerHTML ?? form.tituloHtml,
+      extractoHtml: summaryRef.current?.innerHTML ?? form.extractoHtml,
+      contenido: currentContent,
+    });
   }
 
   function insertInlineImage() {
+    if (activeEditorContext !== "content") {
+      return;
+    }
+
     saveEditorSelection();
     const figure = closestImageFigure(editorSelectionRef.current, editorRef.current);
     const image = figure?.querySelector("img");
@@ -1309,8 +1707,12 @@ export function AdminBlogPage({ user }: AdminBlogPageProps) {
   async function savePost(status: AdminPostStatus, options: { autosave?: boolean } = {}) {
     setError(null);
 
-    const titulo = form.titulo.trim();
-    const contenido = form.contenido.trim();
+    const currentTitleHtml = titleRef.current?.innerHTML ?? form.tituloHtml;
+    const currentExcerptHtml = summaryRef.current?.innerHTML ?? form.extractoHtml;
+    const currentContent = editorRef.current?.innerHTML ?? form.contenido;
+    const titulo = plainTextFromHtml(currentTitleHtml).trim() || form.titulo.trim();
+    const extracto = plainTextFromHtml(currentExcerptHtml).trim() || form.extracto.trim();
+    const contenido = currentContent.trim();
 
     if (status === "PUBLICADO" && (!titulo || !contenido)) {
       if (!options.autosave) {
@@ -1319,7 +1721,7 @@ export function AdminBlogPage({ user }: AdminBlogPageProps) {
       return;
     }
 
-    if (status === "BORRADOR" && !titulo && !form.extracto.trim() && !contenido && !form.imagenPortadaUrl) {
+    if (status === "BORRADOR" && !titulo && !extracto && !contenido && !form.imagenPortadaUrl) {
       if (!options.autosave) {
         showToast("Escribe al menos un dato para guardar el borrador.", "error");
       }
@@ -1332,18 +1734,36 @@ export function AdminBlogPage({ user }: AdminBlogPageProps) {
     try {
       const payload = {
         titulo: titulo || "Borrador sin titulo",
-        extracto: form.extracto.trim(),
+        tituloHtml: currentTitleHtml,
+        extracto,
+        extractoHtml: currentExcerptHtml,
         contenido,
         imagenPortadaUrl: form.imagenPortadaUrl,
+        tituloTamano: form.tituloTamano,
+        tituloAlineacion: form.tituloAlineacion,
+        tituloTipografia: form.tituloTipografia,
+        extractoTamano: form.extractoTamano,
+        extractoAlineacion: form.extractoAlineacion,
+        extractoTipografia: form.extractoTipografia,
+        comentariosHabilitados: form.comentariosHabilitados,
         estado: status,
       };
       const response = currentPostId ? await adminBlogApi.update(currentPostId, payload) : await adminBlogApi.create(payload);
       setCurrentPostId(response.data.id);
       setForm({
         titulo: response.data.titulo,
+        tituloHtml: response.data.tituloHtml ?? escapeHtml(response.data.titulo),
         extracto: response.data.extracto ?? "",
+        extractoHtml: response.data.extractoHtml ?? escapeHtml(response.data.extracto ?? ""),
         contenido: response.data.contenido,
         imagenPortadaUrl: response.data.imagen,
+        tituloTamano: response.data.tituloTamano,
+        tituloAlineacion: response.data.tituloAlineacion,
+        tituloTipografia: response.data.tituloTipografia,
+        extractoTamano: response.data.extractoTamano,
+        extractoAlineacion: response.data.extractoAlineacion,
+        extractoTipografia: response.data.extractoTipografia,
+        comentariosHabilitados: response.data.comentariosHabilitados,
       });
       setSaveState("saved");
       setLastSavedAt(new Date());
@@ -1467,6 +1887,9 @@ export function AdminBlogPage({ user }: AdminBlogPageProps) {
 
     if (key === "k") {
       event.preventDefault();
+      if (activeEditorContext !== "content") {
+        return;
+      }
       saveEditorSelection();
       insertLink();
       return;
@@ -1478,6 +1901,15 @@ export function AdminBlogPage({ user }: AdminBlogPageProps) {
     }
   }
 
+  function handleTitleKeyDown(event: React.KeyboardEvent<HTMLDivElement>) {
+    if (event.key === "Enter") {
+      event.preventDefault();
+      return;
+    }
+
+    handleEditorKeyDown(event);
+  }
+
   const saveStateLabel = saveState === "dirty"
     ? "Cambios sin guardar"
     : saveState === "saving"
@@ -1487,6 +1919,52 @@ export function AdminBlogPage({ user }: AdminBlogPageProps) {
         : saveState === "error"
           ? "Error al guardar"
           : "Sin cambios";
+
+  const filteredComments = comments.filter((comment) => {
+    const query = commentSearch.trim().toLowerCase();
+
+    if (!query) {
+      return true;
+    }
+
+    return `${comment.nombre} ${comment.contenido} ${comment.articulo.titulo}`.toLowerCase().includes(query);
+  });
+
+  async function publishReply(commentId: string) {
+    if (!replyText.trim()) {
+      showToast("Escribe una respuesta antes de publicarla.", "error");
+      return;
+    }
+
+    try {
+      await adminBlogApi.replyComment(commentId, replyText.trim());
+      setReplyingCommentId(null);
+      setReplyText("");
+      await refreshComments();
+      showToast("Respuesta publicada correctamente.");
+    } catch (caughtError) {
+      showToast(caughtError instanceof ApiError ? caughtError.message : "No se pudo publicar la respuesta.", "error");
+    }
+  }
+
+  async function confirmDeleteComment() {
+    if (!commentPendingDelete) {
+      return;
+    }
+
+    try {
+      await adminBlogApi.deleteComment(commentPendingDelete.id);
+      setCommentPendingDelete(null);
+      await refreshComments();
+      await refreshData();
+      showToast("Comentario eliminado correctamente.");
+    } catch (caughtError) {
+      showToast(caughtError instanceof ApiError ? caughtError.message : "No se pudo eliminar el comentario.", "error");
+    }
+  }
+
+  const isContentContext = activeEditorContext === "content";
+  const currentTextColorValue = TEXT_COLOR_OPTIONS.find((option) => option.label === currentTextColor)?.value ?? "#201b16";
 
   const toolbarGroups: ToolbarGroup[] = [
     {
@@ -1501,10 +1979,10 @@ export function AdminBlogPage({ user }: AdminBlogPageProps) {
     {
       label: "Titulos",
       tools: [
-        { icon: <Pilcrow />, label: "Parrafo normal", action: () => applyHeading("p"), activeKey: "p", isToggle: true },
-        { icon: <Heading1 />, label: "Titulo 1", action: () => applyHeading("h1"), activeKey: "h1", isToggle: true },
-        { icon: <Heading2 />, label: "Titulo 2", action: () => applyHeading("h2"), activeKey: "h2", isToggle: true },
-        { icon: <Heading3 />, label: "Titulo 3", action: () => applyHeading("h3"), activeKey: "h3", isToggle: true },
+        { icon: <Pilcrow />, label: "Parrafo normal", action: () => applyHeading("p"), activeKey: "p", isToggle: true, disabled: !isContentContext },
+        { icon: <Heading1 />, label: "Titulo 1", action: () => applyHeading("h1"), activeKey: "h1", isToggle: true, disabled: !isContentContext },
+        { icon: <Heading2 />, label: "Titulo 2", action: () => applyHeading("h2"), activeKey: "h2", isToggle: true, disabled: !isContentContext },
+        { icon: <Heading3 />, label: "Titulo 3", action: () => applyHeading("h3"), activeKey: "h3", isToggle: true, disabled: !isContentContext },
       ],
     },
     {
@@ -1519,28 +1997,21 @@ export function AdminBlogPage({ user }: AdminBlogPageProps) {
     {
       label: "Estructura",
       tools: [
-        { icon: <List />, label: "Lista con viñetas", action: () => applyCommand("insertUnorderedList"), activeKey: "unorderedList", isToggle: true },
-        { icon: <ListOrdered />, label: "Lista numerada", action: () => applyCommand("insertOrderedList"), activeKey: "orderedList", isToggle: true },
-        { icon: <Quote />, label: "Cita", action: () => applyCommand("formatBlock", "blockquote"), activeKey: "blockquote", isToggle: true },
-        { icon: <Minus />, label: "Insertar separador", action: insertHorizontalRule },
-        { icon: <Table2 />, label: "Insertar tabla", action: openTableModal },
-        { icon: <Info />, label: "Insertar nota", action: () => insertCallout("info") },
-        { icon: <AlertTriangle />, label: "Insertar aviso importante", action: () => insertCallout("warning") },
+        { icon: <List />, label: "Lista con viñetas", action: () => applyCommand("insertUnorderedList"), activeKey: "unorderedList", isToggle: true, disabled: !isContentContext },
+        { icon: <ListOrdered />, label: "Lista numerada", action: () => applyCommand("insertOrderedList"), activeKey: "orderedList", isToggle: true, disabled: !isContentContext },
       ],
     },
     {
       label: "Multimedia",
       tools: [
-        { icon: <LinkIcon />, label: "Insertar o editar enlace (Ctrl+K)", action: insertLink, activeKey: "link", isToggle: true },
-        { icon: <Unlink />, label: "Quitar enlace", action: removeCurrentLink, disabled: !activeTools.link },
-        { icon: <ImageIcon />, label: "Insertar imagen", action: insertInlineImage },
-        { icon: <Video />, label: "Insertar video o publicacion", action: openVideoModal },
+        { icon: <LinkIcon />, label: "Insertar o editar enlace (Ctrl+K)", action: insertLink, activeKey: "link", isToggle: true, disabled: !isContentContext },
+        { icon: <ImageIcon />, label: "Insertar imagen", action: insertInlineImage, disabled: !isContentContext },
+        { icon: <Video />, label: "Insertar video o publicacion", action: openVideoModal, disabled: !isContentContext },
       ],
     },
     {
       label: "Edicion",
       tools: [
-        { icon: <RemoveFormatting />, label: "Limpiar formato", action: cleanFormatting },
         { icon: <Undo2 />, label: "Deshacer (Ctrl+Z)", action: () => applyCommand("undo") },
         { icon: <Redo2 />, label: "Rehacer", action: () => applyCommand("redo") },
       ],
@@ -1549,10 +2020,38 @@ export function AdminBlogPage({ user }: AdminBlogPageProps) {
       label: "Vista",
       tools: [
         { icon: <Eye />, label: "Vista previa", action: openCurrentPreview },
-        { icon: isFullscreenEditor ? <Minimize2 /> : <Fullscreen />, label: isFullscreenEditor ? "Salir de pantalla completa" : "Pantalla completa", action: () => setIsFullscreenEditor((current) => !current) },
+        { icon: isFullscreenEditor ? <Minimize2 /> : <Fullscreen />, label: isFullscreenEditor ? "Salir de pantalla completa" : "Pantalla completa", action: () => setIsFullscreenEditor((current) => !current), disabled: !isContentContext },
       ],
     },
   ];
+
+  const secondaryTools: ToolbarTool[] = [
+    { icon: <Quote />, label: "Cita", action: () => insertCallout("info"), disabled: !isContentContext },
+    { icon: <Minus />, label: "Línea horizontal", action: insertHorizontalRule, disabled: !isContentContext },
+    { icon: <Table2 />, label: "Tabla", action: openTableModal, disabled: !isContentContext },
+    { icon: <RemoveFormatting />, label: "Limpiar formato", action: cleanFormatting },
+    { icon: <Unlink />, label: "Quitar enlace", action: removeCurrentLink, disabled: !activeTools.link },
+  ];
+
+  const renderToolbarGroup = (group: ToolbarGroup) => (
+    <div className="admin-rich-toolbar__group" aria-label={group.label} key={group.label}>
+      {group.tools.map((tool) => (
+        <button
+          type="button"
+          className={tool.activeKey && activeTools[tool.activeKey] ? "is-active" : ""}
+          onMouseDown={(event) => event.preventDefault()}
+          onClick={tool.action}
+          aria-label={tool.label}
+          aria-pressed={tool.isToggle ? Boolean(tool.activeKey && activeTools[tool.activeKey]) : undefined}
+          title={tool.label}
+          disabled={tool.disabled}
+          key={tool.label}
+        >
+          {tool.icon}
+        </button>
+      ))}
+    </div>
+  );
 
   return (
     <main className="admin-editorial">
@@ -1566,6 +2065,9 @@ export function AdminBlogPage({ user }: AdminBlogPageProps) {
             </button>
             <button className={view === "publicaciones" ? "is-active" : ""} type="button" onClick={() => setView("publicaciones")}>
               <FileEdit /> Publicaciones
+            </button>
+            <button className={view === "comentarios" ? "is-active" : ""} type="button" onClick={() => setView("comentarios")}>
+              <MessageSquare /> Comentarios
             </button>
             <button className={view === "editor" && !currentPostId ? "is-active" : ""} type="button" onClick={resetEditor}>
               <Plus /> Nueva publicacion
@@ -1630,50 +2132,156 @@ export function AdminBlogPage({ user }: AdminBlogPageProps) {
         )}
 
         {view === "editor" && (
-          <section className="admin-card admin-card--editor admin-card--editor-full">
+          <section className={`admin-card admin-card--editor admin-card--editor-full ${isFullscreenEditor ? "is-fullscreen" : ""}`}>
             <div className="admin-card__header">
               <h2>{currentPostId ? "Editar publicacion" : "Nueva publicacion"}</h2>
               <span className="admin-badge admin-badge--borrador">Borrador</span>
             </div>
+            <div ref={toolbarRef} className="admin-rich-toolbar admin-rich-toolbar--single" aria-label="Herramientas del editor">
+              <div className="admin-rich-toolbar__row admin-rich-toolbar__row--primary">
+                <label className="admin-text-size-control">
+                  <select
+                    value=""
+                    onMouseDown={saveEditorSelection}
+                    onChange={(event) => {
+                      const className = event.target.value;
+                      if (className) {
+                        applyFont(className);
+                      }
+                      event.target.value = "";
+                    }}
+                    title="Fuente"
+                    aria-label="Fuente"
+                  >
+                    <option value="" disabled>{currentFont.label}</option>
+                    {CONTENT_FONT_OPTIONS.map((font) => (
+                      <option value={font.className} style={{ fontFamily: font.preview }} key={font.className}>{font.label}</option>
+                    ))}
+                  </select>
+                </label>
+                <label className="admin-text-size-control admin-text-size-control--short">
+                  <select
+                    value=""
+                    onMouseDown={saveEditorSelection}
+                    onChange={(event) => {
+                      const size = event.target.value as typeof TEXT_SIZE_OPTIONS[number];
+                      if (TEXT_SIZE_OPTIONS.includes(size)) {
+                        applyTextSize(size);
+                      }
+                      event.target.value = "";
+                    }}
+                    title="Tamaño"
+                    aria-label="Tamaño"
+                  >
+                    <option value="" disabled>{currentTextSize}</option>
+                    {TEXT_SIZE_OPTIONS.map((size) => <option value={size} key={size}>{size}</option>)}
+                  </select>
+                </label>
+                <div className="admin-toolbar-popover">
+                  <button
+                    type="button"
+                    className="admin-color-button"
+                    onMouseDown={(event) => {
+                      event.preventDefault();
+                      saveEditorSelection();
+                    }}
+                    onClick={() => {
+                      setIsColorPaletteOpen((current) => !current);
+                      setIsMoreToolsOpen(false);
+                    }}
+                    aria-label={`Color de texto: ${currentTextColor}`}
+                    title="Color de texto"
+                    aria-expanded={isColorPaletteOpen}
+                  >
+                    <span>A</span>
+                    <i style={{ backgroundColor: currentTextColorValue }} />
+                  </button>
+                  {isColorPaletteOpen ? (
+                    <div className="admin-toolbar-menu admin-toolbar-menu--colors" role="menu" aria-label="Color de texto">
+                      {TEXT_COLOR_OPTIONS.map((color) => (
+                        <button
+                          type="button"
+                          role="menuitem"
+                          onMouseDown={(event) => event.preventDefault()}
+                          onClick={() => {
+                            applyTextColor(color.className);
+                            setIsColorPaletteOpen(false);
+                          }}
+                          key={color.value}
+                        >
+                          <i style={{ backgroundColor: color.value }} />
+                          <span>{color.label}</span>
+                        </button>
+                      ))}
+                    </div>
+                  ) : null}
+                </div>
+                {toolbarGroups.slice(0, 4).map(renderToolbarGroup)}
+              </div>
+              <div className="admin-rich-toolbar__row admin-rich-toolbar__row--secondary">
+                {toolbarGroups.slice(4).map(renderToolbarGroup)}
+                <div className="admin-toolbar-popover">
+                  <button
+                    type="button"
+                    className={isMoreToolsOpen ? "is-active" : ""}
+                    onMouseDown={(event) => {
+                      event.preventDefault();
+                      saveEditorSelection();
+                    }}
+                    onClick={() => {
+                      setIsMoreToolsOpen((current) => !current);
+                      setIsColorPaletteOpen(false);
+                    }}
+                    aria-label="Más herramientas"
+                    title="Más herramientas"
+                    aria-expanded={isMoreToolsOpen}
+                  >
+                    <MoreHorizontal />
+                  </button>
+                  {isMoreToolsOpen ? (
+                    <div className="admin-toolbar-menu" role="menu" aria-label="Más herramientas">
+                      <strong>MÁS HERRAMIENTAS</strong>
+                      {secondaryTools.map((tool) => (
+                        <button
+                          type="button"
+                          role="menuitem"
+                          onMouseDown={(event) => event.preventDefault()}
+                          onClick={tool.action}
+                          disabled={tool.disabled}
+                          title={tool.label}
+                          key={tool.label}
+                        >
+                          {tool.icon}
+                          <span>{tool.label}</span>
+                        </button>
+                      ))}
+                    </div>
+                  ) : null}
+                </div>
+              </div>
+            </div>
             <label className="admin-editor-field">
               <span>Titulo</span>
-              <input value={form.titulo} placeholder="Escribe un titulo atractivo..." onChange={(event) => updateForm((current) => ({ ...current, titulo: event.target.value }))} />
+              <div ref={titleRef} className="admin-rich-editor admin-rich-editor--title" contentEditable suppressContentEditableWarning data-placeholder="Escribe un titulo atractivo..." onFocus={() => setActiveEditorContext("title")} onInput={handleTitleInput} onPaste={(event) => handleRichFieldPaste(event, "title")} onKeyDown={handleTitleKeyDown} onKeyUp={saveEditorSelection} onMouseUp={saveEditorSelection} onBlur={saveEditorSelection} />
             </label>
             <label className="admin-editor-field">
-              <span>Resumen</span>
-              <textarea value={form.extracto} placeholder="Breve descripcion que aparecera en la tarjeta del blog..." onChange={(event) => updateForm((current) => ({ ...current, extracto: event.target.value }))} />
+              <span>Descripción</span>
+              <div ref={summaryRef} className="admin-rich-editor admin-rich-editor--summary" contentEditable suppressContentEditableWarning data-placeholder="Breve descripcion que aparecera en la tarjeta del blog..." onFocus={() => setActiveEditorContext("summary")} onInput={handleSummaryInput} onPaste={(event) => handleRichFieldPaste(event, "summary")} onKeyDown={handleEditorKeyDown} onKeyUp={saveEditorSelection} onMouseUp={saveEditorSelection} onBlur={saveEditorSelection} />
+            </label>
+            <label className="admin-toggle-field">
+              <span>Permitir comentarios</span>
+              <input type="checkbox" checked={form.comentariosHabilitados} onChange={(event) => updateForm((current) => ({ ...current, comentariosHabilitados: event.target.checked }))} />
             </label>
             <EditorErrorBoundary>
               <div className={`admin-editor-field admin-editor-field--content ${isFullscreenEditor ? "is-fullscreen" : ""}`}>
                 <span>Contenido</span>
-                <div className="admin-rich-toolbar" aria-label="Herramientas del editor">
-                  {toolbarGroups.map((group) => (
-                    <div className="admin-rich-toolbar__group" key={group.label} aria-label={group.label}>
-                      <span>{group.label}</span>
-                      {group.tools.map((tool) => (
-                        <button
-                          type="button"
-                          className={tool.activeKey && activeTools[tool.activeKey] ? "is-active" : ""}
-                          onMouseDown={(event) => event.preventDefault()}
-                          onClick={tool.action}
-                          aria-label={tool.label}
-                          aria-pressed={tool.isToggle ? Boolean(tool.activeKey && activeTools[tool.activeKey]) : undefined}
-                          title={tool.label}
-                          disabled={tool.disabled}
-                          key={tool.label}
-                        >
-                          {tool.icon}
-                        </button>
-                      ))}
-                    </div>
-                  ))}
-                </div>
                 <div
                   ref={editorRef}
                   className="admin-rich-editor"
                   contentEditable
                   suppressContentEditableWarning
                   data-placeholder="Empieza a escribir tu contenido aqui..."
+                  onFocus={() => setActiveEditorContext("content")}
                   onInput={handleEditorInput}
                   onPaste={handleEditorPaste}
                   onKeyDown={handleEditorKeyDown}
@@ -1762,6 +2370,62 @@ export function AdminBlogPage({ user }: AdminBlogPageProps) {
             </div>
           </section>
         )}
+        {view === "comentarios" && (
+          <section className="admin-card admin-comments-panel">
+            <div className="admin-card__header">
+              <div>
+                <h2>Comentarios</h2>
+                <p>{comments.length} comentarios</p>
+              </div>
+              <input value={commentSearch} placeholder="Buscar comentario..." onChange={(event) => setCommentSearch(event.target.value)} />
+            </div>
+            <div className="admin-comments-list">
+              {filteredComments.length ? filteredComments.map((comment) => (
+                <article className="admin-comment-row" key={comment.id}>
+                  <div>
+                    <h3>{comment.nombre}</h3>
+                    <p>"{comment.contenido}"</p>
+                    <small>Artículo: {comment.articulo.titulo}</small>
+                    <time>{formatAdminDate(comment.fecha)}</time>
+                    {comment.respuesta ? (
+                      <div className="admin-comment-reply">
+                        <strong>{comment.respuesta.autor.nombreCompleto}</strong>
+                        <small>{comment.respuesta.autor.cargo ?? "Abogado"} · Equipo De Mora</small>
+                        <p>{comment.respuesta.contenido}</p>
+                      </div>
+                    ) : null}
+                  </div>
+                  <div className="admin-comment-actions">
+                    <button className="admin-button admin-button--outline" type="button" onClick={() => {
+                      setReplyingCommentId(comment.id);
+                      setReplyText(comment.respuesta?.contenido ?? "");
+                    }}>Responder</button>
+                    <button className="admin-button admin-button--ghost admin-button--danger" type="button" onClick={() => setCommentPendingDelete(comment)}>Eliminar</button>
+                  </div>
+                  {replyingCommentId === comment.id ? (
+                    <div className="admin-comment-editor">
+                      <textarea maxLength={500} value={replyText} onChange={(event) => setReplyText(event.target.value)} placeholder="Escribe una respuesta oficial..." />
+                      <small>{replyText.length} / 500</small>
+                      <div>
+                        <button className="admin-button admin-button--outline" type="button" onClick={() => {
+                          setReplyingCommentId(null);
+                          setReplyText("");
+                        }}>Cancelar</button>
+                        <button className="admin-button admin-button--primary" type="button" onClick={() => publishReply(comment.id)}>Publicar respuesta</button>
+                      </div>
+                    </div>
+                  ) : null}
+                </article>
+              )) : (
+                <div className="admin-empty admin-empty--editorial">
+                  <span aria-hidden="true"><MessageSquare /></span>
+                  <strong>No hay comentarios todavía.</strong>
+                  <p>Los comentarios de las publicaciones aparecerán aquí.</p>
+                </div>
+              )}
+            </div>
+          </section>
+        )}
         </section>
       </div>
 
@@ -1774,8 +2438,8 @@ export function AdminBlogPage({ user }: AdminBlogPageProps) {
           <article className="admin-modal__panel admin-preview">
             <button className="admin-modal__close" type="button" onClick={() => setPreviewPost(null)}>Cerrar</button>
             {previewPost.imagenPortadaUrl ? <img src={previewPost.imagenPortadaUrl} alt="" /> : null}
-            <h2>{previewPost.titulo || "Titulo de la publicacion"}</h2>
-            <p>{previewPost.extracto}</p>
+            <h2 dangerouslySetInnerHTML={{ __html: previewTitleHtml || "Titulo de la publicacion" }} />
+            <p dangerouslySetInnerHTML={{ __html: previewExcerptHtml }} />
             <div dangerouslySetInnerHTML={{ __html: previewHtml }} />
           </article>
         </div>
@@ -2005,6 +2669,22 @@ export function AdminBlogPage({ user }: AdminBlogPageProps) {
               <button className="admin-button admin-button--primary admin-button--danger" type="button" onClick={confirmDeletePost} disabled={isDeleting}>
                 <Trash2 /> {isDeleting ? "Eliminando..." : "Eliminar publicación"}
               </button>
+            </div>
+          </section>
+        </div>
+      ) : null}
+      {commentPendingDelete ? (
+        <div className="admin-modal" role="dialog" aria-modal="true" aria-labelledby="admin-comment-delete-title" onMouseDown={(event) => {
+          if (event.target === event.currentTarget) {
+            setCommentPendingDelete(null);
+          }
+        }}>
+          <section className="admin-modal__panel admin-delete-dialog">
+            <h2 id="admin-comment-delete-title">¿Desea eliminar este comentario?</h2>
+            <p>Esta acción eliminará el comentario y su respuesta oficial, si existe.</p>
+            <div className="admin-modal-actions">
+              <button className="admin-button admin-button--outline" type="button" onClick={() => setCommentPendingDelete(null)}>Cancelar</button>
+              <button className="admin-button admin-button--primary admin-button--danger" type="button" onClick={confirmDeleteComment}>Eliminar</button>
             </div>
           </section>
         </div>

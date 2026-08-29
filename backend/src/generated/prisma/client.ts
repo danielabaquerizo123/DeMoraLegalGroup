@@ -80,6 +80,11 @@ export type CategoriaBlog = Prisma.CategoriaBlogModel
  */
 export type ArticuloBlog = Prisma.ArticuloBlogModel
 /**
+ * Model ComentarioBlog
+ * 
+ */
+export type ComentarioBlog = Prisma.ComentarioBlogModel
+/**
  * Model ArticuloAutor
  * 
  */

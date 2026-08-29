@@ -44,6 +44,50 @@ enum TipoTokenAdmin {
   @@map("tipo_token_admin")
 }
 
+enum TamanoTituloBlog {
+  PEQUENO
+  NORMAL
+  GRANDE
+
+  @@map("tamano_titulo_blog")
+}
+
+enum AlineacionTituloBlog {
+  IZQUIERDA
+  CENTRO
+  DERECHA
+
+  @@map("alineacion_titulo_blog")
+}
+
+enum TamanoExtractoBlog {
+  COMPACTO
+  NORMAL
+  AMPLIO
+
+  @@map("tamano_extracto_blog")
+}
+
+enum AlineacionExtractoBlog {
+  IZQUIERDA
+  CENTRO
+  DERECHA
+  JUSTIFICADO
+
+  @@map("alineacion_extracto_blog")
+}
+
+enum TipografiaBlog {
+  INSTITUCIONAL
+  TIMES_NEW_ROMAN
+  ARIAL
+  CALIBRI
+  GEORGIA
+  GARAMOND
+
+  @@map("tipografia_blog")
+}
+
 model Profesional {
   id        String @id @default(uuid()) @db.Uuid
   nombres   String @db.VarChar(100)
@@ -216,10 +260,20 @@ model ArticuloBlog {
   titulo String @db.VarChar(250)
   slug   String @unique @db.VarChar(280)
 
-  extracto  String? @db.VarChar(500)
-  contenido String  @db.Text
+  extracto     String? @db.VarChar(500)
+  contenido    String  @db.Text
+  tituloHtml   String? @map("titulo_html") @db.Text
+  extractoHtml String? @map("extracto_html") @db.Text
 
   imagenPortadaUrl String? @map("imagen_portada_url") @db.Text
+
+  tituloTamano           TamanoTituloBlog       @default(NORMAL) @map("titulo_tamano")
+  tituloAlineacion       AlineacionTituloBlog   @default(IZQUIERDA) @map("titulo_alineacion")
+  tituloTipografia       TipografiaBlog         @default(INSTITUCIONAL) @map("titulo_tipografia")
+  extractoTamano         TamanoExtractoBlog     @default(NORMAL) @map("extracto_tamano")
+  extractoAlineacion     AlineacionExtractoBlog @default(IZQUIERDA) @map("extracto_alineacion")
+  extractoTipografia     TipografiaBlog         @default(INSTITUCIONAL) @map("extracto_tipografia")
+  comentariosHabilitados Boolean                @default(false) @map("comentarios_habilitados")
 
   estado EstadoPublicacion @default(BORRADOR)
 
@@ -239,15 +293,38 @@ model ArticuloBlog {
   creadoEn      DateTime @default(now()) @map("creado_en") @db.Timestamptz(3)
   actualizadoEn DateTime @updatedAt @map("actualizado_en") @db.Timestamptz(3)
 
-  autores   ArticuloAutor[]
-  servicios ArticuloServicio[]
-  etiquetas ArticuloEtiqueta[]
+  autores     ArticuloAutor[]
+  servicios   ArticuloServicio[]
+  etiquetas   ArticuloEtiqueta[]
+  comentarios ComentarioBlog[]
 
   @@index([estado, publicadoEn(sort: Desc)])
   @@index([categoriaId, estado, publicadoEn(sort: Desc)])
   @@index([autorProfesionalId, estado, actualizadoEn(sort: Desc)])
   @@index([destacado, estado])
   @@map("articulo_blog")
+}
+
+model ComentarioBlog {
+  id String @id @default(uuid()) @db.Uuid
+
+  articuloId String       @map("id_articulo") @db.Uuid
+  articulo   ArticuloBlog @relation(fields: [articuloId], references: [id], onDelete: Cascade, onUpdate: Cascade)
+
+  parentId   String?          @map("id_comentario_padre") @db.Uuid
+  parent     ComentarioBlog?  @relation("ComentarioRespuestas", fields: [parentId], references: [id], onDelete: Cascade, onUpdate: Cascade)
+  respuestas ComentarioBlog[] @relation("ComentarioRespuestas")
+
+  nombreVisitante String?       @map("nombre_visitante") @db.VarChar(80)
+  usuarioAdminId  String?       @map("id_usuario_admin") @db.Uuid
+  usuarioAdmin    UsuarioAdmin? @relation(fields: [usuarioAdminId], references: [id], onDelete: SetNull, onUpdate: Cascade)
+
+  contenido String   @db.VarChar(500)
+  creadoEn  DateTime @default(now()) @map("creado_en") @db.Timestamptz(3)
+
+  @@index([articuloId, parentId, creadoEn])
+  @@index([usuarioAdminId])
+  @@map("comentario_blog")
 }
 
 model ArticuloAutor {
@@ -349,8 +426,9 @@ model UsuarioAdmin {
   creadoEn      DateTime @default(now()) @map("creado_en") @db.Timestamptz(3)
   actualizadoEn DateTime @updatedAt @map("actualizado_en") @db.Timestamptz(3)
 
-  tokens   TokenAdmin[]
-  sesiones SesionAdmin[]
+  tokens          TokenAdmin[]
+  sesiones        SesionAdmin[]
+  comentariosBlog ComentarioBlog[]
 
   @@index([estado])
   @@index([emailVerificado])

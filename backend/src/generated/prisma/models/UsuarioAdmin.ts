@@ -241,6 +241,7 @@ export type UsuarioAdminWhereInput = {
   profesional?: Prisma.XOR<Prisma.ProfesionalNullableScalarRelationFilter, Prisma.ProfesionalWhereInput> | null
   tokens?: Prisma.TokenAdminListRelationFilter
   sesiones?: Prisma.SesionAdminListRelationFilter
+  comentariosBlog?: Prisma.ComentarioBlogListRelationFilter
 }
 
 export type UsuarioAdminOrderByWithRelationInput = {
@@ -259,6 +260,7 @@ export type UsuarioAdminOrderByWithRelationInput = {
   profesional?: Prisma.ProfesionalOrderByWithRelationInput
   tokens?: Prisma.TokenAdminOrderByRelationAggregateInput
   sesiones?: Prisma.SesionAdminOrderByRelationAggregateInput
+  comentariosBlog?: Prisma.ComentarioBlogOrderByRelationAggregateInput
 }
 
 export type UsuarioAdminWhereUniqueInput = Prisma.AtLeast<{
@@ -280,6 +282,7 @@ export type UsuarioAdminWhereUniqueInput = Prisma.AtLeast<{
   profesional?: Prisma.XOR<Prisma.ProfesionalNullableScalarRelationFilter, Prisma.ProfesionalWhereInput> | null
   tokens?: Prisma.TokenAdminListRelationFilter
   sesiones?: Prisma.SesionAdminListRelationFilter
+  comentariosBlog?: Prisma.ComentarioBlogListRelationFilter
 }, "id" | "username" | "email">
 
 export type UsuarioAdminOrderByWithAggregationInput = {
@@ -333,6 +336,7 @@ export type UsuarioAdminCreateInput = {
   profesional?: Prisma.ProfesionalCreateNestedOneWithoutUsuariosAdminInput
   tokens?: Prisma.TokenAdminCreateNestedManyWithoutUsuarioInput
   sesiones?: Prisma.SesionAdminCreateNestedManyWithoutUsuarioInput
+  comentariosBlog?: Prisma.ComentarioBlogCreateNestedManyWithoutUsuarioAdminInput
 }
 
 export type UsuarioAdminUncheckedCreateInput = {
@@ -350,6 +354,7 @@ export type UsuarioAdminUncheckedCreateInput = {
   actualizadoEn?: Date | string
   tokens?: Prisma.TokenAdminUncheckedCreateNestedManyWithoutUsuarioInput
   sesiones?: Prisma.SesionAdminUncheckedCreateNestedManyWithoutUsuarioInput
+  comentariosBlog?: Prisma.ComentarioBlogUncheckedCreateNestedManyWithoutUsuarioAdminInput
 }
 
 export type UsuarioAdminUpdateInput = {
@@ -367,6 +372,7 @@ export type UsuarioAdminUpdateInput = {
   profesional?: Prisma.ProfesionalUpdateOneWithoutUsuariosAdminNestedInput
   tokens?: Prisma.TokenAdminUpdateManyWithoutUsuarioNestedInput
   sesiones?: Prisma.SesionAdminUpdateManyWithoutUsuarioNestedInput
+  comentariosBlog?: Prisma.ComentarioBlogUpdateManyWithoutUsuarioAdminNestedInput
 }
 
 export type UsuarioAdminUncheckedUpdateInput = {
@@ -384,6 +390,7 @@ export type UsuarioAdminUncheckedUpdateInput = {
   actualizadoEn?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
   tokens?: Prisma.TokenAdminUncheckedUpdateManyWithoutUsuarioNestedInput
   sesiones?: Prisma.SesionAdminUncheckedUpdateManyWithoutUsuarioNestedInput
+  comentariosBlog?: Prisma.ComentarioBlogUncheckedUpdateManyWithoutUsuarioAdminNestedInput
 }
 
 export type UsuarioAdminCreateManyInput = {
@@ -438,6 +445,11 @@ export type UsuarioAdminListRelationFilter = {
 
 export type UsuarioAdminOrderByRelationAggregateInput = {
   _count?: Prisma.SortOrder
+}
+
+export type UsuarioAdminNullableScalarRelationFilter = {
+  is?: Prisma.UsuarioAdminWhereInput | null
+  isNot?: Prisma.UsuarioAdminWhereInput | null
 }
 
 export type UsuarioAdminCountOrderByAggregateInput = {
@@ -532,6 +544,22 @@ export type UsuarioAdminUncheckedUpdateManyWithoutProfesionalNestedInput = {
   deleteMany?: Prisma.UsuarioAdminScalarWhereInput | Prisma.UsuarioAdminScalarWhereInput[]
 }
 
+export type UsuarioAdminCreateNestedOneWithoutComentariosBlogInput = {
+  create?: Prisma.XOR<Prisma.UsuarioAdminCreateWithoutComentariosBlogInput, Prisma.UsuarioAdminUncheckedCreateWithoutComentariosBlogInput>
+  connectOrCreate?: Prisma.UsuarioAdminCreateOrConnectWithoutComentariosBlogInput
+  connect?: Prisma.UsuarioAdminWhereUniqueInput
+}
+
+export type UsuarioAdminUpdateOneWithoutComentariosBlogNestedInput = {
+  create?: Prisma.XOR<Prisma.UsuarioAdminCreateWithoutComentariosBlogInput, Prisma.UsuarioAdminUncheckedCreateWithoutComentariosBlogInput>
+  connectOrCreate?: Prisma.UsuarioAdminCreateOrConnectWithoutComentariosBlogInput
+  upsert?: Prisma.UsuarioAdminUpsertWithoutComentariosBlogInput
+  disconnect?: Prisma.UsuarioAdminWhereInput | boolean
+  delete?: Prisma.UsuarioAdminWhereInput | boolean
+  connect?: Prisma.UsuarioAdminWhereUniqueInput
+  update?: Prisma.XOR<Prisma.XOR<Prisma.UsuarioAdminUpdateToOneWithWhereWithoutComentariosBlogInput, Prisma.UsuarioAdminUpdateWithoutComentariosBlogInput>, Prisma.UsuarioAdminUncheckedUpdateWithoutComentariosBlogInput>
+}
+
 export type EnumEstadoUsuarioAdminFieldUpdateOperationsInput = {
   set?: $Enums.EstadoUsuarioAdmin
 }
@@ -578,6 +606,7 @@ export type UsuarioAdminCreateWithoutProfesionalInput = {
   actualizadoEn?: Date | string
   tokens?: Prisma.TokenAdminCreateNestedManyWithoutUsuarioInput
   sesiones?: Prisma.SesionAdminCreateNestedManyWithoutUsuarioInput
+  comentariosBlog?: Prisma.ComentarioBlogCreateNestedManyWithoutUsuarioAdminInput
 }
 
 export type UsuarioAdminUncheckedCreateWithoutProfesionalInput = {
@@ -594,6 +623,7 @@ export type UsuarioAdminUncheckedCreateWithoutProfesionalInput = {
   actualizadoEn?: Date | string
   tokens?: Prisma.TokenAdminUncheckedCreateNestedManyWithoutUsuarioInput
   sesiones?: Prisma.SesionAdminUncheckedCreateNestedManyWithoutUsuarioInput
+  comentariosBlog?: Prisma.ComentarioBlogUncheckedCreateNestedManyWithoutUsuarioAdminInput
 }
 
 export type UsuarioAdminCreateOrConnectWithoutProfesionalInput = {
@@ -640,6 +670,90 @@ export type UsuarioAdminScalarWhereInput = {
   actualizadoEn?: Prisma.DateTimeFilter<"UsuarioAdmin"> | Date | string
 }
 
+export type UsuarioAdminCreateWithoutComentariosBlogInput = {
+  id?: string
+  nombre: string
+  username?: string | null
+  email?: string | null
+  passwordHash: string
+  emailVerificado?: boolean
+  estado?: $Enums.EstadoUsuarioAdmin
+  ultimoAccesoEn?: Date | string | null
+  bloqueadoHasta?: Date | string | null
+  creadoEn?: Date | string
+  actualizadoEn?: Date | string
+  profesional?: Prisma.ProfesionalCreateNestedOneWithoutUsuariosAdminInput
+  tokens?: Prisma.TokenAdminCreateNestedManyWithoutUsuarioInput
+  sesiones?: Prisma.SesionAdminCreateNestedManyWithoutUsuarioInput
+}
+
+export type UsuarioAdminUncheckedCreateWithoutComentariosBlogInput = {
+  id?: string
+  nombre: string
+  username?: string | null
+  email?: string | null
+  passwordHash: string
+  profesionalId?: string | null
+  emailVerificado?: boolean
+  estado?: $Enums.EstadoUsuarioAdmin
+  ultimoAccesoEn?: Date | string | null
+  bloqueadoHasta?: Date | string | null
+  creadoEn?: Date | string
+  actualizadoEn?: Date | string
+  tokens?: Prisma.TokenAdminUncheckedCreateNestedManyWithoutUsuarioInput
+  sesiones?: Prisma.SesionAdminUncheckedCreateNestedManyWithoutUsuarioInput
+}
+
+export type UsuarioAdminCreateOrConnectWithoutComentariosBlogInput = {
+  where: Prisma.UsuarioAdminWhereUniqueInput
+  create: Prisma.XOR<Prisma.UsuarioAdminCreateWithoutComentariosBlogInput, Prisma.UsuarioAdminUncheckedCreateWithoutComentariosBlogInput>
+}
+
+export type UsuarioAdminUpsertWithoutComentariosBlogInput = {
+  update: Prisma.XOR<Prisma.UsuarioAdminUpdateWithoutComentariosBlogInput, Prisma.UsuarioAdminUncheckedUpdateWithoutComentariosBlogInput>
+  create: Prisma.XOR<Prisma.UsuarioAdminCreateWithoutComentariosBlogInput, Prisma.UsuarioAdminUncheckedCreateWithoutComentariosBlogInput>
+  where?: Prisma.UsuarioAdminWhereInput
+}
+
+export type UsuarioAdminUpdateToOneWithWhereWithoutComentariosBlogInput = {
+  where?: Prisma.UsuarioAdminWhereInput
+  data: Prisma.XOR<Prisma.UsuarioAdminUpdateWithoutComentariosBlogInput, Prisma.UsuarioAdminUncheckedUpdateWithoutComentariosBlogInput>
+}
+
+export type UsuarioAdminUpdateWithoutComentariosBlogInput = {
+  id?: Prisma.StringFieldUpdateOperationsInput | string
+  nombre?: Prisma.StringFieldUpdateOperationsInput | string
+  username?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  email?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  passwordHash?: Prisma.StringFieldUpdateOperationsInput | string
+  emailVerificado?: Prisma.BoolFieldUpdateOperationsInput | boolean
+  estado?: Prisma.EnumEstadoUsuarioAdminFieldUpdateOperationsInput | $Enums.EstadoUsuarioAdmin
+  ultimoAccesoEn?: Prisma.NullableDateTimeFieldUpdateOperationsInput | Date | string | null
+  bloqueadoHasta?: Prisma.NullableDateTimeFieldUpdateOperationsInput | Date | string | null
+  creadoEn?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
+  actualizadoEn?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
+  profesional?: Prisma.ProfesionalUpdateOneWithoutUsuariosAdminNestedInput
+  tokens?: Prisma.TokenAdminUpdateManyWithoutUsuarioNestedInput
+  sesiones?: Prisma.SesionAdminUpdateManyWithoutUsuarioNestedInput
+}
+
+export type UsuarioAdminUncheckedUpdateWithoutComentariosBlogInput = {
+  id?: Prisma.StringFieldUpdateOperationsInput | string
+  nombre?: Prisma.StringFieldUpdateOperationsInput | string
+  username?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  email?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  passwordHash?: Prisma.StringFieldUpdateOperationsInput | string
+  profesionalId?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  emailVerificado?: Prisma.BoolFieldUpdateOperationsInput | boolean
+  estado?: Prisma.EnumEstadoUsuarioAdminFieldUpdateOperationsInput | $Enums.EstadoUsuarioAdmin
+  ultimoAccesoEn?: Prisma.NullableDateTimeFieldUpdateOperationsInput | Date | string | null
+  bloqueadoHasta?: Prisma.NullableDateTimeFieldUpdateOperationsInput | Date | string | null
+  creadoEn?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
+  actualizadoEn?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
+  tokens?: Prisma.TokenAdminUncheckedUpdateManyWithoutUsuarioNestedInput
+  sesiones?: Prisma.SesionAdminUncheckedUpdateManyWithoutUsuarioNestedInput
+}
+
 export type UsuarioAdminCreateWithoutTokensInput = {
   id?: string
   nombre: string
@@ -654,6 +768,7 @@ export type UsuarioAdminCreateWithoutTokensInput = {
   actualizadoEn?: Date | string
   profesional?: Prisma.ProfesionalCreateNestedOneWithoutUsuariosAdminInput
   sesiones?: Prisma.SesionAdminCreateNestedManyWithoutUsuarioInput
+  comentariosBlog?: Prisma.ComentarioBlogCreateNestedManyWithoutUsuarioAdminInput
 }
 
 export type UsuarioAdminUncheckedCreateWithoutTokensInput = {
@@ -670,6 +785,7 @@ export type UsuarioAdminUncheckedCreateWithoutTokensInput = {
   creadoEn?: Date | string
   actualizadoEn?: Date | string
   sesiones?: Prisma.SesionAdminUncheckedCreateNestedManyWithoutUsuarioInput
+  comentariosBlog?: Prisma.ComentarioBlogUncheckedCreateNestedManyWithoutUsuarioAdminInput
 }
 
 export type UsuarioAdminCreateOrConnectWithoutTokensInput = {
@@ -702,6 +818,7 @@ export type UsuarioAdminUpdateWithoutTokensInput = {
   actualizadoEn?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
   profesional?: Prisma.ProfesionalUpdateOneWithoutUsuariosAdminNestedInput
   sesiones?: Prisma.SesionAdminUpdateManyWithoutUsuarioNestedInput
+  comentariosBlog?: Prisma.ComentarioBlogUpdateManyWithoutUsuarioAdminNestedInput
 }
 
 export type UsuarioAdminUncheckedUpdateWithoutTokensInput = {
@@ -718,6 +835,7 @@ export type UsuarioAdminUncheckedUpdateWithoutTokensInput = {
   creadoEn?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
   actualizadoEn?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
   sesiones?: Prisma.SesionAdminUncheckedUpdateManyWithoutUsuarioNestedInput
+  comentariosBlog?: Prisma.ComentarioBlogUncheckedUpdateManyWithoutUsuarioAdminNestedInput
 }
 
 export type UsuarioAdminCreateWithoutSesionesInput = {
@@ -734,6 +852,7 @@ export type UsuarioAdminCreateWithoutSesionesInput = {
   actualizadoEn?: Date | string
   profesional?: Prisma.ProfesionalCreateNestedOneWithoutUsuariosAdminInput
   tokens?: Prisma.TokenAdminCreateNestedManyWithoutUsuarioInput
+  comentariosBlog?: Prisma.ComentarioBlogCreateNestedManyWithoutUsuarioAdminInput
 }
 
 export type UsuarioAdminUncheckedCreateWithoutSesionesInput = {
@@ -750,6 +869,7 @@ export type UsuarioAdminUncheckedCreateWithoutSesionesInput = {
   creadoEn?: Date | string
   actualizadoEn?: Date | string
   tokens?: Prisma.TokenAdminUncheckedCreateNestedManyWithoutUsuarioInput
+  comentariosBlog?: Prisma.ComentarioBlogUncheckedCreateNestedManyWithoutUsuarioAdminInput
 }
 
 export type UsuarioAdminCreateOrConnectWithoutSesionesInput = {
@@ -782,6 +902,7 @@ export type UsuarioAdminUpdateWithoutSesionesInput = {
   actualizadoEn?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
   profesional?: Prisma.ProfesionalUpdateOneWithoutUsuariosAdminNestedInput
   tokens?: Prisma.TokenAdminUpdateManyWithoutUsuarioNestedInput
+  comentariosBlog?: Prisma.ComentarioBlogUpdateManyWithoutUsuarioAdminNestedInput
 }
 
 export type UsuarioAdminUncheckedUpdateWithoutSesionesInput = {
@@ -798,6 +919,7 @@ export type UsuarioAdminUncheckedUpdateWithoutSesionesInput = {
   creadoEn?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
   actualizadoEn?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
   tokens?: Prisma.TokenAdminUncheckedUpdateManyWithoutUsuarioNestedInput
+  comentariosBlog?: Prisma.ComentarioBlogUncheckedUpdateManyWithoutUsuarioAdminNestedInput
 }
 
 export type UsuarioAdminCreateManyProfesionalInput = {
@@ -828,6 +950,7 @@ export type UsuarioAdminUpdateWithoutProfesionalInput = {
   actualizadoEn?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
   tokens?: Prisma.TokenAdminUpdateManyWithoutUsuarioNestedInput
   sesiones?: Prisma.SesionAdminUpdateManyWithoutUsuarioNestedInput
+  comentariosBlog?: Prisma.ComentarioBlogUpdateManyWithoutUsuarioAdminNestedInput
 }
 
 export type UsuarioAdminUncheckedUpdateWithoutProfesionalInput = {
@@ -844,6 +967,7 @@ export type UsuarioAdminUncheckedUpdateWithoutProfesionalInput = {
   actualizadoEn?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
   tokens?: Prisma.TokenAdminUncheckedUpdateManyWithoutUsuarioNestedInput
   sesiones?: Prisma.SesionAdminUncheckedUpdateManyWithoutUsuarioNestedInput
+  comentariosBlog?: Prisma.ComentarioBlogUncheckedUpdateManyWithoutUsuarioAdminNestedInput
 }
 
 export type UsuarioAdminUncheckedUpdateManyWithoutProfesionalInput = {
@@ -868,11 +992,13 @@ export type UsuarioAdminUncheckedUpdateManyWithoutProfesionalInput = {
 export type UsuarioAdminCountOutputType = {
   tokens: number
   sesiones: number
+  comentariosBlog: number
 }
 
 export type UsuarioAdminCountOutputTypeSelect<ExtArgs extends runtime.Types.Extensions.InternalArgs = runtime.Types.Extensions.DefaultArgs> = {
   tokens?: boolean | UsuarioAdminCountOutputTypeCountTokensArgs
   sesiones?: boolean | UsuarioAdminCountOutputTypeCountSesionesArgs
+  comentariosBlog?: boolean | UsuarioAdminCountOutputTypeCountComentariosBlogArgs
 }
 
 /**
@@ -899,6 +1025,13 @@ export type UsuarioAdminCountOutputTypeCountSesionesArgs<ExtArgs extends runtime
   where?: Prisma.SesionAdminWhereInput
 }
 
+/**
+ * UsuarioAdminCountOutputType without action
+ */
+export type UsuarioAdminCountOutputTypeCountComentariosBlogArgs<ExtArgs extends runtime.Types.Extensions.InternalArgs = runtime.Types.Extensions.DefaultArgs> = {
+  where?: Prisma.ComentarioBlogWhereInput
+}
+
 
 export type UsuarioAdminSelect<ExtArgs extends runtime.Types.Extensions.InternalArgs = runtime.Types.Extensions.DefaultArgs> = runtime.Types.Extensions.GetSelect<{
   id?: boolean
@@ -916,6 +1049,7 @@ export type UsuarioAdminSelect<ExtArgs extends runtime.Types.Extensions.Internal
   profesional?: boolean | Prisma.UsuarioAdmin$profesionalArgs<ExtArgs>
   tokens?: boolean | Prisma.UsuarioAdmin$tokensArgs<ExtArgs>
   sesiones?: boolean | Prisma.UsuarioAdmin$sesionesArgs<ExtArgs>
+  comentariosBlog?: boolean | Prisma.UsuarioAdmin$comentariosBlogArgs<ExtArgs>
   _count?: boolean | Prisma.UsuarioAdminCountOutputTypeDefaultArgs<ExtArgs>
 }, ExtArgs["result"]["usuarioAdmin"]>
 
@@ -971,6 +1105,7 @@ export type UsuarioAdminInclude<ExtArgs extends runtime.Types.Extensions.Interna
   profesional?: boolean | Prisma.UsuarioAdmin$profesionalArgs<ExtArgs>
   tokens?: boolean | Prisma.UsuarioAdmin$tokensArgs<ExtArgs>
   sesiones?: boolean | Prisma.UsuarioAdmin$sesionesArgs<ExtArgs>
+  comentariosBlog?: boolean | Prisma.UsuarioAdmin$comentariosBlogArgs<ExtArgs>
   _count?: boolean | Prisma.UsuarioAdminCountOutputTypeDefaultArgs<ExtArgs>
 }
 export type UsuarioAdminIncludeCreateManyAndReturn<ExtArgs extends runtime.Types.Extensions.InternalArgs = runtime.Types.Extensions.DefaultArgs> = {
@@ -986,6 +1121,7 @@ export type $UsuarioAdminPayload<ExtArgs extends runtime.Types.Extensions.Intern
     profesional: Prisma.$ProfesionalPayload<ExtArgs> | null
     tokens: Prisma.$TokenAdminPayload<ExtArgs>[]
     sesiones: Prisma.$SesionAdminPayload<ExtArgs>[]
+    comentariosBlog: Prisma.$ComentarioBlogPayload<ExtArgs>[]
   }
   scalars: runtime.Types.Extensions.GetPayloadResult<{
     id: string
@@ -1397,6 +1533,7 @@ export interface Prisma__UsuarioAdminClient<T, Null = never, ExtArgs extends run
   profesional<T extends Prisma.UsuarioAdmin$profesionalArgs<ExtArgs> = {}>(args?: Prisma.Subset<T, Prisma.UsuarioAdmin$profesionalArgs<ExtArgs>>): Prisma.Prisma__ProfesionalClient<runtime.Types.Result.GetResult<Prisma.$ProfesionalPayload<ExtArgs>, T, "findUniqueOrThrow", GlobalOmitOptions> | null, null, ExtArgs, GlobalOmitOptions>
   tokens<T extends Prisma.UsuarioAdmin$tokensArgs<ExtArgs> = {}>(args?: Prisma.Subset<T, Prisma.UsuarioAdmin$tokensArgs<ExtArgs>>): Prisma.PrismaPromise<runtime.Types.Result.GetResult<Prisma.$TokenAdminPayload<ExtArgs>, T, "findMany", GlobalOmitOptions> | Null>
   sesiones<T extends Prisma.UsuarioAdmin$sesionesArgs<ExtArgs> = {}>(args?: Prisma.Subset<T, Prisma.UsuarioAdmin$sesionesArgs<ExtArgs>>): Prisma.PrismaPromise<runtime.Types.Result.GetResult<Prisma.$SesionAdminPayload<ExtArgs>, T, "findMany", GlobalOmitOptions> | Null>
+  comentariosBlog<T extends Prisma.UsuarioAdmin$comentariosBlogArgs<ExtArgs> = {}>(args?: Prisma.Subset<T, Prisma.UsuarioAdmin$comentariosBlogArgs<ExtArgs>>): Prisma.PrismaPromise<runtime.Types.Result.GetResult<Prisma.$ComentarioBlogPayload<ExtArgs>, T, "findMany", GlobalOmitOptions> | Null>
   /**
    * Attaches callbacks for the resolution and/or rejection of the Promise.
    * @param onfulfilled The callback to execute when the Promise is resolved.
@@ -1903,6 +2040,30 @@ export type UsuarioAdmin$sesionesArgs<ExtArgs extends runtime.Types.Extensions.I
   take?: number
   skip?: number
   distinct?: Prisma.SesionAdminScalarFieldEnum | Prisma.SesionAdminScalarFieldEnum[]
+}
+
+/**
+ * UsuarioAdmin.comentariosBlog
+ */
+export type UsuarioAdmin$comentariosBlogArgs<ExtArgs extends runtime.Types.Extensions.InternalArgs = runtime.Types.Extensions.DefaultArgs> = {
+  /**
+   * Select specific fields to fetch from the ComentarioBlog
+   */
+  select?: Prisma.ComentarioBlogSelect<ExtArgs> | null
+  /**
+   * Omit specific fields from the ComentarioBlog
+   */
+  omit?: Prisma.ComentarioBlogOmit<ExtArgs> | null
+  /**
+   * Choose, which related nodes to fetch as well
+   */
+  include?: Prisma.ComentarioBlogInclude<ExtArgs> | null
+  where?: Prisma.ComentarioBlogWhereInput
+  orderBy?: Prisma.ComentarioBlogOrderByWithRelationInput | Prisma.ComentarioBlogOrderByWithRelationInput[]
+  cursor?: Prisma.ComentarioBlogWhereUniqueInput
+  take?: number
+  skip?: number
+  distinct?: Prisma.ComentarioBlogScalarFieldEnum | Prisma.ComentarioBlogScalarFieldEnum[]
 }
 
 /**

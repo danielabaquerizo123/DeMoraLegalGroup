@@ -4,9 +4,18 @@ import { HttpError, notFound } from "../utils/http-error";
 
 type PostPayload = {
   titulo: string;
+  tituloHtml?: string | null;
   extracto?: string | null;
+  extractoHtml?: string | null;
   contenido: string;
   imagenPortadaUrl?: string | null;
+  tituloTamano: "PEQUENO" | "NORMAL" | "GRANDE";
+  tituloAlineacion: "IZQUIERDA" | "CENTRO" | "DERECHA";
+  tituloTipografia: "INSTITUCIONAL" | "TIMES_NEW_ROMAN" | "ARIAL" | "CALIBRI" | "GEORGIA" | "GARAMOND";
+  extractoTamano: "COMPACTO" | "NORMAL" | "AMPLIO";
+  extractoAlineacion: "IZQUIERDA" | "CENTRO" | "DERECHA" | "JUSTIFICADO";
+  extractoTipografia: "INSTITUCIONAL" | "TIMES_NEW_ROMAN" | "ARIAL" | "CALIBRI" | "GEORGIA" | "GARAMOND";
+  comentariosHabilitados: boolean;
   estado: "BORRADOR" | "PUBLICADO";
 };
 
@@ -39,6 +48,7 @@ const allowedAttributes = new Map<string, Set<string>>([
   ["h1", new Set(["class"])],
   ["h2", new Set(["class"])],
   ["h3", new Set(["class"])],
+  ["span", new Set(["class"])],
   ["li", new Set(["class"])],
   ["blockquote", new Set(["class"])],
   ["table", new Set(["class"])],
@@ -76,6 +86,43 @@ const allowedClasses = new Set([
   "text-align-center",
   "text-align-right",
   "text-align-justify",
+  "text-size-8",
+  "text-size-9",
+  "text-size-10",
+  "text-size-11",
+  "text-size-12",
+  "text-size-14",
+  "text-size-16",
+  "text-size-18",
+  "text-size-20",
+  "text-size-22",
+  "text-size-24",
+  "text-size-26",
+  "text-size-28",
+  "text-size-32",
+  "text-size-36",
+  "text-size-40",
+  "text-size-44",
+  "text-size-48",
+  "text-size-54",
+  "text-size-60",
+  "text-size-64",
+  "text-size-72",
+  "text-color-carbon",
+  "text-color-gray",
+  "text-color-gold",
+  "text-color-navy",
+  "text-color-red",
+  "text-color-green",
+  "font-institucional",
+  "font-arial",
+  "font-calibri",
+  "font-times-new-roman",
+  "font-georgia",
+  "font-verdana",
+  "font-tahoma",
+  "font-trebuchet",
+  "font-garamond",
 ]);
 
 function slugify(value: string) {
@@ -507,10 +554,19 @@ function toAdminPost(post: any) {
   return {
     id: post.id,
     titulo: post.titulo,
+    tituloHtml: post.tituloHtml,
     slug: post.slug,
     extracto: post.extracto,
+    extractoHtml: post.extractoHtml,
     contenido: post.contenido,
     imagen: post.imagenPortadaUrl,
+    tituloTamano: post.tituloTamano ?? "NORMAL",
+    tituloAlineacion: post.tituloAlineacion ?? "IZQUIERDA",
+    tituloTipografia: post.tituloTipografia ?? "INSTITUCIONAL",
+    extractoTamano: post.extractoTamano ?? "NORMAL",
+    extractoAlineacion: post.extractoAlineacion ?? "IZQUIERDA",
+    extractoTipografia: post.extractoTipografia ?? "INSTITUCIONAL",
+    comentariosHabilitados: Boolean(post.comentariosHabilitados),
     estado: post.estado,
     fecha: post.publicadoEn,
     actualizadoEn: post.actualizadoEn,
@@ -523,6 +579,8 @@ function normalizedPostPayload(payload: PostPayload) {
   const titulo = payload.titulo.trim() || "Borrador sin titulo";
   const contenido = payload.contenido.trim();
   const sanitizedContent = sanitizeHtml(contenido);
+  const sanitizedTitleHtml = payload.tituloHtml ? sanitizeHtml(payload.tituloHtml) : null;
+  const sanitizedExcerptHtml = payload.extractoHtml ? sanitizeHtml(payload.extractoHtml) : null;
 
   if (isPublished && (!payload.titulo.trim() || sanitizedContent.length === 0)) {
     throw new HttpError(400, "El título y el contenido son obligatorios para publicar.");
@@ -530,9 +588,18 @@ function normalizedPostPayload(payload: PostPayload) {
 
   return {
     titulo,
+    tituloHtml: sanitizedTitleHtml,
     extracto: payload.extracto?.trim() || null,
+    extractoHtml: sanitizedExcerptHtml,
     contenido: sanitizedContent,
     imagenPortadaUrl: payload.imagenPortadaUrl || null,
+    tituloTamano: payload.tituloTamano,
+    tituloAlineacion: payload.tituloAlineacion,
+    tituloTipografia: payload.tituloTipografia,
+    extractoTamano: payload.extractoTamano,
+    extractoAlineacion: payload.extractoAlineacion,
+    extractoTipografia: payload.extractoTipografia,
+    comentariosHabilitados: payload.comentariosHabilitados,
     isPublished,
   };
 }
@@ -556,9 +623,10 @@ async function findOwnedPost(professionalId: string, id: string) {
 export const adminBlogService = {
   async summary(professionalId: string) {
     const where = { OR: [{ autorProfesionalId: professionalId }, { autores: { some: { profesionalId: professionalId } } }] };
-    const [published, drafts, recent] = await prisma.$transaction([
+    const [published, drafts, comments, recent] = await prisma.$transaction([
       prisma.articuloBlog.count({ where: { ...where, estado: EstadoPublicacion.PUBLICADO } }),
       prisma.articuloBlog.count({ where: { ...where, estado: EstadoPublicacion.BORRADOR } }),
+      prisma.comentarioBlog.count({ where: { parentId: null, articulo: where } }),
       prisma.articuloBlog.findMany({
         where,
         take: 3,
@@ -572,6 +640,7 @@ export const adminBlogService = {
         publicadas: published,
         borradores: drafts,
         total: published + drafts,
+        comentarios: comments,
       },
       recientes: recent.map(toAdminPost),
     };
@@ -602,10 +671,19 @@ export const adminBlogService = {
     const post = await prisma.articuloBlog.create({
       data: {
         titulo: normalized.titulo,
+        tituloHtml: normalized.tituloHtml,
         slug,
         extracto: normalized.extracto,
+        extractoHtml: normalized.extractoHtml,
         contenido: normalized.contenido,
         imagenPortadaUrl: normalized.imagenPortadaUrl,
+        tituloTamano: normalized.tituloTamano,
+        tituloAlineacion: normalized.tituloAlineacion,
+        tituloTipografia: normalized.tituloTipografia,
+        extractoTamano: normalized.extractoTamano,
+        extractoAlineacion: normalized.extractoAlineacion,
+        extractoTipografia: normalized.extractoTipografia,
+        comentariosHabilitados: normalized.comentariosHabilitados,
         estado: payload.estado,
         publicadoEn: normalized.isPublished ? new Date() : null,
         categoriaId: categoryId,
@@ -632,10 +710,19 @@ export const adminBlogService = {
       where: { id },
       data: {
         titulo: normalized.titulo,
+        tituloHtml: normalized.tituloHtml,
         slug: await uniqueSlug(normalized.titulo, id),
         extracto: normalized.extracto,
+        extractoHtml: normalized.extractoHtml,
         contenido: normalized.contenido,
         imagenPortadaUrl: normalized.imagenPortadaUrl,
+        tituloTamano: normalized.tituloTamano,
+        tituloAlineacion: normalized.tituloAlineacion,
+        tituloTipografia: normalized.tituloTipografia,
+        extractoTamano: normalized.extractoTamano,
+        extractoAlineacion: normalized.extractoAlineacion,
+        extractoTipografia: normalized.extractoTipografia,
+        comentariosHabilitados: normalized.comentariosHabilitados,
         estado: payload.estado,
         publicadoEn: normalized.isPublished ? (existingPost.publicadoEn ?? new Date()) : null,
         autorProfesionalId: professionalId,

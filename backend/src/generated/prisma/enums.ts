@@ -47,3 +47,52 @@ export const TipoTokenAdmin = {
 } as const
 
 export type TipoTokenAdmin = (typeof TipoTokenAdmin)[keyof typeof TipoTokenAdmin]
+
+
+export const TamanoTituloBlog = {
+  PEQUENO: 'PEQUENO',
+  NORMAL: 'NORMAL',
+  GRANDE: 'GRANDE'
+} as const
+
+export type TamanoTituloBlog = (typeof TamanoTituloBlog)[keyof typeof TamanoTituloBlog]
+
+
+export const AlineacionTituloBlog = {
+  IZQUIERDA: 'IZQUIERDA',
+  CENTRO: 'CENTRO',
+  DERECHA: 'DERECHA'
+} as const
+
+export type AlineacionTituloBlog = (typeof AlineacionTituloBlog)[keyof typeof AlineacionTituloBlog]
+
+
+export const TamanoExtractoBlog = {
+  COMPACTO: 'COMPACTO',
+  NORMAL: 'NORMAL',
+  AMPLIO: 'AMPLIO'
+} as const
+
+export type TamanoExtractoBlog = (typeof TamanoExtractoBlog)[keyof typeof TamanoExtractoBlog]
+
+
+export const AlineacionExtractoBlog = {
+  IZQUIERDA: 'IZQUIERDA',
+  CENTRO: 'CENTRO',
+  DERECHA: 'DERECHA',
+  JUSTIFICADO: 'JUSTIFICADO'
+} as const
+
+export type AlineacionExtractoBlog = (typeof AlineacionExtractoBlog)[keyof typeof AlineacionExtractoBlog]
+
+
+export const TipografiaBlog = {
+  INSTITUCIONAL: 'INSTITUCIONAL',
+  TIMES_NEW_ROMAN: 'TIMES_NEW_ROMAN',
+  ARIAL: 'ARIAL',
+  CALIBRI: 'CALIBRI',
+  GEORGIA: 'GEORGIA',
+  GARAMOND: 'GARAMOND'
+} as const
+
+export type TipografiaBlog = (typeof TipografiaBlog)[keyof typeof TipografiaBlog]

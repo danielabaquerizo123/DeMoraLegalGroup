@@ -30,7 +30,16 @@ export type ArticuloBlogMinAggregateOutputType = {
   slug: string | null
   extracto: string | null
   contenido: string | null
+  tituloHtml: string | null
+  extractoHtml: string | null
   imagenPortadaUrl: string | null
+  tituloTamano: $Enums.TamanoTituloBlog | null
+  tituloAlineacion: $Enums.AlineacionTituloBlog | null
+  tituloTipografia: $Enums.TipografiaBlog | null
+  extractoTamano: $Enums.TamanoExtractoBlog | null
+  extractoAlineacion: $Enums.AlineacionExtractoBlog | null
+  extractoTipografia: $Enums.TipografiaBlog | null
+  comentariosHabilitados: boolean | null
   estado: $Enums.EstadoPublicacion | null
   destacado: boolean | null
   publicadoEn: Date | null
@@ -48,7 +57,16 @@ export type ArticuloBlogMaxAggregateOutputType = {
   slug: string | null
   extracto: string | null
   contenido: string | null
+  tituloHtml: string | null
+  extractoHtml: string | null
   imagenPortadaUrl: string | null
+  tituloTamano: $Enums.TamanoTituloBlog | null
+  tituloAlineacion: $Enums.AlineacionTituloBlog | null
+  tituloTipografia: $Enums.TipografiaBlog | null
+  extractoTamano: $Enums.TamanoExtractoBlog | null
+  extractoAlineacion: $Enums.AlineacionExtractoBlog | null
+  extractoTipografia: $Enums.TipografiaBlog | null
+  comentariosHabilitados: boolean | null
   estado: $Enums.EstadoPublicacion | null
   destacado: boolean | null
   publicadoEn: Date | null
@@ -66,7 +84,16 @@ export type ArticuloBlogCountAggregateOutputType = {
   slug: number
   extracto: number
   contenido: number
+  tituloHtml: number
+  extractoHtml: number
   imagenPortadaUrl: number
+  tituloTamano: number
+  tituloAlineacion: number
+  tituloTipografia: number
+  extractoTamano: number
+  extractoAlineacion: number
+  extractoTipografia: number
+  comentariosHabilitados: number
   estado: number
   destacado: number
   publicadoEn: number
@@ -86,7 +113,16 @@ export type ArticuloBlogMinAggregateInputType = {
   slug?: true
   extracto?: true
   contenido?: true
+  tituloHtml?: true
+  extractoHtml?: true
   imagenPortadaUrl?: true
+  tituloTamano?: true
+  tituloAlineacion?: true
+  tituloTipografia?: true
+  extractoTamano?: true
+  extractoAlineacion?: true
+  extractoTipografia?: true
+  comentariosHabilitados?: true
   estado?: true
   destacado?: true
   publicadoEn?: true
@@ -104,7 +140,16 @@ export type ArticuloBlogMaxAggregateInputType = {
   slug?: true
   extracto?: true
   contenido?: true
+  tituloHtml?: true
+  extractoHtml?: true
   imagenPortadaUrl?: true
+  tituloTamano?: true
+  tituloAlineacion?: true
+  tituloTipografia?: true
+  extractoTamano?: true
+  extractoAlineacion?: true
+  extractoTipografia?: true
+  comentariosHabilitados?: true
   estado?: true
   destacado?: true
   publicadoEn?: true
@@ -122,7 +167,16 @@ export type ArticuloBlogCountAggregateInputType = {
   slug?: true
   extracto?: true
   contenido?: true
+  tituloHtml?: true
+  extractoHtml?: true
   imagenPortadaUrl?: true
+  tituloTamano?: true
+  tituloAlineacion?: true
+  tituloTipografia?: true
+  extractoTamano?: true
+  extractoAlineacion?: true
+  extractoTipografia?: true
+  comentariosHabilitados?: true
   estado?: true
   destacado?: true
   publicadoEn?: true
@@ -213,7 +267,16 @@ export type ArticuloBlogGroupByOutputType = {
   slug: string
   extracto: string | null
   contenido: string
+  tituloHtml: string | null
+  extractoHtml: string | null
   imagenPortadaUrl: string | null
+  tituloTamano: $Enums.TamanoTituloBlog
+  tituloAlineacion: $Enums.AlineacionTituloBlog
+  tituloTipografia: $Enums.TipografiaBlog
+  extractoTamano: $Enums.TamanoExtractoBlog
+  extractoAlineacion: $Enums.AlineacionExtractoBlog
+  extractoTipografia: $Enums.TipografiaBlog
+  comentariosHabilitados: boolean
   estado: $Enums.EstadoPublicacion
   destacado: boolean
   publicadoEn: Date | null
@@ -252,7 +315,16 @@ export type ArticuloBlogWhereInput = {
   slug?: Prisma.StringFilter<"ArticuloBlog"> | string
   extracto?: Prisma.StringNullableFilter<"ArticuloBlog"> | string | null
   contenido?: Prisma.StringFilter<"ArticuloBlog"> | string
+  tituloHtml?: Prisma.StringNullableFilter<"ArticuloBlog"> | string | null
+  extractoHtml?: Prisma.StringNullableFilter<"ArticuloBlog"> | string | null
   imagenPortadaUrl?: Prisma.StringNullableFilter<"ArticuloBlog"> | string | null
+  tituloTamano?: Prisma.EnumTamanoTituloBlogFilter<"ArticuloBlog"> | $Enums.TamanoTituloBlog
+  tituloAlineacion?: Prisma.EnumAlineacionTituloBlogFilter<"ArticuloBlog"> | $Enums.AlineacionTituloBlog
+  tituloTipografia?: Prisma.EnumTipografiaBlogFilter<"ArticuloBlog"> | $Enums.TipografiaBlog
+  extractoTamano?: Prisma.EnumTamanoExtractoBlogFilter<"ArticuloBlog"> | $Enums.TamanoExtractoBlog
+  extractoAlineacion?: Prisma.EnumAlineacionExtractoBlogFilter<"ArticuloBlog"> | $Enums.AlineacionExtractoBlog
+  extractoTipografia?: Prisma.EnumTipografiaBlogFilter<"ArticuloBlog"> | $Enums.TipografiaBlog
+  comentariosHabilitados?: Prisma.BoolFilter<"ArticuloBlog"> | boolean
   estado?: Prisma.EnumEstadoPublicacionFilter<"ArticuloBlog"> | $Enums.EstadoPublicacion
   destacado?: Prisma.BoolFilter<"ArticuloBlog"> | boolean
   publicadoEn?: Prisma.DateTimeNullableFilter<"ArticuloBlog"> | Date | string | null
@@ -267,6 +339,7 @@ export type ArticuloBlogWhereInput = {
   autores?: Prisma.ArticuloAutorListRelationFilter
   servicios?: Prisma.ArticuloServicioListRelationFilter
   etiquetas?: Prisma.ArticuloEtiquetaListRelationFilter
+  comentarios?: Prisma.ComentarioBlogListRelationFilter
 }
 
 export type ArticuloBlogOrderByWithRelationInput = {
@@ -275,7 +348,16 @@ export type ArticuloBlogOrderByWithRelationInput = {
   slug?: Prisma.SortOrder
   extracto?: Prisma.SortOrderInput | Prisma.SortOrder
   contenido?: Prisma.SortOrder
+  tituloHtml?: Prisma.SortOrderInput | Prisma.SortOrder
+  extractoHtml?: Prisma.SortOrderInput | Prisma.SortOrder
   imagenPortadaUrl?: Prisma.SortOrderInput | Prisma.SortOrder
+  tituloTamano?: Prisma.SortOrder
+  tituloAlineacion?: Prisma.SortOrder
+  tituloTipografia?: Prisma.SortOrder
+  extractoTamano?: Prisma.SortOrder
+  extractoAlineacion?: Prisma.SortOrder
+  extractoTipografia?: Prisma.SortOrder
+  comentariosHabilitados?: Prisma.SortOrder
   estado?: Prisma.SortOrder
   destacado?: Prisma.SortOrder
   publicadoEn?: Prisma.SortOrderInput | Prisma.SortOrder
@@ -290,6 +372,7 @@ export type ArticuloBlogOrderByWithRelationInput = {
   autores?: Prisma.ArticuloAutorOrderByRelationAggregateInput
   servicios?: Prisma.ArticuloServicioOrderByRelationAggregateInput
   etiquetas?: Prisma.ArticuloEtiquetaOrderByRelationAggregateInput
+  comentarios?: Prisma.ComentarioBlogOrderByRelationAggregateInput
 }
 
 export type ArticuloBlogWhereUniqueInput = Prisma.AtLeast<{
@@ -301,7 +384,16 @@ export type ArticuloBlogWhereUniqueInput = Prisma.AtLeast<{
   titulo?: Prisma.StringFilter<"ArticuloBlog"> | string
   extracto?: Prisma.StringNullableFilter<"ArticuloBlog"> | string | null
   contenido?: Prisma.StringFilter<"ArticuloBlog"> | string
+  tituloHtml?: Prisma.StringNullableFilter<"ArticuloBlog"> | string | null
+  extractoHtml?: Prisma.StringNullableFilter<"ArticuloBlog"> | string | null
   imagenPortadaUrl?: Prisma.StringNullableFilter<"ArticuloBlog"> | string | null
+  tituloTamano?: Prisma.EnumTamanoTituloBlogFilter<"ArticuloBlog"> | $Enums.TamanoTituloBlog
+  tituloAlineacion?: Prisma.EnumAlineacionTituloBlogFilter<"ArticuloBlog"> | $Enums.AlineacionTituloBlog
+  tituloTipografia?: Prisma.EnumTipografiaBlogFilter<"ArticuloBlog"> | $Enums.TipografiaBlog
+  extractoTamano?: Prisma.EnumTamanoExtractoBlogFilter<"ArticuloBlog"> | $Enums.TamanoExtractoBlog
+  extractoAlineacion?: Prisma.EnumAlineacionExtractoBlogFilter<"ArticuloBlog"> | $Enums.AlineacionExtractoBlog
+  extractoTipografia?: Prisma.EnumTipografiaBlogFilter<"ArticuloBlog"> | $Enums.TipografiaBlog
+  comentariosHabilitados?: Prisma.BoolFilter<"ArticuloBlog"> | boolean
   estado?: Prisma.EnumEstadoPublicacionFilter<"ArticuloBlog"> | $Enums.EstadoPublicacion
   destacado?: Prisma.BoolFilter<"ArticuloBlog"> | boolean
   publicadoEn?: Prisma.DateTimeNullableFilter<"ArticuloBlog"> | Date | string | null
@@ -316,6 +408,7 @@ export type ArticuloBlogWhereUniqueInput = Prisma.AtLeast<{
   autores?: Prisma.ArticuloAutorListRelationFilter
   servicios?: Prisma.ArticuloServicioListRelationFilter
   etiquetas?: Prisma.ArticuloEtiquetaListRelationFilter
+  comentarios?: Prisma.ComentarioBlogListRelationFilter
 }, "id" | "slug">
 
 export type ArticuloBlogOrderByWithAggregationInput = {
@@ -324,7 +417,16 @@ export type ArticuloBlogOrderByWithAggregationInput = {
   slug?: Prisma.SortOrder
   extracto?: Prisma.SortOrderInput | Prisma.SortOrder
   contenido?: Prisma.SortOrder
+  tituloHtml?: Prisma.SortOrderInput | Prisma.SortOrder
+  extractoHtml?: Prisma.SortOrderInput | Prisma.SortOrder
   imagenPortadaUrl?: Prisma.SortOrderInput | Prisma.SortOrder
+  tituloTamano?: Prisma.SortOrder
+  tituloAlineacion?: Prisma.SortOrder
+  tituloTipografia?: Prisma.SortOrder
+  extractoTamano?: Prisma.SortOrder
+  extractoAlineacion?: Prisma.SortOrder
+  extractoTipografia?: Prisma.SortOrder
+  comentariosHabilitados?: Prisma.SortOrder
   estado?: Prisma.SortOrder
   destacado?: Prisma.SortOrder
   publicadoEn?: Prisma.SortOrderInput | Prisma.SortOrder
@@ -348,7 +450,16 @@ export type ArticuloBlogScalarWhereWithAggregatesInput = {
   slug?: Prisma.StringWithAggregatesFilter<"ArticuloBlog"> | string
   extracto?: Prisma.StringNullableWithAggregatesFilter<"ArticuloBlog"> | string | null
   contenido?: Prisma.StringWithAggregatesFilter<"ArticuloBlog"> | string
+  tituloHtml?: Prisma.StringNullableWithAggregatesFilter<"ArticuloBlog"> | string | null
+  extractoHtml?: Prisma.StringNullableWithAggregatesFilter<"ArticuloBlog"> | string | null
   imagenPortadaUrl?: Prisma.StringNullableWithAggregatesFilter<"ArticuloBlog"> | string | null
+  tituloTamano?: Prisma.EnumTamanoTituloBlogWithAggregatesFilter<"ArticuloBlog"> | $Enums.TamanoTituloBlog
+  tituloAlineacion?: Prisma.EnumAlineacionTituloBlogWithAggregatesFilter<"ArticuloBlog"> | $Enums.AlineacionTituloBlog
+  tituloTipografia?: Prisma.EnumTipografiaBlogWithAggregatesFilter<"ArticuloBlog"> | $Enums.TipografiaBlog
+  extractoTamano?: Prisma.EnumTamanoExtractoBlogWithAggregatesFilter<"ArticuloBlog"> | $Enums.TamanoExtractoBlog
+  extractoAlineacion?: Prisma.EnumAlineacionExtractoBlogWithAggregatesFilter<"ArticuloBlog"> | $Enums.AlineacionExtractoBlog
+  extractoTipografia?: Prisma.EnumTipografiaBlogWithAggregatesFilter<"ArticuloBlog"> | $Enums.TipografiaBlog
+  comentariosHabilitados?: Prisma.BoolWithAggregatesFilter<"ArticuloBlog"> | boolean
   estado?: Prisma.EnumEstadoPublicacionWithAggregatesFilter<"ArticuloBlog"> | $Enums.EstadoPublicacion
   destacado?: Prisma.BoolWithAggregatesFilter<"ArticuloBlog"> | boolean
   publicadoEn?: Prisma.DateTimeNullableWithAggregatesFilter<"ArticuloBlog"> | Date | string | null
@@ -366,7 +477,16 @@ export type ArticuloBlogCreateInput = {
   slug: string
   extracto?: string | null
   contenido: string
+  tituloHtml?: string | null
+  extractoHtml?: string | null
   imagenPortadaUrl?: string | null
+  tituloTamano?: $Enums.TamanoTituloBlog
+  tituloAlineacion?: $Enums.AlineacionTituloBlog
+  tituloTipografia?: $Enums.TipografiaBlog
+  extractoTamano?: $Enums.TamanoExtractoBlog
+  extractoAlineacion?: $Enums.AlineacionExtractoBlog
+  extractoTipografia?: $Enums.TipografiaBlog
+  comentariosHabilitados?: boolean
   estado?: $Enums.EstadoPublicacion
   destacado?: boolean
   publicadoEn?: Date | string | null
@@ -379,6 +499,7 @@ export type ArticuloBlogCreateInput = {
   autores?: Prisma.ArticuloAutorCreateNestedManyWithoutArticuloInput
   servicios?: Prisma.ArticuloServicioCreateNestedManyWithoutArticuloInput
   etiquetas?: Prisma.ArticuloEtiquetaCreateNestedManyWithoutArticuloInput
+  comentarios?: Prisma.ComentarioBlogCreateNestedManyWithoutArticuloInput
 }
 
 export type ArticuloBlogUncheckedCreateInput = {
@@ -387,7 +508,16 @@ export type ArticuloBlogUncheckedCreateInput = {
   slug: string
   extracto?: string | null
   contenido: string
+  tituloHtml?: string | null
+  extractoHtml?: string | null
   imagenPortadaUrl?: string | null
+  tituloTamano?: $Enums.TamanoTituloBlog
+  tituloAlineacion?: $Enums.AlineacionTituloBlog
+  tituloTipografia?: $Enums.TipografiaBlog
+  extractoTamano?: $Enums.TamanoExtractoBlog
+  extractoAlineacion?: $Enums.AlineacionExtractoBlog
+  extractoTipografia?: $Enums.TipografiaBlog
+  comentariosHabilitados?: boolean
   estado?: $Enums.EstadoPublicacion
   destacado?: boolean
   publicadoEn?: Date | string | null
@@ -400,6 +530,7 @@ export type ArticuloBlogUncheckedCreateInput = {
   autores?: Prisma.ArticuloAutorUncheckedCreateNestedManyWithoutArticuloInput
   servicios?: Prisma.ArticuloServicioUncheckedCreateNestedManyWithoutArticuloInput
   etiquetas?: Prisma.ArticuloEtiquetaUncheckedCreateNestedManyWithoutArticuloInput
+  comentarios?: Prisma.ComentarioBlogUncheckedCreateNestedManyWithoutArticuloInput
 }
 
 export type ArticuloBlogUpdateInput = {
@@ -408,7 +539,16 @@ export type ArticuloBlogUpdateInput = {
   slug?: Prisma.StringFieldUpdateOperationsInput | string
   extracto?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
   contenido?: Prisma.StringFieldUpdateOperationsInput | string
+  tituloHtml?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  extractoHtml?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
   imagenPortadaUrl?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  tituloTamano?: Prisma.EnumTamanoTituloBlogFieldUpdateOperationsInput | $Enums.TamanoTituloBlog
+  tituloAlineacion?: Prisma.EnumAlineacionTituloBlogFieldUpdateOperationsInput | $Enums.AlineacionTituloBlog
+  tituloTipografia?: Prisma.EnumTipografiaBlogFieldUpdateOperationsInput | $Enums.TipografiaBlog
+  extractoTamano?: Prisma.EnumTamanoExtractoBlogFieldUpdateOperationsInput | $Enums.TamanoExtractoBlog
+  extractoAlineacion?: Prisma.EnumAlineacionExtractoBlogFieldUpdateOperationsInput | $Enums.AlineacionExtractoBlog
+  extractoTipografia?: Prisma.EnumTipografiaBlogFieldUpdateOperationsInput | $Enums.TipografiaBlog
+  comentariosHabilitados?: Prisma.BoolFieldUpdateOperationsInput | boolean
   estado?: Prisma.EnumEstadoPublicacionFieldUpdateOperationsInput | $Enums.EstadoPublicacion
   destacado?: Prisma.BoolFieldUpdateOperationsInput | boolean
   publicadoEn?: Prisma.NullableDateTimeFieldUpdateOperationsInput | Date | string | null
@@ -421,6 +561,7 @@ export type ArticuloBlogUpdateInput = {
   autores?: Prisma.ArticuloAutorUpdateManyWithoutArticuloNestedInput
   servicios?: Prisma.ArticuloServicioUpdateManyWithoutArticuloNestedInput
   etiquetas?: Prisma.ArticuloEtiquetaUpdateManyWithoutArticuloNestedInput
+  comentarios?: Prisma.ComentarioBlogUpdateManyWithoutArticuloNestedInput
 }
 
 export type ArticuloBlogUncheckedUpdateInput = {
@@ -429,7 +570,16 @@ export type ArticuloBlogUncheckedUpdateInput = {
   slug?: Prisma.StringFieldUpdateOperationsInput | string
   extracto?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
   contenido?: Prisma.StringFieldUpdateOperationsInput | string
+  tituloHtml?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  extractoHtml?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
   imagenPortadaUrl?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  tituloTamano?: Prisma.EnumTamanoTituloBlogFieldUpdateOperationsInput | $Enums.TamanoTituloBlog
+  tituloAlineacion?: Prisma.EnumAlineacionTituloBlogFieldUpdateOperationsInput | $Enums.AlineacionTituloBlog
+  tituloTipografia?: Prisma.EnumTipografiaBlogFieldUpdateOperationsInput | $Enums.TipografiaBlog
+  extractoTamano?: Prisma.EnumTamanoExtractoBlogFieldUpdateOperationsInput | $Enums.TamanoExtractoBlog
+  extractoAlineacion?: Prisma.EnumAlineacionExtractoBlogFieldUpdateOperationsInput | $Enums.AlineacionExtractoBlog
+  extractoTipografia?: Prisma.EnumTipografiaBlogFieldUpdateOperationsInput | $Enums.TipografiaBlog
+  comentariosHabilitados?: Prisma.BoolFieldUpdateOperationsInput | boolean
   estado?: Prisma.EnumEstadoPublicacionFieldUpdateOperationsInput | $Enums.EstadoPublicacion
   destacado?: Prisma.BoolFieldUpdateOperationsInput | boolean
   publicadoEn?: Prisma.NullableDateTimeFieldUpdateOperationsInput | Date | string | null
@@ -442,6 +592,7 @@ export type ArticuloBlogUncheckedUpdateInput = {
   autores?: Prisma.ArticuloAutorUncheckedUpdateManyWithoutArticuloNestedInput
   servicios?: Prisma.ArticuloServicioUncheckedUpdateManyWithoutArticuloNestedInput
   etiquetas?: Prisma.ArticuloEtiquetaUncheckedUpdateManyWithoutArticuloNestedInput
+  comentarios?: Prisma.ComentarioBlogUncheckedUpdateManyWithoutArticuloNestedInput
 }
 
 export type ArticuloBlogCreateManyInput = {
@@ -450,7 +601,16 @@ export type ArticuloBlogCreateManyInput = {
   slug: string
   extracto?: string | null
   contenido: string
+  tituloHtml?: string | null
+  extractoHtml?: string | null
   imagenPortadaUrl?: string | null
+  tituloTamano?: $Enums.TamanoTituloBlog
+  tituloAlineacion?: $Enums.AlineacionTituloBlog
+  tituloTipografia?: $Enums.TipografiaBlog
+  extractoTamano?: $Enums.TamanoExtractoBlog
+  extractoAlineacion?: $Enums.AlineacionExtractoBlog
+  extractoTipografia?: $Enums.TipografiaBlog
+  comentariosHabilitados?: boolean
   estado?: $Enums.EstadoPublicacion
   destacado?: boolean
   publicadoEn?: Date | string | null
@@ -468,7 +628,16 @@ export type ArticuloBlogUpdateManyMutationInput = {
   slug?: Prisma.StringFieldUpdateOperationsInput | string
   extracto?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
   contenido?: Prisma.StringFieldUpdateOperationsInput | string
+  tituloHtml?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  extractoHtml?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
   imagenPortadaUrl?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  tituloTamano?: Prisma.EnumTamanoTituloBlogFieldUpdateOperationsInput | $Enums.TamanoTituloBlog
+  tituloAlineacion?: Prisma.EnumAlineacionTituloBlogFieldUpdateOperationsInput | $Enums.AlineacionTituloBlog
+  tituloTipografia?: Prisma.EnumTipografiaBlogFieldUpdateOperationsInput | $Enums.TipografiaBlog
+  extractoTamano?: Prisma.EnumTamanoExtractoBlogFieldUpdateOperationsInput | $Enums.TamanoExtractoBlog
+  extractoAlineacion?: Prisma.EnumAlineacionExtractoBlogFieldUpdateOperationsInput | $Enums.AlineacionExtractoBlog
+  extractoTipografia?: Prisma.EnumTipografiaBlogFieldUpdateOperationsInput | $Enums.TipografiaBlog
+  comentariosHabilitados?: Prisma.BoolFieldUpdateOperationsInput | boolean
   estado?: Prisma.EnumEstadoPublicacionFieldUpdateOperationsInput | $Enums.EstadoPublicacion
   destacado?: Prisma.BoolFieldUpdateOperationsInput | boolean
   publicadoEn?: Prisma.NullableDateTimeFieldUpdateOperationsInput | Date | string | null
@@ -484,7 +653,16 @@ export type ArticuloBlogUncheckedUpdateManyInput = {
   slug?: Prisma.StringFieldUpdateOperationsInput | string
   extracto?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
   contenido?: Prisma.StringFieldUpdateOperationsInput | string
+  tituloHtml?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  extractoHtml?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
   imagenPortadaUrl?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  tituloTamano?: Prisma.EnumTamanoTituloBlogFieldUpdateOperationsInput | $Enums.TamanoTituloBlog
+  tituloAlineacion?: Prisma.EnumAlineacionTituloBlogFieldUpdateOperationsInput | $Enums.AlineacionTituloBlog
+  tituloTipografia?: Prisma.EnumTipografiaBlogFieldUpdateOperationsInput | $Enums.TipografiaBlog
+  extractoTamano?: Prisma.EnumTamanoExtractoBlogFieldUpdateOperationsInput | $Enums.TamanoExtractoBlog
+  extractoAlineacion?: Prisma.EnumAlineacionExtractoBlogFieldUpdateOperationsInput | $Enums.AlineacionExtractoBlog
+  extractoTipografia?: Prisma.EnumTipografiaBlogFieldUpdateOperationsInput | $Enums.TipografiaBlog
+  comentariosHabilitados?: Prisma.BoolFieldUpdateOperationsInput | boolean
   estado?: Prisma.EnumEstadoPublicacionFieldUpdateOperationsInput | $Enums.EstadoPublicacion
   destacado?: Prisma.BoolFieldUpdateOperationsInput | boolean
   publicadoEn?: Prisma.NullableDateTimeFieldUpdateOperationsInput | Date | string | null
@@ -512,7 +690,16 @@ export type ArticuloBlogCountOrderByAggregateInput = {
   slug?: Prisma.SortOrder
   extracto?: Prisma.SortOrder
   contenido?: Prisma.SortOrder
+  tituloHtml?: Prisma.SortOrder
+  extractoHtml?: Prisma.SortOrder
   imagenPortadaUrl?: Prisma.SortOrder
+  tituloTamano?: Prisma.SortOrder
+  tituloAlineacion?: Prisma.SortOrder
+  tituloTipografia?: Prisma.SortOrder
+  extractoTamano?: Prisma.SortOrder
+  extractoAlineacion?: Prisma.SortOrder
+  extractoTipografia?: Prisma.SortOrder
+  comentariosHabilitados?: Prisma.SortOrder
   estado?: Prisma.SortOrder
   destacado?: Prisma.SortOrder
   publicadoEn?: Prisma.SortOrder
@@ -530,7 +717,16 @@ export type ArticuloBlogMaxOrderByAggregateInput = {
   slug?: Prisma.SortOrder
   extracto?: Prisma.SortOrder
   contenido?: Prisma.SortOrder
+  tituloHtml?: Prisma.SortOrder
+  extractoHtml?: Prisma.SortOrder
   imagenPortadaUrl?: Prisma.SortOrder
+  tituloTamano?: Prisma.SortOrder
+  tituloAlineacion?: Prisma.SortOrder
+  tituloTipografia?: Prisma.SortOrder
+  extractoTamano?: Prisma.SortOrder
+  extractoAlineacion?: Prisma.SortOrder
+  extractoTipografia?: Prisma.SortOrder
+  comentariosHabilitados?: Prisma.SortOrder
   estado?: Prisma.SortOrder
   destacado?: Prisma.SortOrder
   publicadoEn?: Prisma.SortOrder
@@ -548,7 +744,16 @@ export type ArticuloBlogMinOrderByAggregateInput = {
   slug?: Prisma.SortOrder
   extracto?: Prisma.SortOrder
   contenido?: Prisma.SortOrder
+  tituloHtml?: Prisma.SortOrder
+  extractoHtml?: Prisma.SortOrder
   imagenPortadaUrl?: Prisma.SortOrder
+  tituloTamano?: Prisma.SortOrder
+  tituloAlineacion?: Prisma.SortOrder
+  tituloTipografia?: Prisma.SortOrder
+  extractoTamano?: Prisma.SortOrder
+  extractoAlineacion?: Prisma.SortOrder
+  extractoTipografia?: Prisma.SortOrder
+  comentariosHabilitados?: Prisma.SortOrder
   estado?: Prisma.SortOrder
   destacado?: Prisma.SortOrder
   publicadoEn?: Prisma.SortOrder
@@ -649,12 +854,46 @@ export type ArticuloBlogUncheckedUpdateManyWithoutCategoriaNestedInput = {
   deleteMany?: Prisma.ArticuloBlogScalarWhereInput | Prisma.ArticuloBlogScalarWhereInput[]
 }
 
+export type EnumTamanoTituloBlogFieldUpdateOperationsInput = {
+  set?: $Enums.TamanoTituloBlog
+}
+
+export type EnumAlineacionTituloBlogFieldUpdateOperationsInput = {
+  set?: $Enums.AlineacionTituloBlog
+}
+
+export type EnumTipografiaBlogFieldUpdateOperationsInput = {
+  set?: $Enums.TipografiaBlog
+}
+
+export type EnumTamanoExtractoBlogFieldUpdateOperationsInput = {
+  set?: $Enums.TamanoExtractoBlog
+}
+
+export type EnumAlineacionExtractoBlogFieldUpdateOperationsInput = {
+  set?: $Enums.AlineacionExtractoBlog
+}
+
 export type EnumEstadoPublicacionFieldUpdateOperationsInput = {
   set?: $Enums.EstadoPublicacion
 }
 
 export type NullableDateTimeFieldUpdateOperationsInput = {
   set?: Date | string | null
+}
+
+export type ArticuloBlogCreateNestedOneWithoutComentariosInput = {
+  create?: Prisma.XOR<Prisma.ArticuloBlogCreateWithoutComentariosInput, Prisma.ArticuloBlogUncheckedCreateWithoutComentariosInput>
+  connectOrCreate?: Prisma.ArticuloBlogCreateOrConnectWithoutComentariosInput
+  connect?: Prisma.ArticuloBlogWhereUniqueInput
+}
+
+export type ArticuloBlogUpdateOneRequiredWithoutComentariosNestedInput = {
+  create?: Prisma.XOR<Prisma.ArticuloBlogCreateWithoutComentariosInput, Prisma.ArticuloBlogUncheckedCreateWithoutComentariosInput>
+  connectOrCreate?: Prisma.ArticuloBlogCreateOrConnectWithoutComentariosInput
+  upsert?: Prisma.ArticuloBlogUpsertWithoutComentariosInput
+  connect?: Prisma.ArticuloBlogWhereUniqueInput
+  update?: Prisma.XOR<Prisma.XOR<Prisma.ArticuloBlogUpdateToOneWithWhereWithoutComentariosInput, Prisma.ArticuloBlogUpdateWithoutComentariosInput>, Prisma.ArticuloBlogUncheckedUpdateWithoutComentariosInput>
 }
 
 export type ArticuloBlogCreateNestedOneWithoutAutoresInput = {
@@ -705,7 +944,16 @@ export type ArticuloBlogCreateWithoutAutorProfesionalInput = {
   slug: string
   extracto?: string | null
   contenido: string
+  tituloHtml?: string | null
+  extractoHtml?: string | null
   imagenPortadaUrl?: string | null
+  tituloTamano?: $Enums.TamanoTituloBlog
+  tituloAlineacion?: $Enums.AlineacionTituloBlog
+  tituloTipografia?: $Enums.TipografiaBlog
+  extractoTamano?: $Enums.TamanoExtractoBlog
+  extractoAlineacion?: $Enums.AlineacionExtractoBlog
+  extractoTipografia?: $Enums.TipografiaBlog
+  comentariosHabilitados?: boolean
   estado?: $Enums.EstadoPublicacion
   destacado?: boolean
   publicadoEn?: Date | string | null
@@ -717,6 +965,7 @@ export type ArticuloBlogCreateWithoutAutorProfesionalInput = {
   autores?: Prisma.ArticuloAutorCreateNestedManyWithoutArticuloInput
   servicios?: Prisma.ArticuloServicioCreateNestedManyWithoutArticuloInput
   etiquetas?: Prisma.ArticuloEtiquetaCreateNestedManyWithoutArticuloInput
+  comentarios?: Prisma.ComentarioBlogCreateNestedManyWithoutArticuloInput
 }
 
 export type ArticuloBlogUncheckedCreateWithoutAutorProfesionalInput = {
@@ -725,7 +974,16 @@ export type ArticuloBlogUncheckedCreateWithoutAutorProfesionalInput = {
   slug: string
   extracto?: string | null
   contenido: string
+  tituloHtml?: string | null
+  extractoHtml?: string | null
   imagenPortadaUrl?: string | null
+  tituloTamano?: $Enums.TamanoTituloBlog
+  tituloAlineacion?: $Enums.AlineacionTituloBlog
+  tituloTipografia?: $Enums.TipografiaBlog
+  extractoTamano?: $Enums.TamanoExtractoBlog
+  extractoAlineacion?: $Enums.AlineacionExtractoBlog
+  extractoTipografia?: $Enums.TipografiaBlog
+  comentariosHabilitados?: boolean
   estado?: $Enums.EstadoPublicacion
   destacado?: boolean
   publicadoEn?: Date | string | null
@@ -737,6 +995,7 @@ export type ArticuloBlogUncheckedCreateWithoutAutorProfesionalInput = {
   autores?: Prisma.ArticuloAutorUncheckedCreateNestedManyWithoutArticuloInput
   servicios?: Prisma.ArticuloServicioUncheckedCreateNestedManyWithoutArticuloInput
   etiquetas?: Prisma.ArticuloEtiquetaUncheckedCreateNestedManyWithoutArticuloInput
+  comentarios?: Prisma.ComentarioBlogUncheckedCreateNestedManyWithoutArticuloInput
 }
 
 export type ArticuloBlogCreateOrConnectWithoutAutorProfesionalInput = {
@@ -774,7 +1033,16 @@ export type ArticuloBlogScalarWhereInput = {
   slug?: Prisma.StringFilter<"ArticuloBlog"> | string
   extracto?: Prisma.StringNullableFilter<"ArticuloBlog"> | string | null
   contenido?: Prisma.StringFilter<"ArticuloBlog"> | string
+  tituloHtml?: Prisma.StringNullableFilter<"ArticuloBlog"> | string | null
+  extractoHtml?: Prisma.StringNullableFilter<"ArticuloBlog"> | string | null
   imagenPortadaUrl?: Prisma.StringNullableFilter<"ArticuloBlog"> | string | null
+  tituloTamano?: Prisma.EnumTamanoTituloBlogFilter<"ArticuloBlog"> | $Enums.TamanoTituloBlog
+  tituloAlineacion?: Prisma.EnumAlineacionTituloBlogFilter<"ArticuloBlog"> | $Enums.AlineacionTituloBlog
+  tituloTipografia?: Prisma.EnumTipografiaBlogFilter<"ArticuloBlog"> | $Enums.TipografiaBlog
+  extractoTamano?: Prisma.EnumTamanoExtractoBlogFilter<"ArticuloBlog"> | $Enums.TamanoExtractoBlog
+  extractoAlineacion?: Prisma.EnumAlineacionExtractoBlogFilter<"ArticuloBlog"> | $Enums.AlineacionExtractoBlog
+  extractoTipografia?: Prisma.EnumTipografiaBlogFilter<"ArticuloBlog"> | $Enums.TipografiaBlog
+  comentariosHabilitados?: Prisma.BoolFilter<"ArticuloBlog"> | boolean
   estado?: Prisma.EnumEstadoPublicacionFilter<"ArticuloBlog"> | $Enums.EstadoPublicacion
   destacado?: Prisma.BoolFilter<"ArticuloBlog"> | boolean
   publicadoEn?: Prisma.DateTimeNullableFilter<"ArticuloBlog"> | Date | string | null
@@ -792,7 +1060,16 @@ export type ArticuloBlogCreateWithoutCategoriaInput = {
   slug: string
   extracto?: string | null
   contenido: string
+  tituloHtml?: string | null
+  extractoHtml?: string | null
   imagenPortadaUrl?: string | null
+  tituloTamano?: $Enums.TamanoTituloBlog
+  tituloAlineacion?: $Enums.AlineacionTituloBlog
+  tituloTipografia?: $Enums.TipografiaBlog
+  extractoTamano?: $Enums.TamanoExtractoBlog
+  extractoAlineacion?: $Enums.AlineacionExtractoBlog
+  extractoTipografia?: $Enums.TipografiaBlog
+  comentariosHabilitados?: boolean
   estado?: $Enums.EstadoPublicacion
   destacado?: boolean
   publicadoEn?: Date | string | null
@@ -804,6 +1081,7 @@ export type ArticuloBlogCreateWithoutCategoriaInput = {
   autores?: Prisma.ArticuloAutorCreateNestedManyWithoutArticuloInput
   servicios?: Prisma.ArticuloServicioCreateNestedManyWithoutArticuloInput
   etiquetas?: Prisma.ArticuloEtiquetaCreateNestedManyWithoutArticuloInput
+  comentarios?: Prisma.ComentarioBlogCreateNestedManyWithoutArticuloInput
 }
 
 export type ArticuloBlogUncheckedCreateWithoutCategoriaInput = {
@@ -812,7 +1090,16 @@ export type ArticuloBlogUncheckedCreateWithoutCategoriaInput = {
   slug: string
   extracto?: string | null
   contenido: string
+  tituloHtml?: string | null
+  extractoHtml?: string | null
   imagenPortadaUrl?: string | null
+  tituloTamano?: $Enums.TamanoTituloBlog
+  tituloAlineacion?: $Enums.AlineacionTituloBlog
+  tituloTipografia?: $Enums.TipografiaBlog
+  extractoTamano?: $Enums.TamanoExtractoBlog
+  extractoAlineacion?: $Enums.AlineacionExtractoBlog
+  extractoTipografia?: $Enums.TipografiaBlog
+  comentariosHabilitados?: boolean
   estado?: $Enums.EstadoPublicacion
   destacado?: boolean
   publicadoEn?: Date | string | null
@@ -824,6 +1111,7 @@ export type ArticuloBlogUncheckedCreateWithoutCategoriaInput = {
   autores?: Prisma.ArticuloAutorUncheckedCreateNestedManyWithoutArticuloInput
   servicios?: Prisma.ArticuloServicioUncheckedCreateNestedManyWithoutArticuloInput
   etiquetas?: Prisma.ArticuloEtiquetaUncheckedCreateNestedManyWithoutArticuloInput
+  comentarios?: Prisma.ComentarioBlogUncheckedCreateNestedManyWithoutArticuloInput
 }
 
 export type ArticuloBlogCreateOrConnectWithoutCategoriaInput = {
@@ -852,13 +1140,158 @@ export type ArticuloBlogUpdateManyWithWhereWithoutCategoriaInput = {
   data: Prisma.XOR<Prisma.ArticuloBlogUpdateManyMutationInput, Prisma.ArticuloBlogUncheckedUpdateManyWithoutCategoriaInput>
 }
 
+export type ArticuloBlogCreateWithoutComentariosInput = {
+  id?: string
+  titulo: string
+  slug: string
+  extracto?: string | null
+  contenido: string
+  tituloHtml?: string | null
+  extractoHtml?: string | null
+  imagenPortadaUrl?: string | null
+  tituloTamano?: $Enums.TamanoTituloBlog
+  tituloAlineacion?: $Enums.AlineacionTituloBlog
+  tituloTipografia?: $Enums.TipografiaBlog
+  extractoTamano?: $Enums.TamanoExtractoBlog
+  extractoAlineacion?: $Enums.AlineacionExtractoBlog
+  extractoTipografia?: $Enums.TipografiaBlog
+  comentariosHabilitados?: boolean
+  estado?: $Enums.EstadoPublicacion
+  destacado?: boolean
+  publicadoEn?: Date | string | null
+  metaTitulo?: string | null
+  metaDescripcion?: string | null
+  creadoEn?: Date | string
+  actualizadoEn?: Date | string
+  categoria?: Prisma.CategoriaBlogCreateNestedOneWithoutArticulosInput
+  autorProfesional?: Prisma.ProfesionalCreateNestedOneWithoutArticulosAdminInput
+  autores?: Prisma.ArticuloAutorCreateNestedManyWithoutArticuloInput
+  servicios?: Prisma.ArticuloServicioCreateNestedManyWithoutArticuloInput
+  etiquetas?: Prisma.ArticuloEtiquetaCreateNestedManyWithoutArticuloInput
+}
+
+export type ArticuloBlogUncheckedCreateWithoutComentariosInput = {
+  id?: string
+  titulo: string
+  slug: string
+  extracto?: string | null
+  contenido: string
+  tituloHtml?: string | null
+  extractoHtml?: string | null
+  imagenPortadaUrl?: string | null
+  tituloTamano?: $Enums.TamanoTituloBlog
+  tituloAlineacion?: $Enums.AlineacionTituloBlog
+  tituloTipografia?: $Enums.TipografiaBlog
+  extractoTamano?: $Enums.TamanoExtractoBlog
+  extractoAlineacion?: $Enums.AlineacionExtractoBlog
+  extractoTipografia?: $Enums.TipografiaBlog
+  comentariosHabilitados?: boolean
+  estado?: $Enums.EstadoPublicacion
+  destacado?: boolean
+  publicadoEn?: Date | string | null
+  categoriaId?: string | null
+  autorProfesionalId?: string | null
+  metaTitulo?: string | null
+  metaDescripcion?: string | null
+  creadoEn?: Date | string
+  actualizadoEn?: Date | string
+  autores?: Prisma.ArticuloAutorUncheckedCreateNestedManyWithoutArticuloInput
+  servicios?: Prisma.ArticuloServicioUncheckedCreateNestedManyWithoutArticuloInput
+  etiquetas?: Prisma.ArticuloEtiquetaUncheckedCreateNestedManyWithoutArticuloInput
+}
+
+export type ArticuloBlogCreateOrConnectWithoutComentariosInput = {
+  where: Prisma.ArticuloBlogWhereUniqueInput
+  create: Prisma.XOR<Prisma.ArticuloBlogCreateWithoutComentariosInput, Prisma.ArticuloBlogUncheckedCreateWithoutComentariosInput>
+}
+
+export type ArticuloBlogUpsertWithoutComentariosInput = {
+  update: Prisma.XOR<Prisma.ArticuloBlogUpdateWithoutComentariosInput, Prisma.ArticuloBlogUncheckedUpdateWithoutComentariosInput>
+  create: Prisma.XOR<Prisma.ArticuloBlogCreateWithoutComentariosInput, Prisma.ArticuloBlogUncheckedCreateWithoutComentariosInput>
+  where?: Prisma.ArticuloBlogWhereInput
+}
+
+export type ArticuloBlogUpdateToOneWithWhereWithoutComentariosInput = {
+  where?: Prisma.ArticuloBlogWhereInput
+  data: Prisma.XOR<Prisma.ArticuloBlogUpdateWithoutComentariosInput, Prisma.ArticuloBlogUncheckedUpdateWithoutComentariosInput>
+}
+
+export type ArticuloBlogUpdateWithoutComentariosInput = {
+  id?: Prisma.StringFieldUpdateOperationsInput | string
+  titulo?: Prisma.StringFieldUpdateOperationsInput | string
+  slug?: Prisma.StringFieldUpdateOperationsInput | string
+  extracto?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  contenido?: Prisma.StringFieldUpdateOperationsInput | string
+  tituloHtml?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  extractoHtml?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  imagenPortadaUrl?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  tituloTamano?: Prisma.EnumTamanoTituloBlogFieldUpdateOperationsInput | $Enums.TamanoTituloBlog
+  tituloAlineacion?: Prisma.EnumAlineacionTituloBlogFieldUpdateOperationsInput | $Enums.AlineacionTituloBlog
+  tituloTipografia?: Prisma.EnumTipografiaBlogFieldUpdateOperationsInput | $Enums.TipografiaBlog
+  extractoTamano?: Prisma.EnumTamanoExtractoBlogFieldUpdateOperationsInput | $Enums.TamanoExtractoBlog
+  extractoAlineacion?: Prisma.EnumAlineacionExtractoBlogFieldUpdateOperationsInput | $Enums.AlineacionExtractoBlog
+  extractoTipografia?: Prisma.EnumTipografiaBlogFieldUpdateOperationsInput | $Enums.TipografiaBlog
+  comentariosHabilitados?: Prisma.BoolFieldUpdateOperationsInput | boolean
+  estado?: Prisma.EnumEstadoPublicacionFieldUpdateOperationsInput | $Enums.EstadoPublicacion
+  destacado?: Prisma.BoolFieldUpdateOperationsInput | boolean
+  publicadoEn?: Prisma.NullableDateTimeFieldUpdateOperationsInput | Date | string | null
+  metaTitulo?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  metaDescripcion?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  creadoEn?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
+  actualizadoEn?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
+  categoria?: Prisma.CategoriaBlogUpdateOneWithoutArticulosNestedInput
+  autorProfesional?: Prisma.ProfesionalUpdateOneWithoutArticulosAdminNestedInput
+  autores?: Prisma.ArticuloAutorUpdateManyWithoutArticuloNestedInput
+  servicios?: Prisma.ArticuloServicioUpdateManyWithoutArticuloNestedInput
+  etiquetas?: Prisma.ArticuloEtiquetaUpdateManyWithoutArticuloNestedInput
+}
+
+export type ArticuloBlogUncheckedUpdateWithoutComentariosInput = {
+  id?: Prisma.StringFieldUpdateOperationsInput | string
+  titulo?: Prisma.StringFieldUpdateOperationsInput | string
+  slug?: Prisma.StringFieldUpdateOperationsInput | string
+  extracto?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  contenido?: Prisma.StringFieldUpdateOperationsInput | string
+  tituloHtml?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  extractoHtml?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  imagenPortadaUrl?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  tituloTamano?: Prisma.EnumTamanoTituloBlogFieldUpdateOperationsInput | $Enums.TamanoTituloBlog
+  tituloAlineacion?: Prisma.EnumAlineacionTituloBlogFieldUpdateOperationsInput | $Enums.AlineacionTituloBlog
+  tituloTipografia?: Prisma.EnumTipografiaBlogFieldUpdateOperationsInput | $Enums.TipografiaBlog
+  extractoTamano?: Prisma.EnumTamanoExtractoBlogFieldUpdateOperationsInput | $Enums.TamanoExtractoBlog
+  extractoAlineacion?: Prisma.EnumAlineacionExtractoBlogFieldUpdateOperationsInput | $Enums.AlineacionExtractoBlog
+  extractoTipografia?: Prisma.EnumTipografiaBlogFieldUpdateOperationsInput | $Enums.TipografiaBlog
+  comentariosHabilitados?: Prisma.BoolFieldUpdateOperationsInput | boolean
+  estado?: Prisma.EnumEstadoPublicacionFieldUpdateOperationsInput | $Enums.EstadoPublicacion
+  destacado?: Prisma.BoolFieldUpdateOperationsInput | boolean
+  publicadoEn?: Prisma.NullableDateTimeFieldUpdateOperationsInput | Date | string | null
+  categoriaId?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  autorProfesionalId?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  metaTitulo?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  metaDescripcion?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  creadoEn?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
+  actualizadoEn?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
+  autores?: Prisma.ArticuloAutorUncheckedUpdateManyWithoutArticuloNestedInput
+  servicios?: Prisma.ArticuloServicioUncheckedUpdateManyWithoutArticuloNestedInput
+  etiquetas?: Prisma.ArticuloEtiquetaUncheckedUpdateManyWithoutArticuloNestedInput
+}
+
 export type ArticuloBlogCreateWithoutAutoresInput = {
   id?: string
   titulo: string
   slug: string
   extracto?: string | null
   contenido: string
+  tituloHtml?: string | null
+  extractoHtml?: string | null
   imagenPortadaUrl?: string | null
+  tituloTamano?: $Enums.TamanoTituloBlog
+  tituloAlineacion?: $Enums.AlineacionTituloBlog
+  tituloTipografia?: $Enums.TipografiaBlog
+  extractoTamano?: $Enums.TamanoExtractoBlog
+  extractoAlineacion?: $Enums.AlineacionExtractoBlog
+  extractoTipografia?: $Enums.TipografiaBlog
+  comentariosHabilitados?: boolean
   estado?: $Enums.EstadoPublicacion
   destacado?: boolean
   publicadoEn?: Date | string | null
@@ -870,6 +1303,7 @@ export type ArticuloBlogCreateWithoutAutoresInput = {
   autorProfesional?: Prisma.ProfesionalCreateNestedOneWithoutArticulosAdminInput
   servicios?: Prisma.ArticuloServicioCreateNestedManyWithoutArticuloInput
   etiquetas?: Prisma.ArticuloEtiquetaCreateNestedManyWithoutArticuloInput
+  comentarios?: Prisma.ComentarioBlogCreateNestedManyWithoutArticuloInput
 }
 
 export type ArticuloBlogUncheckedCreateWithoutAutoresInput = {
@@ -878,7 +1312,16 @@ export type ArticuloBlogUncheckedCreateWithoutAutoresInput = {
   slug: string
   extracto?: string | null
   contenido: string
+  tituloHtml?: string | null
+  extractoHtml?: string | null
   imagenPortadaUrl?: string | null
+  tituloTamano?: $Enums.TamanoTituloBlog
+  tituloAlineacion?: $Enums.AlineacionTituloBlog
+  tituloTipografia?: $Enums.TipografiaBlog
+  extractoTamano?: $Enums.TamanoExtractoBlog
+  extractoAlineacion?: $Enums.AlineacionExtractoBlog
+  extractoTipografia?: $Enums.TipografiaBlog
+  comentariosHabilitados?: boolean
   estado?: $Enums.EstadoPublicacion
   destacado?: boolean
   publicadoEn?: Date | string | null
@@ -890,6 +1333,7 @@ export type ArticuloBlogUncheckedCreateWithoutAutoresInput = {
   actualizadoEn?: Date | string
   servicios?: Prisma.ArticuloServicioUncheckedCreateNestedManyWithoutArticuloInput
   etiquetas?: Prisma.ArticuloEtiquetaUncheckedCreateNestedManyWithoutArticuloInput
+  comentarios?: Prisma.ComentarioBlogUncheckedCreateNestedManyWithoutArticuloInput
 }
 
 export type ArticuloBlogCreateOrConnectWithoutAutoresInput = {
@@ -914,7 +1358,16 @@ export type ArticuloBlogUpdateWithoutAutoresInput = {
   slug?: Prisma.StringFieldUpdateOperationsInput | string
   extracto?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
   contenido?: Prisma.StringFieldUpdateOperationsInput | string
+  tituloHtml?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  extractoHtml?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
   imagenPortadaUrl?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  tituloTamano?: Prisma.EnumTamanoTituloBlogFieldUpdateOperationsInput | $Enums.TamanoTituloBlog
+  tituloAlineacion?: Prisma.EnumAlineacionTituloBlogFieldUpdateOperationsInput | $Enums.AlineacionTituloBlog
+  tituloTipografia?: Prisma.EnumTipografiaBlogFieldUpdateOperationsInput | $Enums.TipografiaBlog
+  extractoTamano?: Prisma.EnumTamanoExtractoBlogFieldUpdateOperationsInput | $Enums.TamanoExtractoBlog
+  extractoAlineacion?: Prisma.EnumAlineacionExtractoBlogFieldUpdateOperationsInput | $Enums.AlineacionExtractoBlog
+  extractoTipografia?: Prisma.EnumTipografiaBlogFieldUpdateOperationsInput | $Enums.TipografiaBlog
+  comentariosHabilitados?: Prisma.BoolFieldUpdateOperationsInput | boolean
   estado?: Prisma.EnumEstadoPublicacionFieldUpdateOperationsInput | $Enums.EstadoPublicacion
   destacado?: Prisma.BoolFieldUpdateOperationsInput | boolean
   publicadoEn?: Prisma.NullableDateTimeFieldUpdateOperationsInput | Date | string | null
@@ -926,6 +1379,7 @@ export type ArticuloBlogUpdateWithoutAutoresInput = {
   autorProfesional?: Prisma.ProfesionalUpdateOneWithoutArticulosAdminNestedInput
   servicios?: Prisma.ArticuloServicioUpdateManyWithoutArticuloNestedInput
   etiquetas?: Prisma.ArticuloEtiquetaUpdateManyWithoutArticuloNestedInput
+  comentarios?: Prisma.ComentarioBlogUpdateManyWithoutArticuloNestedInput
 }
 
 export type ArticuloBlogUncheckedUpdateWithoutAutoresInput = {
@@ -934,7 +1388,16 @@ export type ArticuloBlogUncheckedUpdateWithoutAutoresInput = {
   slug?: Prisma.StringFieldUpdateOperationsInput | string
   extracto?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
   contenido?: Prisma.StringFieldUpdateOperationsInput | string
+  tituloHtml?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  extractoHtml?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
   imagenPortadaUrl?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  tituloTamano?: Prisma.EnumTamanoTituloBlogFieldUpdateOperationsInput | $Enums.TamanoTituloBlog
+  tituloAlineacion?: Prisma.EnumAlineacionTituloBlogFieldUpdateOperationsInput | $Enums.AlineacionTituloBlog
+  tituloTipografia?: Prisma.EnumTipografiaBlogFieldUpdateOperationsInput | $Enums.TipografiaBlog
+  extractoTamano?: Prisma.EnumTamanoExtractoBlogFieldUpdateOperationsInput | $Enums.TamanoExtractoBlog
+  extractoAlineacion?: Prisma.EnumAlineacionExtractoBlogFieldUpdateOperationsInput | $Enums.AlineacionExtractoBlog
+  extractoTipografia?: Prisma.EnumTipografiaBlogFieldUpdateOperationsInput | $Enums.TipografiaBlog
+  comentariosHabilitados?: Prisma.BoolFieldUpdateOperationsInput | boolean
   estado?: Prisma.EnumEstadoPublicacionFieldUpdateOperationsInput | $Enums.EstadoPublicacion
   destacado?: Prisma.BoolFieldUpdateOperationsInput | boolean
   publicadoEn?: Prisma.NullableDateTimeFieldUpdateOperationsInput | Date | string | null
@@ -946,6 +1409,7 @@ export type ArticuloBlogUncheckedUpdateWithoutAutoresInput = {
   actualizadoEn?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
   servicios?: Prisma.ArticuloServicioUncheckedUpdateManyWithoutArticuloNestedInput
   etiquetas?: Prisma.ArticuloEtiquetaUncheckedUpdateManyWithoutArticuloNestedInput
+  comentarios?: Prisma.ComentarioBlogUncheckedUpdateManyWithoutArticuloNestedInput
 }
 
 export type ArticuloBlogCreateWithoutServiciosInput = {
@@ -954,7 +1418,16 @@ export type ArticuloBlogCreateWithoutServiciosInput = {
   slug: string
   extracto?: string | null
   contenido: string
+  tituloHtml?: string | null
+  extractoHtml?: string | null
   imagenPortadaUrl?: string | null
+  tituloTamano?: $Enums.TamanoTituloBlog
+  tituloAlineacion?: $Enums.AlineacionTituloBlog
+  tituloTipografia?: $Enums.TipografiaBlog
+  extractoTamano?: $Enums.TamanoExtractoBlog
+  extractoAlineacion?: $Enums.AlineacionExtractoBlog
+  extractoTipografia?: $Enums.TipografiaBlog
+  comentariosHabilitados?: boolean
   estado?: $Enums.EstadoPublicacion
   destacado?: boolean
   publicadoEn?: Date | string | null
@@ -966,6 +1439,7 @@ export type ArticuloBlogCreateWithoutServiciosInput = {
   autorProfesional?: Prisma.ProfesionalCreateNestedOneWithoutArticulosAdminInput
   autores?: Prisma.ArticuloAutorCreateNestedManyWithoutArticuloInput
   etiquetas?: Prisma.ArticuloEtiquetaCreateNestedManyWithoutArticuloInput
+  comentarios?: Prisma.ComentarioBlogCreateNestedManyWithoutArticuloInput
 }
 
 export type ArticuloBlogUncheckedCreateWithoutServiciosInput = {
@@ -974,7 +1448,16 @@ export type ArticuloBlogUncheckedCreateWithoutServiciosInput = {
   slug: string
   extracto?: string | null
   contenido: string
+  tituloHtml?: string | null
+  extractoHtml?: string | null
   imagenPortadaUrl?: string | null
+  tituloTamano?: $Enums.TamanoTituloBlog
+  tituloAlineacion?: $Enums.AlineacionTituloBlog
+  tituloTipografia?: $Enums.TipografiaBlog
+  extractoTamano?: $Enums.TamanoExtractoBlog
+  extractoAlineacion?: $Enums.AlineacionExtractoBlog
+  extractoTipografia?: $Enums.TipografiaBlog
+  comentariosHabilitados?: boolean
   estado?: $Enums.EstadoPublicacion
   destacado?: boolean
   publicadoEn?: Date | string | null
@@ -986,6 +1469,7 @@ export type ArticuloBlogUncheckedCreateWithoutServiciosInput = {
   actualizadoEn?: Date | string
   autores?: Prisma.ArticuloAutorUncheckedCreateNestedManyWithoutArticuloInput
   etiquetas?: Prisma.ArticuloEtiquetaUncheckedCreateNestedManyWithoutArticuloInput
+  comentarios?: Prisma.ComentarioBlogUncheckedCreateNestedManyWithoutArticuloInput
 }
 
 export type ArticuloBlogCreateOrConnectWithoutServiciosInput = {
@@ -1010,7 +1494,16 @@ export type ArticuloBlogUpdateWithoutServiciosInput = {
   slug?: Prisma.StringFieldUpdateOperationsInput | string
   extracto?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
   contenido?: Prisma.StringFieldUpdateOperationsInput | string
+  tituloHtml?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  extractoHtml?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
   imagenPortadaUrl?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  tituloTamano?: Prisma.EnumTamanoTituloBlogFieldUpdateOperationsInput | $Enums.TamanoTituloBlog
+  tituloAlineacion?: Prisma.EnumAlineacionTituloBlogFieldUpdateOperationsInput | $Enums.AlineacionTituloBlog
+  tituloTipografia?: Prisma.EnumTipografiaBlogFieldUpdateOperationsInput | $Enums.TipografiaBlog
+  extractoTamano?: Prisma.EnumTamanoExtractoBlogFieldUpdateOperationsInput | $Enums.TamanoExtractoBlog
+  extractoAlineacion?: Prisma.EnumAlineacionExtractoBlogFieldUpdateOperationsInput | $Enums.AlineacionExtractoBlog
+  extractoTipografia?: Prisma.EnumTipografiaBlogFieldUpdateOperationsInput | $Enums.TipografiaBlog
+  comentariosHabilitados?: Prisma.BoolFieldUpdateOperationsInput | boolean
   estado?: Prisma.EnumEstadoPublicacionFieldUpdateOperationsInput | $Enums.EstadoPublicacion
   destacado?: Prisma.BoolFieldUpdateOperationsInput | boolean
   publicadoEn?: Prisma.NullableDateTimeFieldUpdateOperationsInput | Date | string | null
@@ -1022,6 +1515,7 @@ export type ArticuloBlogUpdateWithoutServiciosInput = {
   autorProfesional?: Prisma.ProfesionalUpdateOneWithoutArticulosAdminNestedInput
   autores?: Prisma.ArticuloAutorUpdateManyWithoutArticuloNestedInput
   etiquetas?: Prisma.ArticuloEtiquetaUpdateManyWithoutArticuloNestedInput
+  comentarios?: Prisma.ComentarioBlogUpdateManyWithoutArticuloNestedInput
 }
 
 export type ArticuloBlogUncheckedUpdateWithoutServiciosInput = {
@@ -1030,7 +1524,16 @@ export type ArticuloBlogUncheckedUpdateWithoutServiciosInput = {
   slug?: Prisma.StringFieldUpdateOperationsInput | string
   extracto?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
   contenido?: Prisma.StringFieldUpdateOperationsInput | string
+  tituloHtml?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  extractoHtml?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
   imagenPortadaUrl?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  tituloTamano?: Prisma.EnumTamanoTituloBlogFieldUpdateOperationsInput | $Enums.TamanoTituloBlog
+  tituloAlineacion?: Prisma.EnumAlineacionTituloBlogFieldUpdateOperationsInput | $Enums.AlineacionTituloBlog
+  tituloTipografia?: Prisma.EnumTipografiaBlogFieldUpdateOperationsInput | $Enums.TipografiaBlog
+  extractoTamano?: Prisma.EnumTamanoExtractoBlogFieldUpdateOperationsInput | $Enums.TamanoExtractoBlog
+  extractoAlineacion?: Prisma.EnumAlineacionExtractoBlogFieldUpdateOperationsInput | $Enums.AlineacionExtractoBlog
+  extractoTipografia?: Prisma.EnumTipografiaBlogFieldUpdateOperationsInput | $Enums.TipografiaBlog
+  comentariosHabilitados?: Prisma.BoolFieldUpdateOperationsInput | boolean
   estado?: Prisma.EnumEstadoPublicacionFieldUpdateOperationsInput | $Enums.EstadoPublicacion
   destacado?: Prisma.BoolFieldUpdateOperationsInput | boolean
   publicadoEn?: Prisma.NullableDateTimeFieldUpdateOperationsInput | Date | string | null
@@ -1042,6 +1545,7 @@ export type ArticuloBlogUncheckedUpdateWithoutServiciosInput = {
   actualizadoEn?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
   autores?: Prisma.ArticuloAutorUncheckedUpdateManyWithoutArticuloNestedInput
   etiquetas?: Prisma.ArticuloEtiquetaUncheckedUpdateManyWithoutArticuloNestedInput
+  comentarios?: Prisma.ComentarioBlogUncheckedUpdateManyWithoutArticuloNestedInput
 }
 
 export type ArticuloBlogCreateWithoutEtiquetasInput = {
@@ -1050,7 +1554,16 @@ export type ArticuloBlogCreateWithoutEtiquetasInput = {
   slug: string
   extracto?: string | null
   contenido: string
+  tituloHtml?: string | null
+  extractoHtml?: string | null
   imagenPortadaUrl?: string | null
+  tituloTamano?: $Enums.TamanoTituloBlog
+  tituloAlineacion?: $Enums.AlineacionTituloBlog
+  tituloTipografia?: $Enums.TipografiaBlog
+  extractoTamano?: $Enums.TamanoExtractoBlog
+  extractoAlineacion?: $Enums.AlineacionExtractoBlog
+  extractoTipografia?: $Enums.TipografiaBlog
+  comentariosHabilitados?: boolean
   estado?: $Enums.EstadoPublicacion
   destacado?: boolean
   publicadoEn?: Date | string | null
@@ -1062,6 +1575,7 @@ export type ArticuloBlogCreateWithoutEtiquetasInput = {
   autorProfesional?: Prisma.ProfesionalCreateNestedOneWithoutArticulosAdminInput
   autores?: Prisma.ArticuloAutorCreateNestedManyWithoutArticuloInput
   servicios?: Prisma.ArticuloServicioCreateNestedManyWithoutArticuloInput
+  comentarios?: Prisma.ComentarioBlogCreateNestedManyWithoutArticuloInput
 }
 
 export type ArticuloBlogUncheckedCreateWithoutEtiquetasInput = {
@@ -1070,7 +1584,16 @@ export type ArticuloBlogUncheckedCreateWithoutEtiquetasInput = {
   slug: string
   extracto?: string | null
   contenido: string
+  tituloHtml?: string | null
+  extractoHtml?: string | null
   imagenPortadaUrl?: string | null
+  tituloTamano?: $Enums.TamanoTituloBlog
+  tituloAlineacion?: $Enums.AlineacionTituloBlog
+  tituloTipografia?: $Enums.TipografiaBlog
+  extractoTamano?: $Enums.TamanoExtractoBlog
+  extractoAlineacion?: $Enums.AlineacionExtractoBlog
+  extractoTipografia?: $Enums.TipografiaBlog
+  comentariosHabilitados?: boolean
   estado?: $Enums.EstadoPublicacion
   destacado?: boolean
   publicadoEn?: Date | string | null
@@ -1082,6 +1605,7 @@ export type ArticuloBlogUncheckedCreateWithoutEtiquetasInput = {
   actualizadoEn?: Date | string
   autores?: Prisma.ArticuloAutorUncheckedCreateNestedManyWithoutArticuloInput
   servicios?: Prisma.ArticuloServicioUncheckedCreateNestedManyWithoutArticuloInput
+  comentarios?: Prisma.ComentarioBlogUncheckedCreateNestedManyWithoutArticuloInput
 }
 
 export type ArticuloBlogCreateOrConnectWithoutEtiquetasInput = {
@@ -1106,7 +1630,16 @@ export type ArticuloBlogUpdateWithoutEtiquetasInput = {
   slug?: Prisma.StringFieldUpdateOperationsInput | string
   extracto?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
   contenido?: Prisma.StringFieldUpdateOperationsInput | string
+  tituloHtml?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  extractoHtml?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
   imagenPortadaUrl?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  tituloTamano?: Prisma.EnumTamanoTituloBlogFieldUpdateOperationsInput | $Enums.TamanoTituloBlog
+  tituloAlineacion?: Prisma.EnumAlineacionTituloBlogFieldUpdateOperationsInput | $Enums.AlineacionTituloBlog
+  tituloTipografia?: Prisma.EnumTipografiaBlogFieldUpdateOperationsInput | $Enums.TipografiaBlog
+  extractoTamano?: Prisma.EnumTamanoExtractoBlogFieldUpdateOperationsInput | $Enums.TamanoExtractoBlog
+  extractoAlineacion?: Prisma.EnumAlineacionExtractoBlogFieldUpdateOperationsInput | $Enums.AlineacionExtractoBlog
+  extractoTipografia?: Prisma.EnumTipografiaBlogFieldUpdateOperationsInput | $Enums.TipografiaBlog
+  comentariosHabilitados?: Prisma.BoolFieldUpdateOperationsInput | boolean
   estado?: Prisma.EnumEstadoPublicacionFieldUpdateOperationsInput | $Enums.EstadoPublicacion
   destacado?: Prisma.BoolFieldUpdateOperationsInput | boolean
   publicadoEn?: Prisma.NullableDateTimeFieldUpdateOperationsInput | Date | string | null
@@ -1118,6 +1651,7 @@ export type ArticuloBlogUpdateWithoutEtiquetasInput = {
   autorProfesional?: Prisma.ProfesionalUpdateOneWithoutArticulosAdminNestedInput
   autores?: Prisma.ArticuloAutorUpdateManyWithoutArticuloNestedInput
   servicios?: Prisma.ArticuloServicioUpdateManyWithoutArticuloNestedInput
+  comentarios?: Prisma.ComentarioBlogUpdateManyWithoutArticuloNestedInput
 }
 
 export type ArticuloBlogUncheckedUpdateWithoutEtiquetasInput = {
@@ -1126,7 +1660,16 @@ export type ArticuloBlogUncheckedUpdateWithoutEtiquetasInput = {
   slug?: Prisma.StringFieldUpdateOperationsInput | string
   extracto?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
   contenido?: Prisma.StringFieldUpdateOperationsInput | string
+  tituloHtml?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  extractoHtml?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
   imagenPortadaUrl?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  tituloTamano?: Prisma.EnumTamanoTituloBlogFieldUpdateOperationsInput | $Enums.TamanoTituloBlog
+  tituloAlineacion?: Prisma.EnumAlineacionTituloBlogFieldUpdateOperationsInput | $Enums.AlineacionTituloBlog
+  tituloTipografia?: Prisma.EnumTipografiaBlogFieldUpdateOperationsInput | $Enums.TipografiaBlog
+  extractoTamano?: Prisma.EnumTamanoExtractoBlogFieldUpdateOperationsInput | $Enums.TamanoExtractoBlog
+  extractoAlineacion?: Prisma.EnumAlineacionExtractoBlogFieldUpdateOperationsInput | $Enums.AlineacionExtractoBlog
+  extractoTipografia?: Prisma.EnumTipografiaBlogFieldUpdateOperationsInput | $Enums.TipografiaBlog
+  comentariosHabilitados?: Prisma.BoolFieldUpdateOperationsInput | boolean
   estado?: Prisma.EnumEstadoPublicacionFieldUpdateOperationsInput | $Enums.EstadoPublicacion
   destacado?: Prisma.BoolFieldUpdateOperationsInput | boolean
   publicadoEn?: Prisma.NullableDateTimeFieldUpdateOperationsInput | Date | string | null
@@ -1138,6 +1681,7 @@ export type ArticuloBlogUncheckedUpdateWithoutEtiquetasInput = {
   actualizadoEn?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
   autores?: Prisma.ArticuloAutorUncheckedUpdateManyWithoutArticuloNestedInput
   servicios?: Prisma.ArticuloServicioUncheckedUpdateManyWithoutArticuloNestedInput
+  comentarios?: Prisma.ComentarioBlogUncheckedUpdateManyWithoutArticuloNestedInput
 }
 
 export type ArticuloBlogCreateManyAutorProfesionalInput = {
@@ -1146,7 +1690,16 @@ export type ArticuloBlogCreateManyAutorProfesionalInput = {
   slug: string
   extracto?: string | null
   contenido: string
+  tituloHtml?: string | null
+  extractoHtml?: string | null
   imagenPortadaUrl?: string | null
+  tituloTamano?: $Enums.TamanoTituloBlog
+  tituloAlineacion?: $Enums.AlineacionTituloBlog
+  tituloTipografia?: $Enums.TipografiaBlog
+  extractoTamano?: $Enums.TamanoExtractoBlog
+  extractoAlineacion?: $Enums.AlineacionExtractoBlog
+  extractoTipografia?: $Enums.TipografiaBlog
+  comentariosHabilitados?: boolean
   estado?: $Enums.EstadoPublicacion
   destacado?: boolean
   publicadoEn?: Date | string | null
@@ -1163,7 +1716,16 @@ export type ArticuloBlogUpdateWithoutAutorProfesionalInput = {
   slug?: Prisma.StringFieldUpdateOperationsInput | string
   extracto?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
   contenido?: Prisma.StringFieldUpdateOperationsInput | string
+  tituloHtml?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  extractoHtml?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
   imagenPortadaUrl?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  tituloTamano?: Prisma.EnumTamanoTituloBlogFieldUpdateOperationsInput | $Enums.TamanoTituloBlog
+  tituloAlineacion?: Prisma.EnumAlineacionTituloBlogFieldUpdateOperationsInput | $Enums.AlineacionTituloBlog
+  tituloTipografia?: Prisma.EnumTipografiaBlogFieldUpdateOperationsInput | $Enums.TipografiaBlog
+  extractoTamano?: Prisma.EnumTamanoExtractoBlogFieldUpdateOperationsInput | $Enums.TamanoExtractoBlog
+  extractoAlineacion?: Prisma.EnumAlineacionExtractoBlogFieldUpdateOperationsInput | $Enums.AlineacionExtractoBlog
+  extractoTipografia?: Prisma.EnumTipografiaBlogFieldUpdateOperationsInput | $Enums.TipografiaBlog
+  comentariosHabilitados?: Prisma.BoolFieldUpdateOperationsInput | boolean
   estado?: Prisma.EnumEstadoPublicacionFieldUpdateOperationsInput | $Enums.EstadoPublicacion
   destacado?: Prisma.BoolFieldUpdateOperationsInput | boolean
   publicadoEn?: Prisma.NullableDateTimeFieldUpdateOperationsInput | Date | string | null
@@ -1175,6 +1737,7 @@ export type ArticuloBlogUpdateWithoutAutorProfesionalInput = {
   autores?: Prisma.ArticuloAutorUpdateManyWithoutArticuloNestedInput
   servicios?: Prisma.ArticuloServicioUpdateManyWithoutArticuloNestedInput
   etiquetas?: Prisma.ArticuloEtiquetaUpdateManyWithoutArticuloNestedInput
+  comentarios?: Prisma.ComentarioBlogUpdateManyWithoutArticuloNestedInput
 }
 
 export type ArticuloBlogUncheckedUpdateWithoutAutorProfesionalInput = {
@@ -1183,7 +1746,16 @@ export type ArticuloBlogUncheckedUpdateWithoutAutorProfesionalInput = {
   slug?: Prisma.StringFieldUpdateOperationsInput | string
   extracto?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
   contenido?: Prisma.StringFieldUpdateOperationsInput | string
+  tituloHtml?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  extractoHtml?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
   imagenPortadaUrl?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  tituloTamano?: Prisma.EnumTamanoTituloBlogFieldUpdateOperationsInput | $Enums.TamanoTituloBlog
+  tituloAlineacion?: Prisma.EnumAlineacionTituloBlogFieldUpdateOperationsInput | $Enums.AlineacionTituloBlog
+  tituloTipografia?: Prisma.EnumTipografiaBlogFieldUpdateOperationsInput | $Enums.TipografiaBlog
+  extractoTamano?: Prisma.EnumTamanoExtractoBlogFieldUpdateOperationsInput | $Enums.TamanoExtractoBlog
+  extractoAlineacion?: Prisma.EnumAlineacionExtractoBlogFieldUpdateOperationsInput | $Enums.AlineacionExtractoBlog
+  extractoTipografia?: Prisma.EnumTipografiaBlogFieldUpdateOperationsInput | $Enums.TipografiaBlog
+  comentariosHabilitados?: Prisma.BoolFieldUpdateOperationsInput | boolean
   estado?: Prisma.EnumEstadoPublicacionFieldUpdateOperationsInput | $Enums.EstadoPublicacion
   destacado?: Prisma.BoolFieldUpdateOperationsInput | boolean
   publicadoEn?: Prisma.NullableDateTimeFieldUpdateOperationsInput | Date | string | null
@@ -1195,6 +1767,7 @@ export type ArticuloBlogUncheckedUpdateWithoutAutorProfesionalInput = {
   autores?: Prisma.ArticuloAutorUncheckedUpdateManyWithoutArticuloNestedInput
   servicios?: Prisma.ArticuloServicioUncheckedUpdateManyWithoutArticuloNestedInput
   etiquetas?: Prisma.ArticuloEtiquetaUncheckedUpdateManyWithoutArticuloNestedInput
+  comentarios?: Prisma.ComentarioBlogUncheckedUpdateManyWithoutArticuloNestedInput
 }
 
 export type ArticuloBlogUncheckedUpdateManyWithoutAutorProfesionalInput = {
@@ -1203,7 +1776,16 @@ export type ArticuloBlogUncheckedUpdateManyWithoutAutorProfesionalInput = {
   slug?: Prisma.StringFieldUpdateOperationsInput | string
   extracto?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
   contenido?: Prisma.StringFieldUpdateOperationsInput | string
+  tituloHtml?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  extractoHtml?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
   imagenPortadaUrl?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  tituloTamano?: Prisma.EnumTamanoTituloBlogFieldUpdateOperationsInput | $Enums.TamanoTituloBlog
+  tituloAlineacion?: Prisma.EnumAlineacionTituloBlogFieldUpdateOperationsInput | $Enums.AlineacionTituloBlog
+  tituloTipografia?: Prisma.EnumTipografiaBlogFieldUpdateOperationsInput | $Enums.TipografiaBlog
+  extractoTamano?: Prisma.EnumTamanoExtractoBlogFieldUpdateOperationsInput | $Enums.TamanoExtractoBlog
+  extractoAlineacion?: Prisma.EnumAlineacionExtractoBlogFieldUpdateOperationsInput | $Enums.AlineacionExtractoBlog
+  extractoTipografia?: Prisma.EnumTipografiaBlogFieldUpdateOperationsInput | $Enums.TipografiaBlog
+  comentariosHabilitados?: Prisma.BoolFieldUpdateOperationsInput | boolean
   estado?: Prisma.EnumEstadoPublicacionFieldUpdateOperationsInput | $Enums.EstadoPublicacion
   destacado?: Prisma.BoolFieldUpdateOperationsInput | boolean
   publicadoEn?: Prisma.NullableDateTimeFieldUpdateOperationsInput | Date | string | null
@@ -1220,7 +1802,16 @@ export type ArticuloBlogCreateManyCategoriaInput = {
   slug: string
   extracto?: string | null
   contenido: string
+  tituloHtml?: string | null
+  extractoHtml?: string | null
   imagenPortadaUrl?: string | null
+  tituloTamano?: $Enums.TamanoTituloBlog
+  tituloAlineacion?: $Enums.AlineacionTituloBlog
+  tituloTipografia?: $Enums.TipografiaBlog
+  extractoTamano?: $Enums.TamanoExtractoBlog
+  extractoAlineacion?: $Enums.AlineacionExtractoBlog
+  extractoTipografia?: $Enums.TipografiaBlog
+  comentariosHabilitados?: boolean
   estado?: $Enums.EstadoPublicacion
   destacado?: boolean
   publicadoEn?: Date | string | null
@@ -1237,7 +1828,16 @@ export type ArticuloBlogUpdateWithoutCategoriaInput = {
   slug?: Prisma.StringFieldUpdateOperationsInput | string
   extracto?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
   contenido?: Prisma.StringFieldUpdateOperationsInput | string
+  tituloHtml?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  extractoHtml?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
   imagenPortadaUrl?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  tituloTamano?: Prisma.EnumTamanoTituloBlogFieldUpdateOperationsInput | $Enums.TamanoTituloBlog
+  tituloAlineacion?: Prisma.EnumAlineacionTituloBlogFieldUpdateOperationsInput | $Enums.AlineacionTituloBlog
+  tituloTipografia?: Prisma.EnumTipografiaBlogFieldUpdateOperationsInput | $Enums.TipografiaBlog
+  extractoTamano?: Prisma.EnumTamanoExtractoBlogFieldUpdateOperationsInput | $Enums.TamanoExtractoBlog
+  extractoAlineacion?: Prisma.EnumAlineacionExtractoBlogFieldUpdateOperationsInput | $Enums.AlineacionExtractoBlog
+  extractoTipografia?: Prisma.EnumTipografiaBlogFieldUpdateOperationsInput | $Enums.TipografiaBlog
+  comentariosHabilitados?: Prisma.BoolFieldUpdateOperationsInput | boolean
   estado?: Prisma.EnumEstadoPublicacionFieldUpdateOperationsInput | $Enums.EstadoPublicacion
   destacado?: Prisma.BoolFieldUpdateOperationsInput | boolean
   publicadoEn?: Prisma.NullableDateTimeFieldUpdateOperationsInput | Date | string | null
@@ -1249,6 +1849,7 @@ export type ArticuloBlogUpdateWithoutCategoriaInput = {
   autores?: Prisma.ArticuloAutorUpdateManyWithoutArticuloNestedInput
   servicios?: Prisma.ArticuloServicioUpdateManyWithoutArticuloNestedInput
   etiquetas?: Prisma.ArticuloEtiquetaUpdateManyWithoutArticuloNestedInput
+  comentarios?: Prisma.ComentarioBlogUpdateManyWithoutArticuloNestedInput
 }
 
 export type ArticuloBlogUncheckedUpdateWithoutCategoriaInput = {
@@ -1257,7 +1858,16 @@ export type ArticuloBlogUncheckedUpdateWithoutCategoriaInput = {
   slug?: Prisma.StringFieldUpdateOperationsInput | string
   extracto?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
   contenido?: Prisma.StringFieldUpdateOperationsInput | string
+  tituloHtml?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  extractoHtml?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
   imagenPortadaUrl?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  tituloTamano?: Prisma.EnumTamanoTituloBlogFieldUpdateOperationsInput | $Enums.TamanoTituloBlog
+  tituloAlineacion?: Prisma.EnumAlineacionTituloBlogFieldUpdateOperationsInput | $Enums.AlineacionTituloBlog
+  tituloTipografia?: Prisma.EnumTipografiaBlogFieldUpdateOperationsInput | $Enums.TipografiaBlog
+  extractoTamano?: Prisma.EnumTamanoExtractoBlogFieldUpdateOperationsInput | $Enums.TamanoExtractoBlog
+  extractoAlineacion?: Prisma.EnumAlineacionExtractoBlogFieldUpdateOperationsInput | $Enums.AlineacionExtractoBlog
+  extractoTipografia?: Prisma.EnumTipografiaBlogFieldUpdateOperationsInput | $Enums.TipografiaBlog
+  comentariosHabilitados?: Prisma.BoolFieldUpdateOperationsInput | boolean
   estado?: Prisma.EnumEstadoPublicacionFieldUpdateOperationsInput | $Enums.EstadoPublicacion
   destacado?: Prisma.BoolFieldUpdateOperationsInput | boolean
   publicadoEn?: Prisma.NullableDateTimeFieldUpdateOperationsInput | Date | string | null
@@ -1269,6 +1879,7 @@ export type ArticuloBlogUncheckedUpdateWithoutCategoriaInput = {
   autores?: Prisma.ArticuloAutorUncheckedUpdateManyWithoutArticuloNestedInput
   servicios?: Prisma.ArticuloServicioUncheckedUpdateManyWithoutArticuloNestedInput
   etiquetas?: Prisma.ArticuloEtiquetaUncheckedUpdateManyWithoutArticuloNestedInput
+  comentarios?: Prisma.ComentarioBlogUncheckedUpdateManyWithoutArticuloNestedInput
 }
 
 export type ArticuloBlogUncheckedUpdateManyWithoutCategoriaInput = {
@@ -1277,7 +1888,16 @@ export type ArticuloBlogUncheckedUpdateManyWithoutCategoriaInput = {
   slug?: Prisma.StringFieldUpdateOperationsInput | string
   extracto?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
   contenido?: Prisma.StringFieldUpdateOperationsInput | string
+  tituloHtml?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  extractoHtml?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
   imagenPortadaUrl?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  tituloTamano?: Prisma.EnumTamanoTituloBlogFieldUpdateOperationsInput | $Enums.TamanoTituloBlog
+  tituloAlineacion?: Prisma.EnumAlineacionTituloBlogFieldUpdateOperationsInput | $Enums.AlineacionTituloBlog
+  tituloTipografia?: Prisma.EnumTipografiaBlogFieldUpdateOperationsInput | $Enums.TipografiaBlog
+  extractoTamano?: Prisma.EnumTamanoExtractoBlogFieldUpdateOperationsInput | $Enums.TamanoExtractoBlog
+  extractoAlineacion?: Prisma.EnumAlineacionExtractoBlogFieldUpdateOperationsInput | $Enums.AlineacionExtractoBlog
+  extractoTipografia?: Prisma.EnumTipografiaBlogFieldUpdateOperationsInput | $Enums.TipografiaBlog
+  comentariosHabilitados?: Prisma.BoolFieldUpdateOperationsInput | boolean
   estado?: Prisma.EnumEstadoPublicacionFieldUpdateOperationsInput | $Enums.EstadoPublicacion
   destacado?: Prisma.BoolFieldUpdateOperationsInput | boolean
   publicadoEn?: Prisma.NullableDateTimeFieldUpdateOperationsInput | Date | string | null
@@ -1297,12 +1917,14 @@ export type ArticuloBlogCountOutputType = {
   autores: number
   servicios: number
   etiquetas: number
+  comentarios: number
 }
 
 export type ArticuloBlogCountOutputTypeSelect<ExtArgs extends runtime.Types.Extensions.InternalArgs = runtime.Types.Extensions.DefaultArgs> = {
   autores?: boolean | ArticuloBlogCountOutputTypeCountAutoresArgs
   servicios?: boolean | ArticuloBlogCountOutputTypeCountServiciosArgs
   etiquetas?: boolean | ArticuloBlogCountOutputTypeCountEtiquetasArgs
+  comentarios?: boolean | ArticuloBlogCountOutputTypeCountComentariosArgs
 }
 
 /**
@@ -1336,6 +1958,13 @@ export type ArticuloBlogCountOutputTypeCountEtiquetasArgs<ExtArgs extends runtim
   where?: Prisma.ArticuloEtiquetaWhereInput
 }
 
+/**
+ * ArticuloBlogCountOutputType without action
+ */
+export type ArticuloBlogCountOutputTypeCountComentariosArgs<ExtArgs extends runtime.Types.Extensions.InternalArgs = runtime.Types.Extensions.DefaultArgs> = {
+  where?: Prisma.ComentarioBlogWhereInput
+}
+
 
 export type ArticuloBlogSelect<ExtArgs extends runtime.Types.Extensions.InternalArgs = runtime.Types.Extensions.DefaultArgs> = runtime.Types.Extensions.GetSelect<{
   id?: boolean
@@ -1343,7 +1972,16 @@ export type ArticuloBlogSelect<ExtArgs extends runtime.Types.Extensions.Internal
   slug?: boolean
   extracto?: boolean
   contenido?: boolean
+  tituloHtml?: boolean
+  extractoHtml?: boolean
   imagenPortadaUrl?: boolean
+  tituloTamano?: boolean
+  tituloAlineacion?: boolean
+  tituloTipografia?: boolean
+  extractoTamano?: boolean
+  extractoAlineacion?: boolean
+  extractoTipografia?: boolean
+  comentariosHabilitados?: boolean
   estado?: boolean
   destacado?: boolean
   publicadoEn?: boolean
@@ -1358,6 +1996,7 @@ export type ArticuloBlogSelect<ExtArgs extends runtime.Types.Extensions.Internal
   autores?: boolean | Prisma.ArticuloBlog$autoresArgs<ExtArgs>
   servicios?: boolean | Prisma.ArticuloBlog$serviciosArgs<ExtArgs>
   etiquetas?: boolean | Prisma.ArticuloBlog$etiquetasArgs<ExtArgs>
+  comentarios?: boolean | Prisma.ArticuloBlog$comentariosArgs<ExtArgs>
   _count?: boolean | Prisma.ArticuloBlogCountOutputTypeDefaultArgs<ExtArgs>
 }, ExtArgs["result"]["articuloBlog"]>
 
@@ -1367,7 +2006,16 @@ export type ArticuloBlogSelectCreateManyAndReturn<ExtArgs extends runtime.Types.
   slug?: boolean
   extracto?: boolean
   contenido?: boolean
+  tituloHtml?: boolean
+  extractoHtml?: boolean
   imagenPortadaUrl?: boolean
+  tituloTamano?: boolean
+  tituloAlineacion?: boolean
+  tituloTipografia?: boolean
+  extractoTamano?: boolean
+  extractoAlineacion?: boolean
+  extractoTipografia?: boolean
+  comentariosHabilitados?: boolean
   estado?: boolean
   destacado?: boolean
   publicadoEn?: boolean
@@ -1387,7 +2035,16 @@ export type ArticuloBlogSelectUpdateManyAndReturn<ExtArgs extends runtime.Types.
   slug?: boolean
   extracto?: boolean
   contenido?: boolean
+  tituloHtml?: boolean
+  extractoHtml?: boolean
   imagenPortadaUrl?: boolean
+  tituloTamano?: boolean
+  tituloAlineacion?: boolean
+  tituloTipografia?: boolean
+  extractoTamano?: boolean
+  extractoAlineacion?: boolean
+  extractoTipografia?: boolean
+  comentariosHabilitados?: boolean
   estado?: boolean
   destacado?: boolean
   publicadoEn?: boolean
@@ -1407,7 +2064,16 @@ export type ArticuloBlogSelectScalar = {
   slug?: boolean
   extracto?: boolean
   contenido?: boolean
+  tituloHtml?: boolean
+  extractoHtml?: boolean
   imagenPortadaUrl?: boolean
+  tituloTamano?: boolean
+  tituloAlineacion?: boolean
+  tituloTipografia?: boolean
+  extractoTamano?: boolean
+  extractoAlineacion?: boolean
+  extractoTipografia?: boolean
+  comentariosHabilitados?: boolean
   estado?: boolean
   destacado?: boolean
   publicadoEn?: boolean
@@ -1419,13 +2085,14 @@ export type ArticuloBlogSelectScalar = {
   actualizadoEn?: boolean
 }
 
-export type ArticuloBlogOmit<ExtArgs extends runtime.Types.Extensions.InternalArgs = runtime.Types.Extensions.DefaultArgs> = runtime.Types.Extensions.GetOmit<"id" | "titulo" | "slug" | "extracto" | "contenido" | "imagenPortadaUrl" | "estado" | "destacado" | "publicadoEn" | "categoriaId" | "autorProfesionalId" | "metaTitulo" | "metaDescripcion" | "creadoEn" | "actualizadoEn", ExtArgs["result"]["articuloBlog"]>
+export type ArticuloBlogOmit<ExtArgs extends runtime.Types.Extensions.InternalArgs = runtime.Types.Extensions.DefaultArgs> = runtime.Types.Extensions.GetOmit<"id" | "titulo" | "slug" | "extracto" | "contenido" | "tituloHtml" | "extractoHtml" | "imagenPortadaUrl" | "tituloTamano" | "tituloAlineacion" | "tituloTipografia" | "extractoTamano" | "extractoAlineacion" | "extractoTipografia" | "comentariosHabilitados" | "estado" | "destacado" | "publicadoEn" | "categoriaId" | "autorProfesionalId" | "metaTitulo" | "metaDescripcion" | "creadoEn" | "actualizadoEn", ExtArgs["result"]["articuloBlog"]>
 export type ArticuloBlogInclude<ExtArgs extends runtime.Types.Extensions.InternalArgs = runtime.Types.Extensions.DefaultArgs> = {
   categoria?: boolean | Prisma.ArticuloBlog$categoriaArgs<ExtArgs>
   autorProfesional?: boolean | Prisma.ArticuloBlog$autorProfesionalArgs<ExtArgs>
   autores?: boolean | Prisma.ArticuloBlog$autoresArgs<ExtArgs>
   servicios?: boolean | Prisma.ArticuloBlog$serviciosArgs<ExtArgs>
   etiquetas?: boolean | Prisma.ArticuloBlog$etiquetasArgs<ExtArgs>
+  comentarios?: boolean | Prisma.ArticuloBlog$comentariosArgs<ExtArgs>
   _count?: boolean | Prisma.ArticuloBlogCountOutputTypeDefaultArgs<ExtArgs>
 }
 export type ArticuloBlogIncludeCreateManyAndReturn<ExtArgs extends runtime.Types.Extensions.InternalArgs = runtime.Types.Extensions.DefaultArgs> = {
@@ -1445,6 +2112,7 @@ export type $ArticuloBlogPayload<ExtArgs extends runtime.Types.Extensions.Intern
     autores: Prisma.$ArticuloAutorPayload<ExtArgs>[]
     servicios: Prisma.$ArticuloServicioPayload<ExtArgs>[]
     etiquetas: Prisma.$ArticuloEtiquetaPayload<ExtArgs>[]
+    comentarios: Prisma.$ComentarioBlogPayload<ExtArgs>[]
   }
   scalars: runtime.Types.Extensions.GetPayloadResult<{
     id: string
@@ -1452,7 +2120,16 @@ export type $ArticuloBlogPayload<ExtArgs extends runtime.Types.Extensions.Intern
     slug: string
     extracto: string | null
     contenido: string
+    tituloHtml: string | null
+    extractoHtml: string | null
     imagenPortadaUrl: string | null
+    tituloTamano: $Enums.TamanoTituloBlog
+    tituloAlineacion: $Enums.AlineacionTituloBlog
+    tituloTipografia: $Enums.TipografiaBlog
+    extractoTamano: $Enums.TamanoExtractoBlog
+    extractoAlineacion: $Enums.AlineacionExtractoBlog
+    extractoTipografia: $Enums.TipografiaBlog
+    comentariosHabilitados: boolean
     estado: $Enums.EstadoPublicacion
     destacado: boolean
     publicadoEn: Date | null
@@ -1861,6 +2538,7 @@ export interface Prisma__ArticuloBlogClient<T, Null = never, ExtArgs extends run
   autores<T extends Prisma.ArticuloBlog$autoresArgs<ExtArgs> = {}>(args?: Prisma.Subset<T, Prisma.ArticuloBlog$autoresArgs<ExtArgs>>): Prisma.PrismaPromise<runtime.Types.Result.GetResult<Prisma.$ArticuloAutorPayload<ExtArgs>, T, "findMany", GlobalOmitOptions> | Null>
   servicios<T extends Prisma.ArticuloBlog$serviciosArgs<ExtArgs> = {}>(args?: Prisma.Subset<T, Prisma.ArticuloBlog$serviciosArgs<ExtArgs>>): Prisma.PrismaPromise<runtime.Types.Result.GetResult<Prisma.$ArticuloServicioPayload<ExtArgs>, T, "findMany", GlobalOmitOptions> | Null>
   etiquetas<T extends Prisma.ArticuloBlog$etiquetasArgs<ExtArgs> = {}>(args?: Prisma.Subset<T, Prisma.ArticuloBlog$etiquetasArgs<ExtArgs>>): Prisma.PrismaPromise<runtime.Types.Result.GetResult<Prisma.$ArticuloEtiquetaPayload<ExtArgs>, T, "findMany", GlobalOmitOptions> | Null>
+  comentarios<T extends Prisma.ArticuloBlog$comentariosArgs<ExtArgs> = {}>(args?: Prisma.Subset<T, Prisma.ArticuloBlog$comentariosArgs<ExtArgs>>): Prisma.PrismaPromise<runtime.Types.Result.GetResult<Prisma.$ComentarioBlogPayload<ExtArgs>, T, "findMany", GlobalOmitOptions> | Null>
   /**
    * Attaches callbacks for the resolution and/or rejection of the Promise.
    * @param onfulfilled The callback to execute when the Promise is resolved.
@@ -1895,7 +2573,16 @@ export interface ArticuloBlogFieldRefs {
   readonly slug: Prisma.FieldRef<"ArticuloBlog", 'String'>
   readonly extracto: Prisma.FieldRef<"ArticuloBlog", 'String'>
   readonly contenido: Prisma.FieldRef<"ArticuloBlog", 'String'>
+  readonly tituloHtml: Prisma.FieldRef<"ArticuloBlog", 'String'>
+  readonly extractoHtml: Prisma.FieldRef<"ArticuloBlog", 'String'>
   readonly imagenPortadaUrl: Prisma.FieldRef<"ArticuloBlog", 'String'>
+  readonly tituloTamano: Prisma.FieldRef<"ArticuloBlog", 'TamanoTituloBlog'>
+  readonly tituloAlineacion: Prisma.FieldRef<"ArticuloBlog", 'AlineacionTituloBlog'>
+  readonly tituloTipografia: Prisma.FieldRef<"ArticuloBlog", 'TipografiaBlog'>
+  readonly extractoTamano: Prisma.FieldRef<"ArticuloBlog", 'TamanoExtractoBlog'>
+  readonly extractoAlineacion: Prisma.FieldRef<"ArticuloBlog", 'AlineacionExtractoBlog'>
+  readonly extractoTipografia: Prisma.FieldRef<"ArticuloBlog", 'TipografiaBlog'>
+  readonly comentariosHabilitados: Prisma.FieldRef<"ArticuloBlog", 'Boolean'>
   readonly estado: Prisma.FieldRef<"ArticuloBlog", 'EstadoPublicacion'>
   readonly destacado: Prisma.FieldRef<"ArticuloBlog", 'Boolean'>
   readonly publicadoEn: Prisma.FieldRef<"ArticuloBlog", 'DateTime'>
@@ -2413,6 +3100,30 @@ export type ArticuloBlog$etiquetasArgs<ExtArgs extends runtime.Types.Extensions.
   take?: number
   skip?: number
   distinct?: Prisma.ArticuloEtiquetaScalarFieldEnum | Prisma.ArticuloEtiquetaScalarFieldEnum[]
+}
+
+/**
+ * ArticuloBlog.comentarios
+ */
+export type ArticuloBlog$comentariosArgs<ExtArgs extends runtime.Types.Extensions.InternalArgs = runtime.Types.Extensions.DefaultArgs> = {
+  /**
+   * Select specific fields to fetch from the ComentarioBlog
+   */
+  select?: Prisma.ComentarioBlogSelect<ExtArgs> | null
+  /**
+   * Omit specific fields from the ComentarioBlog
+   */
+  omit?: Prisma.ComentarioBlogOmit<ExtArgs> | null
+  /**
+   * Choose, which related nodes to fetch as well
+   */
+  include?: Prisma.ComentarioBlogInclude<ExtArgs> | null
+  where?: Prisma.ComentarioBlogWhereInput
+  orderBy?: Prisma.ComentarioBlogOrderByWithRelationInput | Prisma.ComentarioBlogOrderByWithRelationInput[]
+  cursor?: Prisma.ComentarioBlogWhereUniqueInput
+  take?: number
+  skip?: number
+  distinct?: Prisma.ComentarioBlogScalarFieldEnum | Prisma.ComentarioBlogScalarFieldEnum[]
 }
 
 /**

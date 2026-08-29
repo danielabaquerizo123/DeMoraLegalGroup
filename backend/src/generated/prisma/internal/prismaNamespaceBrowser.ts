@@ -59,6 +59,7 @@ export const ModelName = {
   ProfesionalServicio: 'ProfesionalServicio',
   CategoriaBlog: 'CategoriaBlog',
   ArticuloBlog: 'ArticuloBlog',
+  ComentarioBlog: 'ComentarioBlog',
   ArticuloAutor: 'ArticuloAutor',
   ArticuloServicio: 'ArticuloServicio',
   EtiquetaBlog: 'EtiquetaBlog',
@@ -203,7 +204,16 @@ export const ArticuloBlogScalarFieldEnum = {
   slug: 'slug',
   extracto: 'extracto',
   contenido: 'contenido',
+  tituloHtml: 'tituloHtml',
+  extractoHtml: 'extractoHtml',
   imagenPortadaUrl: 'imagenPortadaUrl',
+  tituloTamano: 'tituloTamano',
+  tituloAlineacion: 'tituloAlineacion',
+  tituloTipografia: 'tituloTipografia',
+  extractoTamano: 'extractoTamano',
+  extractoAlineacion: 'extractoAlineacion',
+  extractoTipografia: 'extractoTipografia',
+  comentariosHabilitados: 'comentariosHabilitados',
   estado: 'estado',
   destacado: 'destacado',
   publicadoEn: 'publicadoEn',
@@ -216,6 +226,19 @@ export const ArticuloBlogScalarFieldEnum = {
 } as const
 
 export type ArticuloBlogScalarFieldEnum = (typeof ArticuloBlogScalarFieldEnum)[keyof typeof ArticuloBlogScalarFieldEnum]
+
+
+export const ComentarioBlogScalarFieldEnum = {
+  id: 'id',
+  articuloId: 'articuloId',
+  parentId: 'parentId',
+  nombreVisitante: 'nombreVisitante',
+  usuarioAdminId: 'usuarioAdminId',
+  contenido: 'contenido',
+  creadoEn: 'creadoEn'
+} as const
+
+export type ComentarioBlogScalarFieldEnum = (typeof ComentarioBlogScalarFieldEnum)[keyof typeof ComentarioBlogScalarFieldEnum]
 
 
 export const ArticuloAutorScalarFieldEnum = {

@@ -194,6 +194,41 @@ export type EnumTipoCanalContactoWithAggregatesFilter<$PrismaModel = never> = {
   _max?: Prisma.NestedEnumTipoCanalContactoFilter<$PrismaModel>
 }
 
+export type EnumTamanoTituloBlogFilter<$PrismaModel = never> = {
+  equals?: $Enums.TamanoTituloBlog | Prisma.EnumTamanoTituloBlogFieldRefInput<$PrismaModel>
+  in?: $Enums.TamanoTituloBlog[] | Prisma.ListEnumTamanoTituloBlogFieldRefInput<$PrismaModel>
+  notIn?: $Enums.TamanoTituloBlog[] | Prisma.ListEnumTamanoTituloBlogFieldRefInput<$PrismaModel>
+  not?: Prisma.NestedEnumTamanoTituloBlogFilter<$PrismaModel> | $Enums.TamanoTituloBlog
+}
+
+export type EnumAlineacionTituloBlogFilter<$PrismaModel = never> = {
+  equals?: $Enums.AlineacionTituloBlog | Prisma.EnumAlineacionTituloBlogFieldRefInput<$PrismaModel>
+  in?: $Enums.AlineacionTituloBlog[] | Prisma.ListEnumAlineacionTituloBlogFieldRefInput<$PrismaModel>
+  notIn?: $Enums.AlineacionTituloBlog[] | Prisma.ListEnumAlineacionTituloBlogFieldRefInput<$PrismaModel>
+  not?: Prisma.NestedEnumAlineacionTituloBlogFilter<$PrismaModel> | $Enums.AlineacionTituloBlog
+}
+
+export type EnumTipografiaBlogFilter<$PrismaModel = never> = {
+  equals?: $Enums.TipografiaBlog | Prisma.EnumTipografiaBlogFieldRefInput<$PrismaModel>
+  in?: $Enums.TipografiaBlog[] | Prisma.ListEnumTipografiaBlogFieldRefInput<$PrismaModel>
+  notIn?: $Enums.TipografiaBlog[] | Prisma.ListEnumTipografiaBlogFieldRefInput<$PrismaModel>
+  not?: Prisma.NestedEnumTipografiaBlogFilter<$PrismaModel> | $Enums.TipografiaBlog
+}
+
+export type EnumTamanoExtractoBlogFilter<$PrismaModel = never> = {
+  equals?: $Enums.TamanoExtractoBlog | Prisma.EnumTamanoExtractoBlogFieldRefInput<$PrismaModel>
+  in?: $Enums.TamanoExtractoBlog[] | Prisma.ListEnumTamanoExtractoBlogFieldRefInput<$PrismaModel>
+  notIn?: $Enums.TamanoExtractoBlog[] | Prisma.ListEnumTamanoExtractoBlogFieldRefInput<$PrismaModel>
+  not?: Prisma.NestedEnumTamanoExtractoBlogFilter<$PrismaModel> | $Enums.TamanoExtractoBlog
+}
+
+export type EnumAlineacionExtractoBlogFilter<$PrismaModel = never> = {
+  equals?: $Enums.AlineacionExtractoBlog | Prisma.EnumAlineacionExtractoBlogFieldRefInput<$PrismaModel>
+  in?: $Enums.AlineacionExtractoBlog[] | Prisma.ListEnumAlineacionExtractoBlogFieldRefInput<$PrismaModel>
+  notIn?: $Enums.AlineacionExtractoBlog[] | Prisma.ListEnumAlineacionExtractoBlogFieldRefInput<$PrismaModel>
+  not?: Prisma.NestedEnumAlineacionExtractoBlogFilter<$PrismaModel> | $Enums.AlineacionExtractoBlog
+}
+
 export type EnumEstadoPublicacionFilter<$PrismaModel = never> = {
   equals?: $Enums.EstadoPublicacion | Prisma.EnumEstadoPublicacionFieldRefInput<$PrismaModel>
   in?: $Enums.EstadoPublicacion[] | Prisma.ListEnumEstadoPublicacionFieldRefInput<$PrismaModel>
@@ -222,6 +257,56 @@ export type UuidNullableFilter<$PrismaModel = never> = {
   gte?: string | Prisma.StringFieldRefInput<$PrismaModel>
   mode?: Prisma.QueryMode
   not?: Prisma.NestedUuidNullableFilter<$PrismaModel> | string | null
+}
+
+export type EnumTamanoTituloBlogWithAggregatesFilter<$PrismaModel = never> = {
+  equals?: $Enums.TamanoTituloBlog | Prisma.EnumTamanoTituloBlogFieldRefInput<$PrismaModel>
+  in?: $Enums.TamanoTituloBlog[] | Prisma.ListEnumTamanoTituloBlogFieldRefInput<$PrismaModel>
+  notIn?: $Enums.TamanoTituloBlog[] | Prisma.ListEnumTamanoTituloBlogFieldRefInput<$PrismaModel>
+  not?: Prisma.NestedEnumTamanoTituloBlogWithAggregatesFilter<$PrismaModel> | $Enums.TamanoTituloBlog
+  _count?: Prisma.NestedIntFilter<$PrismaModel>
+  _min?: Prisma.NestedEnumTamanoTituloBlogFilter<$PrismaModel>
+  _max?: Prisma.NestedEnumTamanoTituloBlogFilter<$PrismaModel>
+}
+
+export type EnumAlineacionTituloBlogWithAggregatesFilter<$PrismaModel = never> = {
+  equals?: $Enums.AlineacionTituloBlog | Prisma.EnumAlineacionTituloBlogFieldRefInput<$PrismaModel>
+  in?: $Enums.AlineacionTituloBlog[] | Prisma.ListEnumAlineacionTituloBlogFieldRefInput<$PrismaModel>
+  notIn?: $Enums.AlineacionTituloBlog[] | Prisma.ListEnumAlineacionTituloBlogFieldRefInput<$PrismaModel>
+  not?: Prisma.NestedEnumAlineacionTituloBlogWithAggregatesFilter<$PrismaModel> | $Enums.AlineacionTituloBlog
+  _count?: Prisma.NestedIntFilter<$PrismaModel>
+  _min?: Prisma.NestedEnumAlineacionTituloBlogFilter<$PrismaModel>
+  _max?: Prisma.NestedEnumAlineacionTituloBlogFilter<$PrismaModel>
+}
+
+export type EnumTipografiaBlogWithAggregatesFilter<$PrismaModel = never> = {
+  equals?: $Enums.TipografiaBlog | Prisma.EnumTipografiaBlogFieldRefInput<$PrismaModel>
+  in?: $Enums.TipografiaBlog[] | Prisma.ListEnumTipografiaBlogFieldRefInput<$PrismaModel>
+  notIn?: $Enums.TipografiaBlog[] | Prisma.ListEnumTipografiaBlogFieldRefInput<$PrismaModel>
+  not?: Prisma.NestedEnumTipografiaBlogWithAggregatesFilter<$PrismaModel> | $Enums.TipografiaBlog
+  _count?: Prisma.NestedIntFilter<$PrismaModel>
+  _min?: Prisma.NestedEnumTipografiaBlogFilter<$PrismaModel>
+  _max?: Prisma.NestedEnumTipografiaBlogFilter<$PrismaModel>
+}
+
+export type EnumTamanoExtractoBlogWithAggregatesFilter<$PrismaModel = never> = {
+  equals?: $Enums.TamanoExtractoBlog | Prisma.EnumTamanoExtractoBlogFieldRefInput<$PrismaModel>
+  in?: $Enums.TamanoExtractoBlog[] | Prisma.ListEnumTamanoExtractoBlogFieldRefInput<$PrismaModel>
+  notIn?: $Enums.TamanoExtractoBlog[] | Prisma.ListEnumTamanoExtractoBlogFieldRefInput<$PrismaModel>
+  not?: Prisma.NestedEnumTamanoExtractoBlogWithAggregatesFilter<$PrismaModel> | $Enums.TamanoExtractoBlog
+  _count?: Prisma.NestedIntFilter<$PrismaModel>
+  _min?: Prisma.NestedEnumTamanoExtractoBlogFilter<$PrismaModel>
+  _max?: Prisma.NestedEnumTamanoExtractoBlogFilter<$PrismaModel>
+}
+
+export type EnumAlineacionExtractoBlogWithAggregatesFilter<$PrismaModel = never> = {
+  equals?: $Enums.AlineacionExtractoBlog | Prisma.EnumAlineacionExtractoBlogFieldRefInput<$PrismaModel>
+  in?: $Enums.AlineacionExtractoBlog[] | Prisma.ListEnumAlineacionExtractoBlogFieldRefInput<$PrismaModel>
+  notIn?: $Enums.AlineacionExtractoBlog[] | Prisma.ListEnumAlineacionExtractoBlogFieldRefInput<$PrismaModel>
+  not?: Prisma.NestedEnumAlineacionExtractoBlogWithAggregatesFilter<$PrismaModel> | $Enums.AlineacionExtractoBlog
+  _count?: Prisma.NestedIntFilter<$PrismaModel>
+  _min?: Prisma.NestedEnumAlineacionExtractoBlogFilter<$PrismaModel>
+  _max?: Prisma.NestedEnumAlineacionExtractoBlogFilter<$PrismaModel>
 }
 
 export type EnumEstadoPublicacionWithAggregatesFilter<$PrismaModel = never> = {
@@ -539,6 +624,41 @@ export type NestedEnumTipoCanalContactoWithAggregatesFilter<$PrismaModel = never
   _max?: Prisma.NestedEnumTipoCanalContactoFilter<$PrismaModel>
 }
 
+export type NestedEnumTamanoTituloBlogFilter<$PrismaModel = never> = {
+  equals?: $Enums.TamanoTituloBlog | Prisma.EnumTamanoTituloBlogFieldRefInput<$PrismaModel>
+  in?: $Enums.TamanoTituloBlog[] | Prisma.ListEnumTamanoTituloBlogFieldRefInput<$PrismaModel>
+  notIn?: $Enums.TamanoTituloBlog[] | Prisma.ListEnumTamanoTituloBlogFieldRefInput<$PrismaModel>
+  not?: Prisma.NestedEnumTamanoTituloBlogFilter<$PrismaModel> | $Enums.TamanoTituloBlog
+}
+
+export type NestedEnumAlineacionTituloBlogFilter<$PrismaModel = never> = {
+  equals?: $Enums.AlineacionTituloBlog | Prisma.EnumAlineacionTituloBlogFieldRefInput<$PrismaModel>
+  in?: $Enums.AlineacionTituloBlog[] | Prisma.ListEnumAlineacionTituloBlogFieldRefInput<$PrismaModel>
+  notIn?: $Enums.AlineacionTituloBlog[] | Prisma.ListEnumAlineacionTituloBlogFieldRefInput<$PrismaModel>
+  not?: Prisma.NestedEnumAlineacionTituloBlogFilter<$PrismaModel> | $Enums.AlineacionTituloBlog
+}
+
+export type NestedEnumTipografiaBlogFilter<$PrismaModel = never> = {
+  equals?: $Enums.TipografiaBlog | Prisma.EnumTipografiaBlogFieldRefInput<$PrismaModel>
+  in?: $Enums.TipografiaBlog[] | Prisma.ListEnumTipografiaBlogFieldRefInput<$PrismaModel>
+  notIn?: $Enums.TipografiaBlog[] | Prisma.ListEnumTipografiaBlogFieldRefInput<$PrismaModel>
+  not?: Prisma.NestedEnumTipografiaBlogFilter<$PrismaModel> | $Enums.TipografiaBlog
+}
+
+export type NestedEnumTamanoExtractoBlogFilter<$PrismaModel = never> = {
+  equals?: $Enums.TamanoExtractoBlog | Prisma.EnumTamanoExtractoBlogFieldRefInput<$PrismaModel>
+  in?: $Enums.TamanoExtractoBlog[] | Prisma.ListEnumTamanoExtractoBlogFieldRefInput<$PrismaModel>
+  notIn?: $Enums.TamanoExtractoBlog[] | Prisma.ListEnumTamanoExtractoBlogFieldRefInput<$PrismaModel>
+  not?: Prisma.NestedEnumTamanoExtractoBlogFilter<$PrismaModel> | $Enums.TamanoExtractoBlog
+}
+
+export type NestedEnumAlineacionExtractoBlogFilter<$PrismaModel = never> = {
+  equals?: $Enums.AlineacionExtractoBlog | Prisma.EnumAlineacionExtractoBlogFieldRefInput<$PrismaModel>
+  in?: $Enums.AlineacionExtractoBlog[] | Prisma.ListEnumAlineacionExtractoBlogFieldRefInput<$PrismaModel>
+  notIn?: $Enums.AlineacionExtractoBlog[] | Prisma.ListEnumAlineacionExtractoBlogFieldRefInput<$PrismaModel>
+  not?: Prisma.NestedEnumAlineacionExtractoBlogFilter<$PrismaModel> | $Enums.AlineacionExtractoBlog
+}
+
 export type NestedEnumEstadoPublicacionFilter<$PrismaModel = never> = {
   equals?: $Enums.EstadoPublicacion | Prisma.EnumEstadoPublicacionFieldRefInput<$PrismaModel>
   in?: $Enums.EstadoPublicacion[] | Prisma.ListEnumEstadoPublicacionFieldRefInput<$PrismaModel>
@@ -566,6 +686,56 @@ export type NestedUuidNullableFilter<$PrismaModel = never> = {
   gt?: string | Prisma.StringFieldRefInput<$PrismaModel>
   gte?: string | Prisma.StringFieldRefInput<$PrismaModel>
   not?: Prisma.NestedUuidNullableFilter<$PrismaModel> | string | null
+}
+
+export type NestedEnumTamanoTituloBlogWithAggregatesFilter<$PrismaModel = never> = {
+  equals?: $Enums.TamanoTituloBlog | Prisma.EnumTamanoTituloBlogFieldRefInput<$PrismaModel>
+  in?: $Enums.TamanoTituloBlog[] | Prisma.ListEnumTamanoTituloBlogFieldRefInput<$PrismaModel>
+  notIn?: $Enums.TamanoTituloBlog[] | Prisma.ListEnumTamanoTituloBlogFieldRefInput<$PrismaModel>
+  not?: Prisma.NestedEnumTamanoTituloBlogWithAggregatesFilter<$PrismaModel> | $Enums.TamanoTituloBlog
+  _count?: Prisma.NestedIntFilter<$PrismaModel>
+  _min?: Prisma.NestedEnumTamanoTituloBlogFilter<$PrismaModel>
+  _max?: Prisma.NestedEnumTamanoTituloBlogFilter<$PrismaModel>
+}
+
+export type NestedEnumAlineacionTituloBlogWithAggregatesFilter<$PrismaModel = never> = {
+  equals?: $Enums.AlineacionTituloBlog | Prisma.EnumAlineacionTituloBlogFieldRefInput<$PrismaModel>
+  in?: $Enums.AlineacionTituloBlog[] | Prisma.ListEnumAlineacionTituloBlogFieldRefInput<$PrismaModel>
+  notIn?: $Enums.AlineacionTituloBlog[] | Prisma.ListEnumAlineacionTituloBlogFieldRefInput<$PrismaModel>
+  not?: Prisma.NestedEnumAlineacionTituloBlogWithAggregatesFilter<$PrismaModel> | $Enums.AlineacionTituloBlog
+  _count?: Prisma.NestedIntFilter<$PrismaModel>
+  _min?: Prisma.NestedEnumAlineacionTituloBlogFilter<$PrismaModel>
+  _max?: Prisma.NestedEnumAlineacionTituloBlogFilter<$PrismaModel>
+}
+
+export type NestedEnumTipografiaBlogWithAggregatesFilter<$PrismaModel = never> = {
+  equals?: $Enums.TipografiaBlog | Prisma.EnumTipografiaBlogFieldRefInput<$PrismaModel>
+  in?: $Enums.TipografiaBlog[] | Prisma.ListEnumTipografiaBlogFieldRefInput<$PrismaModel>
+  notIn?: $Enums.TipografiaBlog[] | Prisma.ListEnumTipografiaBlogFieldRefInput<$PrismaModel>
+  not?: Prisma.NestedEnumTipografiaBlogWithAggregatesFilter<$PrismaModel> | $Enums.TipografiaBlog
+  _count?: Prisma.NestedIntFilter<$PrismaModel>
+  _min?: Prisma.NestedEnumTipografiaBlogFilter<$PrismaModel>
+  _max?: Prisma.NestedEnumTipografiaBlogFilter<$PrismaModel>
+}
+
+export type NestedEnumTamanoExtractoBlogWithAggregatesFilter<$PrismaModel = never> = {
+  equals?: $Enums.TamanoExtractoBlog | Prisma.EnumTamanoExtractoBlogFieldRefInput<$PrismaModel>
+  in?: $Enums.TamanoExtractoBlog[] | Prisma.ListEnumTamanoExtractoBlogFieldRefInput<$PrismaModel>
+  notIn?: $Enums.TamanoExtractoBlog[] | Prisma.ListEnumTamanoExtractoBlogFieldRefInput<$PrismaModel>
+  not?: Prisma.NestedEnumTamanoExtractoBlogWithAggregatesFilter<$PrismaModel> | $Enums.TamanoExtractoBlog
+  _count?: Prisma.NestedIntFilter<$PrismaModel>
+  _min?: Prisma.NestedEnumTamanoExtractoBlogFilter<$PrismaModel>
+  _max?: Prisma.NestedEnumTamanoExtractoBlogFilter<$PrismaModel>
+}
+
+export type NestedEnumAlineacionExtractoBlogWithAggregatesFilter<$PrismaModel = never> = {
+  equals?: $Enums.AlineacionExtractoBlog | Prisma.EnumAlineacionExtractoBlogFieldRefInput<$PrismaModel>
+  in?: $Enums.AlineacionExtractoBlog[] | Prisma.ListEnumAlineacionExtractoBlogFieldRefInput<$PrismaModel>
+  notIn?: $Enums.AlineacionExtractoBlog[] | Prisma.ListEnumAlineacionExtractoBlogFieldRefInput<$PrismaModel>
+  not?: Prisma.NestedEnumAlineacionExtractoBlogWithAggregatesFilter<$PrismaModel> | $Enums.AlineacionExtractoBlog
+  _count?: Prisma.NestedIntFilter<$PrismaModel>
+  _min?: Prisma.NestedEnumAlineacionExtractoBlogFilter<$PrismaModel>
+  _max?: Prisma.NestedEnumAlineacionExtractoBlogFilter<$PrismaModel>
 }
 
 export type NestedEnumEstadoPublicacionWithAggregatesFilter<$PrismaModel = never> = {

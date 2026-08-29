@@ -1,4 +1,4 @@
-import { useEffect, useState } from "react";
+import { useEffect, useState, type FormEvent } from "react";
 import { Link, useOutletContext, useParams } from "react-router-dom";
 import { CalendarDays, Clock, Home, Mail, MessageCircle, Play, Scale, UserRound } from "lucide-react";
 import { ErrorState } from "../../components/common/ErrorState";
@@ -7,8 +7,9 @@ import { blogApi } from "../../services/api/blog-api";
 import { useApi } from "../../hooks/use-api";
 import { formatDate } from "../../utils/format";
 import { renderArticleContentHtml } from "../../utils/sanitize-html";
+import { typographyClassName } from "../../utils/typography";
 import { buildWhatsAppUrl } from "../../utils/whatsapp";
-import type { Article, SiteConfiguration } from "../../types/api";
+import type { Article, BlogComment, PaginatedResponse, SiteConfiguration } from "../../types/api";
 
 type LayoutContext = {
   configuration: SiteConfiguration | null;
@@ -21,6 +22,12 @@ function plainTextFromHtml(html: string) {
 function readingTime(content: string) {
   const words = plainTextFromHtml(content).split(" ").filter(Boolean).length;
   return `${Math.max(1, Math.ceil(words / 220))} min de lectura`;
+}
+
+function escapeHtml(value: string) {
+  const element = document.createElement("div");
+  element.textContent = value;
+  return element.innerHTML;
 }
 
 function shareLinks(title: string) {
@@ -37,6 +44,24 @@ function shareLinks(title: string) {
   };
 }
 
+function articleTitleClass(size: Article["tituloTamano"], alignment: Article["tituloAlineacion"], typography: Article["tituloTipografia"]) {
+  return [
+    "article-title",
+    `article-title--${(size ?? "NORMAL").toLowerCase()}`,
+    `article-title--${(alignment ?? "IZQUIERDA").toLowerCase()}`,
+    typographyClassName(typography),
+  ].filter(Boolean).join(" ");
+}
+
+function articleLeadClass(size: Article["extractoTamano"], alignment: Article["extractoAlineacion"], typography: Article["extractoTipografia"]) {
+  return [
+    "article-detail__lead",
+    `article-detail__lead--${(size ?? "NORMAL").toLowerCase()}`,
+    `article-detail__lead--${(alignment ?? "IZQUIERDA").toLowerCase()}`,
+    typographyClassName(typography),
+  ].filter(Boolean).join(" ");
+}
+
 function primaryAuthor(article: Article) {
   return article.autores[0] ?? null;
 }
@@ -45,8 +70,25 @@ export function BlogDetailPage() {
   const { slug = "" } = useParams();
   const { configuration } = useOutletContext<LayoutContext>();
   const [copyToast, setCopyToast] = useState<string | null>(null);
+  const [comments, setComments] = useState<PaginatedResponse<BlogComment> | null>(null);
+  const [commentPage, setCommentPage] = useState(1);
+  const [commentForm, setCommentForm] = useState({ nombre: "", contenido: "" });
+  const [commentFeedback, setCommentFeedback] = useState<string | null>(null);
+  const [isSubmittingComment, setIsSubmittingComment] = useState(false);
   const article = useApi(() => blogApi.articleDetail(slug), [slug]);
   const relatedArticles = useApi(() => blogApi.listArticles(1, 4), [slug]);
+  const detailData = article.data?.data;
+  const commentsEnabled = Boolean(detailData?.comentariosHabilitados);
+
+  const loadComments = async (page = 1) => {
+    if (!detailData) {
+      return;
+    }
+
+    const response = await blogApi.listComments(detailData.slug, page, 10);
+    setComments((current) => page === 1 ? response : { ...response, data: [...(current?.data ?? []), ...response.data] });
+    setCommentPage(page);
+  };
 
   useEffect(() => {
     document.body.classList.add("blog-detail-route");
@@ -79,6 +121,14 @@ export function BlogDetailPage() {
     return () => cleanup.forEach((removeListener) => removeListener());
   }, [article.data?.data.contenido]);
 
+  useEffect(() => {
+    if (commentsEnabled) {
+      void loadComments(1);
+    } else {
+      setComments(null);
+    }
+  }, [detailData?.slug, commentsEnabled]);
+
   if (article.isLoading) {
     return <LoadingState label="Cargando articulo" />;
   }
@@ -89,12 +139,38 @@ export function BlogDetailPage() {
 
   const data = article.data.data;
   const safeContent = renderArticleContentHtml(data.contenido ?? "");
+  const safeTitleHtml = renderArticleContentHtml(data.tituloHtml || escapeHtml(data.titulo));
+  const safeExcerptHtml = data.extracto ? renderArticleContentHtml(data.extractoHtml || escapeHtml(data.extracto)) : "";
   const author = primaryAuthor(data);
   const related = relatedArticles.data?.data.filter((item) => item.slug !== data.slug).slice(0, 3) ?? [];
   const share = shareLinks(data.titulo);
   const whatsapp = configuration?.contacto_whatsapp_principal;
   const categoryName = data.categoria?.nombre ?? "Actualidad Jurídica";
   const hasVideoContent = /content-video|<iframe|youtube|youtu\.be|vimeo/i.test(safeContent);
+  const canSubmitComment = commentForm.nombre.trim().length > 0 && commentForm.contenido.trim().length > 0 && !isSubmittingComment;
+  const submitComment = async (event: FormEvent) => {
+    event.preventDefault();
+    if (!canSubmitComment) {
+      return;
+    }
+
+    setCommentFeedback(null);
+    setIsSubmittingComment(true);
+
+    try {
+      const response = await blogApi.createComment(data.slug, {
+        nombre: commentForm.nombre.trim(),
+        contenido: commentForm.contenido.trim(),
+      });
+      setComments((current) => current ? { ...current, pagination: { ...current.pagination, total: current.pagination.total + 1 }, data: [response.data, ...current.data] } : current);
+      setCommentForm({ nombre: "", contenido: "" });
+      setCommentFeedback("Comentario publicado correctamente.");
+    } catch {
+      setCommentFeedback("No se pudo publicar el comentario. Revisa el nombre y el contenido.");
+    } finally {
+      setIsSubmittingComment(false);
+    }
+  };
 
   const handleInstagramShare = async () => {
     if (typeof window === "undefined") {
@@ -125,8 +201,8 @@ export function BlogDetailPage() {
             <strong>{data.titulo}</strong>
           </nav>
           <p className="eyebrow">{categoryName}</p>
-          <h1>{data.titulo}</h1>
-          {data.extracto ? <p className="article-detail__lead">{data.extracto}</p> : null}
+          <h1 className={articleTitleClass(data.tituloTamano, data.tituloAlineacion, data.tituloTipografia)} dangerouslySetInnerHTML={{ __html: safeTitleHtml }} />
+          {data.extracto ? <div className={articleLeadClass(data.extractoTamano, data.extractoAlineacion, data.extractoTipografia)} dangerouslySetInnerHTML={{ __html: safeExcerptHtml }} /> : null}
           <span className="article-detail__rule" aria-hidden="true" />
           <div className="article-detail__meta" aria-label="Informacion del articulo">
             <span><CalendarDays /> {formatDate(data.fecha)}</span>
@@ -166,6 +242,43 @@ export function BlogDetailPage() {
             <section className="article-content article-detail__content">
               <div dangerouslySetInnerHTML={{ __html: safeContent }} />
             </section>
+            {commentsEnabled ? (
+              <section className="article-comments">
+                <h2>Comentarios</h2>
+                {comments && comments.data.length === 0 ? <p className="article-comments__empty">No hay comentarios todavía.</p> : null}
+                {comments?.data.map((comment) => (
+                  <article className="article-comment" key={comment.id}>
+                    <strong>{comment.nombre}</strong>
+                    <p>{comment.contenido}</p>
+                    <time>{formatDate(comment.fecha)}</time>
+                    {comment.respuesta ? (
+                      <div className="article-comment__reply">
+                        <strong>{comment.respuesta.autor.nombreCompleto}</strong>
+                        <small>{comment.respuesta.autor.cargo ?? "Abogado"} · Equipo De Mora</small>
+                        <p>{comment.respuesta.contenido}</p>
+                      </div>
+                    ) : null}
+                  </article>
+                ))}
+                {comments && comments.pagination.page < comments.pagination.totalPages ? (
+                  <button className="button button--outline" type="button" onClick={() => void loadComments(commentPage + 1)}>Ver más comentarios</button>
+                ) : null}
+                <form className="article-comment-form" onSubmit={submitComment}>
+                  <h3>Deje su comentario</h3>
+                  <label>
+                    Nombre
+                    <input maxLength={80} value={commentForm.nombre} onChange={(event) => setCommentForm((current) => ({ ...current, nombre: event.target.value.slice(0, 80) }))} />
+                  </label>
+                  <label>
+                    Comentario
+                    <textarea maxLength={500} value={commentForm.contenido} onChange={(event) => setCommentForm((current) => ({ ...current, contenido: event.target.value.slice(0, 500) }))} />
+                  </label>
+                  <small>{commentForm.contenido.length} / 500</small>
+                  {commentFeedback ? <p className="article-comment-feedback">{commentFeedback}</p> : null}
+                  <button className="button button--primary" type="submit" disabled={!canSubmitComment}>{isSubmittingComment ? "Publicando..." : "Publicar comentario"}</button>
+                </form>
+              </section>
+            ) : null}
           </div>
 
           <aside className="article-sidebar" aria-label="Contenido relacionado">

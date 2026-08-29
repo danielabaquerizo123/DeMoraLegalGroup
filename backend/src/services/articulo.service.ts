@@ -40,9 +40,17 @@ const toAuthors = (articulo: ArticuloListRecord) => {
 
 const toListItem = (articulo: ArticuloListRecord) => ({
   titulo: articulo.titulo,
+  tituloHtml: articulo.tituloHtml,
   slug: articulo.slug,
   extracto: articulo.extracto,
+  extractoHtml: articulo.extractoHtml,
   imagen: articulo.imagenPortadaUrl,
+  tituloTamano: articulo.tituloTamano ?? "NORMAL",
+  tituloAlineacion: articulo.tituloAlineacion ?? "IZQUIERDA",
+  tituloTipografia: articulo.tituloTipografia ?? "INSTITUCIONAL",
+  extractoTamano: articulo.extractoTamano ?? "NORMAL",
+  extractoAlineacion: articulo.extractoAlineacion ?? "IZQUIERDA",
+  extractoTipografia: articulo.extractoTipografia ?? "INSTITUCIONAL",
   fecha: articulo.publicadoEn,
   categoria: {
     nombre: articulo.categoria?.nombre ?? null,
@@ -53,10 +61,19 @@ const toListItem = (articulo: ArticuloListRecord) => ({
 
 const toDetail = (articulo: ArticuloDetailRecord) => ({
   titulo: articulo.titulo,
+  tituloHtml: articulo.tituloHtml,
   slug: articulo.slug,
   contenido: articulo.contenido,
   extracto: articulo.extracto,
+  extractoHtml: articulo.extractoHtml,
   imagen: articulo.imagenPortadaUrl,
+  tituloTamano: articulo.tituloTamano ?? "NORMAL",
+  tituloAlineacion: articulo.tituloAlineacion ?? "IZQUIERDA",
+  tituloTipografia: articulo.tituloTipografia ?? "INSTITUCIONAL",
+  extractoTamano: articulo.extractoTamano ?? "NORMAL",
+  extractoAlineacion: articulo.extractoAlineacion ?? "IZQUIERDA",
+  extractoTipografia: articulo.extractoTipografia ?? "INSTITUCIONAL",
+  comentariosHabilitados: articulo.comentariosHabilitados,
   fecha: articulo.publicadoEn,
   categoria: {
     nombre: articulo.categoria?.nombre ?? null,
