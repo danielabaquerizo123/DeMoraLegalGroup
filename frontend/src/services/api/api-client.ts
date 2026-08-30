@@ -1,5 +1,31 @@
 import { API_BASE_URL } from "../../config/api";
 
+export const AUTH_TOKEN_STORAGE_KEY = "demora_admin_session_token";
+
+export function getStoredSessionToken(): string | null {
+  try {
+    return sessionStorage.getItem(AUTH_TOKEN_STORAGE_KEY);
+  } catch {
+    return null;
+  }
+}
+
+export function setStoredSessionToken(token: string): void {
+  try {
+    sessionStorage.setItem(AUTH_TOKEN_STORAGE_KEY, token);
+  } catch {
+    // sessionStorage no disponible: la cookie sigue siendo el transporte principal.
+  }
+}
+
+export function clearStoredSessionToken(): void {
+  try {
+    sessionStorage.removeItem(AUTH_TOKEN_STORAGE_KEY);
+  } catch {
+    // sin sesión persistente que limpiar.
+  }
+}
+
 export class ApiError extends Error {
   constructor(
     message: string,
@@ -16,13 +42,23 @@ type ApiClientOptions = {
 };
 
 export const apiClient = async <T>(path: string, options: ApiClientOptions = {}): Promise<T> => {
+  const headers: Record<string, string> = {
+    Accept: "application/json",
+  };
+
+  if (options.body) {
+    headers["Content-Type"] = "application/json";
+  }
+
+  const token = getStoredSessionToken();
+  if (token) {
+    headers["Authorization"] = `Bearer ${token}`;
+  }
+
   const response = await fetch(`${API_BASE_URL}${path}`, {
     method: options.method ?? "GET",
     credentials: "include",
-    headers: {
-      Accept: "application/json",
-      ...(options.body ? { "Content-Type": "application/json" } : {}),
-    },
+    headers,
     body: options.body ? JSON.stringify(options.body) : undefined,
   });
 

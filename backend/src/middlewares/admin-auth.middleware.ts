@@ -1,11 +1,11 @@
 import type { RequestHandler } from "express";
-import { getAdminSession, getSessionCookieName } from "../services/admin-auth.service";
+import { getAdminSession } from "../services/admin-auth.service";
 import { HttpError } from "../utils/http-error";
-import { readCookie } from "../utils/cookies";
+import { readAuthToken } from "../utils/auth-token";
 
 export const requireAdminAuth: RequestHandler = async (request, _response, next) => {
   try {
-    const token = readCookie(request.headers.cookie, getSessionCookieName());
+    const token = readAuthToken(request);
 
     if (!token) {
       throw new HttpError(401, "Acceso administrativo requerido.");

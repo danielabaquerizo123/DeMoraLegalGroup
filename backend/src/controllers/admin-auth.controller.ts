@@ -1,12 +1,11 @@
 import type { Request } from "express";
 import { asyncHandler } from "../utils/async-handler";
-import { readCookie } from "../utils/cookies";
+import { readAuthToken } from "../utils/auth-token";
 import {
   buildClearSessionCookie,
   buildSessionCookie,
   changeAdminPassword,
   getAdminSession,
-  getSessionCookieName,
   loginAdmin,
   logoutAdmin,
 } from "../services/admin-auth.service";
@@ -25,13 +24,14 @@ export const login = asyncHandler(async (request, response) => {
   response.status(200).json({
     data: {
       user: result.user,
+      sessionToken: result.sessionToken,
       message: "Sesión iniciada correctamente.",
     },
   });
 });
 
 export const me = asyncHandler(async (request, response) => {
-  const token = readCookie(request.headers.cookie, getSessionCookieName());
+  const token = readAuthToken(request);
   const session = token ? await getAdminSession(token) : null;
 
   response.status(200).json({
@@ -42,7 +42,7 @@ export const me = asyncHandler(async (request, response) => {
 });
 
 export const logout = asyncHandler(async (request, response) => {
-  const token = readCookie(request.headers.cookie, getSessionCookieName());
+  const token = readAuthToken(request);
   await logoutAdmin(token);
 
   response.setHeader("Set-Cookie", buildClearSessionCookie());

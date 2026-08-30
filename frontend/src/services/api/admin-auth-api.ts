@@ -1,5 +1,5 @@
 import type { AdminUser, ApiMessageResponse } from "../../types/api";
-import { apiClient } from "./api-client";
+import { apiClient, clearStoredSessionToken, setStoredSessionToken } from "./api-client";
 
 export type LoginPayload = {
   username: string;
@@ -10,17 +10,34 @@ export type ChangePasswordPayload = {
   password: string;
 };
 
+type LoginResponse = {
+  user: AdminUser;
+  sessionToken?: string;
+};
+
 export const adminAuthApi = {
-  login: (payload: LoginPayload) =>
-    apiClient<ApiMessageResponse<{ user: AdminUser }>>("/api/admin/auth/login", {
+  login: async (payload: LoginPayload) => {
+    const response = await apiClient<ApiMessageResponse<LoginResponse>>("/api/admin/auth/login", {
       method: "POST",
       body: payload,
-    }),
+    });
+
+    if (response.data?.sessionToken) {
+      setStoredSessionToken(response.data.sessionToken);
+    }
+
+    return response;
+  },
   me: () => apiClient<{ data: { user: AdminUser | null } }>("/api/admin/auth/me"),
-  logout: () =>
-    apiClient<ApiMessageResponse>("/api/admin/auth/logout", {
-      method: "POST",
-    }),
+  logout: async () => {
+    try {
+      await apiClient<ApiMessageResponse>("/api/admin/auth/logout", {
+        method: "POST",
+      });
+    } finally {
+      clearStoredSessionToken();
+    }
+  },
   changePassword: (payload: ChangePasswordPayload) =>
     apiClient<ApiMessageResponse>("/api/admin/auth/cambiar-contrasena", {
       method: "POST",
