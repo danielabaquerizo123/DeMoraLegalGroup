@@ -22,8 +22,6 @@ export function setupHeroAnimations(scope: HTMLElement) {
   if (heroImage) {
     gsap.from(heroImage, {
       autoAlpha: 0,
-      scale: 1.035,
-      x: 28,
       duration: motion.duration.slow,
       ease: motion.easing.cinematic,
     });
@@ -39,7 +37,7 @@ export function setupHeroAnimations(scope: HTMLElement) {
     layers.forEach((layer, index) => {
       gsap.to(layer, {
         yPercent: index === 0 ? -7 : -12,
-        scale: layer.classList.contains("hero-justice") ? 1.055 : index === 0 ? 1.04 : 1.08,
+        scale: layer.classList.contains("hero-justice") ? 1 : index === 0 ? 1.04 : 1.08,
         ease: "none",
         scrollTrigger: {
           trigger: hero,

@@ -1,4 +1,5 @@
-import { useOutletContext } from "react-router-dom";
+import { useEffect, useState } from "react";
+import { useLocation, useOutletContext } from "react-router-dom";
 import { ErrorState } from "../../components/common/ErrorState";
 import { LoadingState } from "../../components/common/LoadingState";
 import { ServiceCard } from "../../components/sections/ServiceCard";
@@ -49,7 +50,34 @@ const processSteps = [
 export function ServicesPage() {
   const services = useApi(serviceApi.list, []);
   const { configuration } = useOutletContext<LayoutContext>();
+  const location = useLocation();
+  const [highlightedService, setHighlightedService] = useState<string | null>(null);
   const whatsapp = configuration?.contacto_whatsapp_principal;
+
+  useEffect(() => {
+    if (!services.data || !location.hash) {
+      return;
+    }
+
+    const targetId = decodeURIComponent(location.hash.slice(1));
+    const target = document.getElementById(targetId);
+
+    if (!target) {
+      return;
+    }
+
+    const prefersReducedMotion = window.matchMedia("(prefers-reduced-motion: reduce)").matches;
+    target.scrollIntoView({
+      behavior: prefersReducedMotion ? "auto" : "smooth",
+      block: "center",
+    });
+    target.focus({ preventScroll: true });
+    setHighlightedService(targetId);
+
+    const timeout = window.setTimeout(() => setHighlightedService(null), 1600);
+
+    return () => window.clearTimeout(timeout);
+  }, [location.hash, services.data]);
 
   return (
     <article className="services-page cinematic-section" data-cinematic-services="true">
@@ -83,7 +111,9 @@ export function ServicesPage() {
         {services.data ? (
           <div className="service-grid service-grid--editorial">
             {services.data.data.map((service) => (
-              <ServiceCard key={service.slug} service={service} />
+              <div className={highlightedService === service.slug ? "service-card-anchor is-highlighted" : "service-card-anchor"} key={service.slug}>
+                <ServiceCard service={service} />
+              </div>
             ))}
           </div>
         ) : null}

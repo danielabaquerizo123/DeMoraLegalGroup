@@ -109,7 +109,7 @@ export function HomePage() {
           {services.isLoading ? <LoadingState label="Cargando servicios" /> : null}
           {services.error ? <ErrorState message={services.error} /> : null}
           {services.data?.data.map((service, index) => (
-            <Link className="practice-service-row" key={service.slug} to={`/servicios/${service.slug}`}>
+            <Link className="practice-service-row" key={service.slug} to={`/servicios#${service.slug}`}>
               <span>{String(index + 1).padStart(2, "0")}</span>
               <strong>{service.nombre}</strong>
               <i aria-hidden="true">-&gt;</i>

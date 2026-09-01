@@ -169,6 +169,40 @@ const emptyForm: EditorForm = {
   comentariosHabilitados: false,
 };
 
+const BLOG_POST_DELETED_EVENT = "demora:blog-post-deleted";
+
+function createBlogPostDeletedEvent(payload: { id: string; slug: string; deletedAt: number }) {
+  if (typeof CustomEvent === "function") {
+    return new CustomEvent(BLOG_POST_DELETED_EVENT, { detail: payload });
+  }
+
+  if (typeof document.createEvent === "function") {
+    const event = document.createEvent("CustomEvent");
+    event.initCustomEvent(BLOG_POST_DELETED_EVENT, false, false, payload);
+    return event;
+  }
+
+  const event = new Event(BLOG_POST_DELETED_EVENT);
+  Object.defineProperty(event, "detail", { value: payload });
+  return event;
+}
+
+function notifyPublicBlogPostDeleted(post: AdminBlogPost) {
+  const payload = {
+    id: post.id,
+    slug: post.slug,
+    deletedAt: Date.now(),
+  };
+
+  window.dispatchEvent(createBlogPostDeletedEvent(payload));
+
+  try {
+    window.localStorage.setItem(BLOG_POST_DELETED_EVENT, JSON.stringify(payload));
+  } catch {
+    // El evento de la ventana actual cubre navegadores sin localStorage disponible.
+  }
+}
+
 const TEXT_SIZE_OPTIONS = ["8", "9", "10", "11", "12", "14", "16", "18", "20", "22", "24", "26", "28", "32", "36", "40", "44", "48", "54", "60", "64", "72"] as const;
 
 const TEXT_COLOR_OPTIONS: ReadonlyArray<{ value: string; label: string; className: string }> = [
@@ -1808,6 +1842,7 @@ export function AdminBlogPage({ user }: AdminBlogPageProps) {
     setIsDeleting(true);
     try {
       await adminBlogApi.delete(postPendingDelete.id);
+      notifyPublicBlogPostDeleted(postPendingDelete);
       if (currentPostId === postPendingDelete.id) {
         setCurrentPostId(null);
         setForm(emptyForm);

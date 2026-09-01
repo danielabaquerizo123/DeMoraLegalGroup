@@ -11,7 +11,7 @@ export function ServiceCard({ service }: ServiceCardProps) {
   const iconLabel = service.icono ?? "Servicio juridico";
 
   return (
-    <article className="service-card">
+    <article className="service-card" id={service.slug} tabIndex={-1}>
       <div className="service-card__image" aria-hidden="true">
         <img src={imageSrc} alt="" loading="lazy" style={{ objectPosition: imagePosition }} />
       </div>

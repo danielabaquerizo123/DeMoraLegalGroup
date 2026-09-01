@@ -64,7 +64,7 @@ export function Footer({ configuration }: FooterProps) {
         <div className="footer-column">
           <h2>Servicios</h2>
           {services.data?.data.map((service) => (
-            <Link key={service.slug} to={`/servicios/${service.slug}`}>
+            <Link key={service.slug} to={`/servicios#${service.slug}`}>
               {(() => {
                 const Icon = serviceIconMap[service.slug as keyof typeof serviceIconMap] ?? Scale;
                 return <Icon />;

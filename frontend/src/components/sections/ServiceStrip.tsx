@@ -33,7 +33,7 @@ export function ServiceStrip({ services }: ServiceStripProps) {
     <section className="service-strip reveal" aria-label="Servicios destacados">
       <div className="service-strip__inner">
         {services.map((service, index) => (
-          <Link className="service-strip__item" key={service.slug} to={`/servicios/${service.slug}`}>
+          <Link className="service-strip__item" key={service.slug} to={`/servicios#${service.slug}`}>
             <ServiceIcon index={index} />
             <span>{service.nombre}</span>
           </Link>

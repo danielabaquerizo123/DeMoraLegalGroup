@@ -11,6 +11,8 @@ import { typographyClassName } from "../../utils/typography";
 import { buildWhatsAppUrl } from "../../utils/whatsapp";
 import type { Article, BlogComment, PaginatedResponse, SiteConfiguration } from "../../types/api";
 
+const BLOG_POST_DELETED_EVENT = "demora:blog-post-deleted";
+
 type LayoutContext = {
   configuration: SiteConfiguration | null;
 };
@@ -75,7 +77,8 @@ export function BlogDetailPage() {
   const [commentForm, setCommentForm] = useState({ nombre: "", contenido: "" });
   const [commentFeedback, setCommentFeedback] = useState<string | null>(null);
   const [isSubmittingComment, setIsSubmittingComment] = useState(false);
-  const article = useApi(() => blogApi.articleDetail(slug), [slug]);
+  const [articleReloadKey, setArticleReloadKey] = useState(0);
+  const article = useApi(() => blogApi.articleDetail(slug), [slug, articleReloadKey]);
   const relatedArticles = useApi(() => blogApi.listArticles(1, 4), [slug]);
   const detailData = article.data?.data;
   const commentsEnabled = Boolean(detailData?.comentariosHabilitados);
@@ -97,6 +100,42 @@ export function BlogDetailPage() {
       document.body.classList.remove("blog-detail-route");
     };
   }, []);
+
+  useEffect(() => {
+    const refreshIfCurrentArticleWasDeleted = (deletedSlug: string | null) => {
+      if (deletedSlug && deletedSlug === slug) {
+        setArticleReloadKey((current) => current + 1);
+        setComments(null);
+      }
+    };
+
+    const handleDeletedPost = (event: Event) => {
+      const detail = "detail" in event ? (event.detail as { slug?: string } | null) : null;
+      const deletedSlug = String(detail?.slug ?? "");
+      refreshIfCurrentArticleWasDeleted(deletedSlug);
+    };
+
+    const handleStorage = (event: StorageEvent) => {
+      if (event.key !== BLOG_POST_DELETED_EVENT || !event.newValue) {
+        return;
+      }
+
+      try {
+        const payload = JSON.parse(event.newValue) as { slug?: string };
+        refreshIfCurrentArticleWasDeleted(payload.slug ?? null);
+      } catch {
+        refreshIfCurrentArticleWasDeleted(null);
+      }
+    };
+
+    window.addEventListener(BLOG_POST_DELETED_EVENT, handleDeletedPost);
+    window.addEventListener("storage", handleStorage);
+
+    return () => {
+      window.removeEventListener(BLOG_POST_DELETED_EVENT, handleDeletedPost);
+      window.removeEventListener("storage", handleStorage);
+    };
+  }, [slug]);
 
   useEffect(() => {
     const images = Array.from(document.querySelectorAll<HTMLImageElement>(".article-detail__content img"));
@@ -130,11 +169,23 @@ export function BlogDetailPage() {
   }, [detailData?.slug, commentsEnabled]);
 
   if (article.isLoading) {
-    return <LoadingState label="Cargando articulo" />;
+    return (
+      <section className="article-detail article-detail--state">
+        <div className="article-detail__container">
+          <LoadingState label="Cargando articulo" />
+        </div>
+      </section>
+    );
   }
 
   if (article.error || !article.data) {
-    return <ErrorState message="No encontramos este articulo publicado." />;
+    return (
+      <section className="article-detail article-detail--state">
+        <div className="article-detail__container">
+          <ErrorState message="No encontramos este articulo publicado." />
+        </div>
+      </section>
+    );
   }
 
   const data = article.data.data;
